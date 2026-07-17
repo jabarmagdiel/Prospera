@@ -1,0 +1,80 @@
+{
+  "promo": {
+    "active": false,
+    "title": "¡Gran Oportunidad!",
+    "description": "Aprovecha los descuentos por lanzamiento en la nueva fase de Campo Grande.",
+    "imageUrl": "/images/project_cg1.png",
+    "ctaText": "Más información",
+    "ctaLink": "#contacto"
+  },
+  "content": {
+    "heroEyebrow": "Santa Cruz de la Sierra",
+    "heroTitle1": "Un terreno puede ser",
+    "heroTitle2": "el comienzo de algo grande.",
+    "heroDescription": "En Prospera desarrollamos proyectos urbanísticos para quienes quieren vivir mejor, invertir con criterio o dejar patrimonio. Te ayudamos a entender cada opción y avanzar con una condición que sí puedas sostener.",
+    "aboutEyebrow": "Quiénes somos",
+    "aboutTitle1": "Planificamos tierra.",
+    "aboutTitle2": "Impulsamos futuro.",
+    "aboutDescription1": "Prospera Desarrollos Inmobiliarios es una empresa cruceña dedicada a planificar, gestionar y comercializar proyectos urbanísticos.",
+    "aboutDescription2": "Trabajamos cada desarrollo desde una mirada integral: entendemos el territorio, ordenamos la propuesta y acompañamos al cliente para que pueda saber dónde compra, cómo avanza y cuál proyecto responde mejor a su realidad.",
+    "aboutImage": "/images/about.png"
+  },
+  "projects": [
+    {
+      "key": "la-fortuna",
+      "systemId": 5,
+      "name": "La Fortuna",
+      "family": "Expansión · entrada accesible",
+      "short": "LF",
+      "description": "Un proyecto con alternativas para empezar, comparar ubicaciones y construir patrimonio paso a paso.",
+      "tone": "villa",
+      "plan": "/projects/la-fortuna-plan.jpg",
+      "planAlt": "Plano general de la urbanización La Fortuna",
+      "surfaceRange": "274–683 m²",
+      "planDate": "12/07/2026",
+      "logo": "/brand/prospera.png"
+    },
+    {
+      "key": "campo-grande-1",
+      "systemId": 1,
+      "name": "Campo Grande 1",
+      "family": "Vivienda · etapa consolidada",
+      "short": "CG1",
+      "description": "Una etapa madura del macroproyecto para comparar ubicación y oportunidades según disponibilidad.",
+      "tone": "cg-one",
+      "logo": "/brand/campo-grande.png",
+      "plan": "/projects/campo-grande-1-plan.jpg",
+      "planAlt": "Plano general de Campo Grande 1",
+      "surfaceRange": "299–787 m²",
+      "planDate": "12/07/2026"
+    },
+    {
+      "key": "campo-grande-2",
+      "systemId": 2,
+      "name": "Campo Grande 2",
+      "family": "Vivienda · equilibrio y avance",
+      "short": "CG2",
+      "description": "Una alternativa para quienes quieren proyectar vivienda y avanzar dentro de un entorno en consolidación.",
+      "tone": "cg-two",
+      "logo": "/brand/campo-grande.png",
+      "plan": "/projects/campo-grande-2-plan.jpg",
+      "planAlt": "Plano general de Campo Grande 2",
+      "surfaceRange": "259–1.412 m²",
+      "planDate": "12/07/2026"
+    },
+    {
+      "key": "campo-grande-3",
+      "systemId": 3,
+      "name": "Campo Grande 3",
+      "family": "Inversión · visión de futuro",
+      "short": "CG3",
+      "description": "Una etapa para quienes buscan entrar a tiempo, entender la oportunidad y construir patrimonio a futuro.",
+      "tone": "cg-three",
+      "logo": "/brand/campo-grande.png",
+      "plan": "/projects/campo-grande-3-plan.jpg",
+      "planAlt": "Plano general de Campo Grande 3",
+      "surfaceRange": "202–1.256 m²",
+      "planDate": "12/07/2026"
+    }
+  ]
+}
