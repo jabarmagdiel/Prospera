@@ -230,7 +230,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           <p>Decinos si buscás vivienda, inversión o patrimonio. Un asesor te ayudará a comparar proyectos sin apurarte.</p>
         </div>
         <button className="button primary">Encontrar una opción para mí <span>→</span></button>
-      </section>
+      </motion.section>
     </main>
   );
 }
