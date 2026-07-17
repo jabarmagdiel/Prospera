@@ -221,6 +221,15 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
       <footer className="corp-footer">
         <img src="/brand/prospera.png" alt="Prospera"/>
         <p>Desarrollamos oportunidades para vivir, invertir y construir futuro en Santa Cruz.</p>
+        <div className="flex gap-4 text-sm mt-4 mb-4 flex-wrap justify-center text-stone-400">
+          <span>Avenida Noel Kempff #700. Santa Cruz, Bolivia.</span>
+          <span>|</span>
+          <a href="mailto:info@prospera.com.bo" className="hover:text-white transition-colors">info@prospera.com.bo</a>
+          <span>|</span>
+          <a href="tel:+59133454519" className="hover:text-white transition-colors">+591 3 3454519</a>
+          <span>|</span>
+          <a href="https://wa.me/59177820003" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp: +591 77820003</a>
+        </div>
         <div>
           <a href="#proyectos">Proyectos</a><a href="#nosotros">Prospera</a><a href="#trabaja">Trabajá con nosotros</a><a href="#contacto">Contacto</a>
         </div>

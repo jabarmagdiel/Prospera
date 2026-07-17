@@ -14,7 +14,9 @@ export function SmartWhatsapp() {
 
   return (
     <motion.a
-      href="#contacto"
+      href="https://wa.me/59177820003"
+      target="_blank"
+      rel="noopener noreferrer"
       className="fixed right-6 bottom-6 z-50 flex items-center justify-center w-14 h-14 bg-green-500 rounded-full shadow-lg border-2 border-white group hover:shadow-xl hover:scale-110 transition-all text-white"
       initial={{ scale: 0, opacity: 0, y: 50 }}
       animate={{ scale: 1, opacity: 1, y: 0 }}
