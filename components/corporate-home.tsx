@@ -36,9 +36,9 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
         style={{ scaleX: scrollYProgress, transformOrigin: "0% 50%" }}
         className="fixed top-0 left-0 right-0 h-1 z-[100] bg-orange-500/80"
       />
-      <header className="corp-header">
-        <a className="corp-brand flex items-center" href="#inicio" aria-label="Prospera, inicio">
-          <img src="/brand/prospera.png" alt="Prospera Desarrollos Inmobiliarios" className="h-16 sm:h-20 w-auto object-contain" style={{ maxHeight: '100%', padding: '8px 0' }}/>
+      <header className="corp-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 5%' }}>
+        <a href="#inicio" aria-label="Prospera, inicio" style={{ display: 'flex', alignItems: 'center' }}>
+          <img src="/brand/prospera.png" alt="Prospera Desarrollos Inmobiliarios" style={{ height: '55px', width: 'auto', objectFit: 'contain' }}/>
         </a>
         <nav aria-label="Navegación de Prospera">
           <a href="#proyectos">Proyectos</a>

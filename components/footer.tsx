@@ -7,7 +7,7 @@ export function Footer() {
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Col 1: Logo & Desc */}
           <div className="flex flex-col gap-6">
-            <img src="/brand/prospera.png" alt="Prospera" className="h-14 sm:h-20 w-auto object-contain object-left mix-blend-multiply opacity-90" style={{ filter: 'brightness(0)' }} />
+            <img src="/brand/prospera.png" alt="Prospera" style={{ height: '60px', width: 'auto', objectFit: 'contain', objectPosition: 'left', mixBlendMode: 'multiply', opacity: 0.9, filter: 'brightness(0)' }} />
             <p className="text-sm leading-relaxed" style={{ color: '#57534e' }}>
               Desarrollamos oportunidades para vivir, invertir y construir futuro en Santa Cruz, brindando seguridad jurídica y solidez en cada proyecto.
             </p>
