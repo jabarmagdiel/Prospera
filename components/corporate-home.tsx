@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { Project } from "../lib/types";
 import { HeroCarousel } from "./hero-carousel";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 import { ProjectCardCarousel } from "./project-card-carousel";
 import { PaymentSimulator } from "./payment-simulator";
@@ -23,11 +23,19 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
   };
 
   const stagger: any = {
-    visible: { transition: { staggerChildren: 0.1 } }
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.15 } }
   };
+  
+  const { scrollYProgress } = useScroll();
 
   return (
     <main className="corporate-site">
+      {/* Scroll Progress Indicator */}
+      <motion.div
+        style={{ scaleX: scrollYProgress, transformOrigin: "0% 50%" }}
+        className="fixed top-0 left-0 right-0 h-1 z-[100] bg-orange-500/80"
+      />
       <header className="corp-header">
         <a className="corp-brand" href="#inicio" aria-label="Prospera, inicio">
           <img src="/brand/prospera.png" alt="Prospera Desarrollos Inmobiliarios"/>
@@ -44,17 +52,17 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
       <section className="corp-hero" id="inicio">
         <motion.div 
           className="corp-hero-copy"
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          initial="hidden"
+          animate="visible"
+          variants={stagger}
         >
-          <p className="eyebrow light"><span></span> Santa Cruz de la Sierra</p>
-          <h1>Un terreno puede ser<br/><em>el comienzo de algo grande.</em></h1>
-          <p>En Prospera desarrollamos proyectos urbanísticos para quienes quieren vivir mejor, invertir con criterio o dejar patrimonio. Te ayudamos a entender cada opción y avanzar con una condición que sí puedas sostener.</p>
-          <div className="hero-actions">
-            <button className="button primary">Encontrá tu proyecto <span>↓</span></button>
-            <button className="button ghost">Conocé Prospera</button>
-          </div>
+          <motion.p variants={fadeUp} className="eyebrow light"><span></span> Santa Cruz de la Sierra</motion.p>
+          <motion.h1 variants={fadeUp}>Un terreno puede ser<br/><em>el comienzo de algo grande.</em></motion.h1>
+          <motion.p variants={fadeUp}>En Prospera desarrollamos proyectos urbanísticos para quienes quieren vivir mejor, invertir con criterio o dejar patrimonio. Te ayudamos a entender cada opción y avanzar con una condición que sí puedas sostener.</motion.p>
+          <motion.div variants={fadeUp} className="hero-actions">
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="button primary">Encontrá tu proyecto <span>↓</span></motion.button>
+            <motion.button whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.8)" }} whileTap={{ scale: 0.95 }} className="button ghost">Conocé Prospera</motion.button>
+          </motion.div>
         </motion.div>
         <HeroCarousel />
       </section>
