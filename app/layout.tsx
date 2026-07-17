@@ -25,6 +25,7 @@ export const metadata: Metadata = {
   },
 };
 
+import { Footer } from "../components/footer";
 import { PromoPopup } from "../components/promo-popup";
 import settings from "../data/settings.json";
 
@@ -38,10 +39,11 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <PromoPopup promo={promo} />
         {children}
+        <Footer />
       </body>
     </html>
   );
