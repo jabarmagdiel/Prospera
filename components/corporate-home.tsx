@@ -37,8 +37,8 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
         className="fixed top-0 left-0 right-0 h-1 z-[100] bg-orange-500/80"
       />
       <header className="corp-header">
-        <a className="corp-brand" href="#inicio" aria-label="Prospera, inicio">
-          <img src="/brand/prospera.png" alt="Prospera Desarrollos Inmobiliarios"/>
+        <a className="corp-brand flex items-center" href="#inicio" aria-label="Prospera, inicio">
+          <img src="/brand/prospera.png" alt="Prospera Desarrollos Inmobiliarios" className="h-16 sm:h-20 w-auto object-contain" style={{ maxHeight: '100%', padding: '8px 0' }}/>
         </a>
         <nav aria-label="Navegación de Prospera">
           <a href="#proyectos">Proyectos</a>
