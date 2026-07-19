@@ -8,6 +8,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ProjectCardCarousel } from "./project-card-carousel";
 import { PaymentSimulator } from "./payment-simulator";
 import { SmartWhatsapp } from "./smart-whatsapp";
+import { Header } from "./header";
 
 export function CorporateHome({ onOpenProject, content, projects }: { onOpenProject: (project: Project) => void, content?: any, projects?: any[] }) {
   const [toast, setToast] = useState("");
@@ -36,18 +37,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
         style={{ scaleX: scrollYProgress, transformOrigin: "0% 50%" }}
         className="fixed top-0 left-0 right-0 h-1 z-[100] bg-orange-500/80"
       />
-      <header className="corp-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 5%' }}>
-        <a href="#inicio" aria-label="Prospera, inicio" style={{ display: 'flex', alignItems: 'center' }}>
-          <img src="/brand/prospera.png" alt="Prospera Desarrollos Inmobiliarios" style={{ height: '55px', width: 'auto', objectFit: 'contain' }}/>
-        </a>
-        <nav aria-label="Navegación de Prospera">
-          <a href="#proyectos">Proyectos</a>
-          <a href="#nosotros">Quiénes somos</a>
-          <a href="#distancia">Comprar desde lejos</a>
-          <a href="#trabaja">Trabajá con nosotros</a>
-        </nav>
-        <button className="corp-contact">Hablar con un asesor</button>
-      </header>
+      <Header />
       
       <section className="corp-hero" id="inicio">
         <motion.div 
@@ -60,8 +50,8 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           <motion.h1 variants={fadeUp}>Un terreno puede ser<br/><em>el comienzo de algo grande.</em></motion.h1>
           <motion.p variants={fadeUp}>En Prospera desarrollamos proyectos urbanísticos para quienes quieren vivir mejor, invertir con criterio o dejar patrimonio. Te ayudamos a entender cada opción y avanzar con una condición que sí puedas sostener.</motion.p>
           <motion.div variants={fadeUp} className="hero-actions">
-            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="button primary">Encontrá tu proyecto <span>↓</span></motion.button>
-            <motion.button whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.8)" }} whileTap={{ scale: 0.95 }} className="button ghost">Conocé Prospera</motion.button>
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="button primary" onClick={() => window.location.href = '#proyectos'}>Encontrá tu proyecto <span>↓</span></motion.button>
+            <motion.button whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.8)" }} whileTap={{ scale: 0.95 }} className="button ghost" onClick={() => window.location.href = '#nosotros'}>Conocé Prospera</motion.button>
           </motion.div>
         </motion.div>
         <HeroCarousel />
@@ -192,7 +182,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           <motion.p variants={fadeUp} className="eyebrow"><span></span> Tu decisión puede empezar desde cualquier lugar</motion.p>
           <motion.h2 variants={fadeUp}>Primero conocé.<br/><em>Después decidí si querés viajar.</em></motion.h2>
           <motion.p variants={fadeUp}>Si vivís en La Paz, Oruro o fuera de Bolivia, un asesor puede mostrarte el proyecto desde el terreno, responder tus preguntas e incorporar a tu familia en la videollamada.</motion.p>
-          <motion.button variants={fadeUp} className="button dark">Ver un proyecto en vivo <span>→</span></motion.button>
+          <motion.button variants={fadeUp} className="button dark" onClick={() => window.open('https://wa.me/59177820003', '_blank')}>Ver un proyecto en vivo <span>→</span></motion.button>
         </div>
       </motion.section>
       
@@ -208,7 +198,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           <motion.p variants={fadeUp} className="eyebrow light"><span></span> Trabajá con nosotros</motion.p>
           <motion.h2 variants={fadeUp}>El futuro también se construye<br/><em>con las personas correctas.</em></motion.h2>
           <motion.p variants={fadeUp}>En Prospera valoramos la claridad, el compromiso, el trabajo en equipo y las ganas de crecer. Si te interesa aportar al desarrollo inmobiliario de Santa Cruz, queremos conocerte.</motion.p>
-          <motion.button variants={fadeUp} className="button work-button">Quiero ser parte de Prospera <span>→</span></motion.button>
+          <motion.button variants={fadeUp} className="button work-button" onClick={() => window.open('https://wa.me/59177820003', '_blank')}>Quiero ser parte de Prospera <span>→</span></motion.button>
         </div>
         <motion.div 
           initial={{ opacity: 0, scale: 0.8, rotate: -2 }}
@@ -237,7 +227,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           <h2>Tu primera decisión es empezar a mirar.</h2>
           <p>Decinos si buscás vivienda, inversión o patrimonio. Un asesor te ayudará a comparar proyectos sin apurarte.</p>
         </div>
-        <button className="button primary">Encontrar una opción para mí <span>→</span></button>
+        <button className="button primary" onClick={() => window.open('https://wa.me/59177820003', '_blank')}>Encontrar una opción para mí <span>→</span></button>
       </motion.section>
     </main>
   );

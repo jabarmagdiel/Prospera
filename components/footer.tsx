@@ -45,7 +45,7 @@ export function Footer() {
         </div>
         
         <div className="max-w-6xl mx-auto mt-16 pt-8 border-t text-center flex flex-col sm:flex-row items-center justify-between gap-4" style={{ borderTopColor: '#e5e1d8' }}>
-          <small className="text-xs" style={{ color: '#a8a29e' }}>Prototipo corporativo · Contenido, disponibilidad y condiciones sujetos a validación de Prospera.</small>
+          <small className="text-xs" style={{ color: '#a8a29e' }}>Contenido, disponibilidad y condiciones sujetos a validación de Prospera.</small>
           <small className="text-xs" style={{ color: '#a8a29e' }}>© {new Date().getFullYear()} Prospera. Todos los derechos reservados.</small>
         </div>
       </footer>
