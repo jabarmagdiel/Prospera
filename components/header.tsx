@@ -30,14 +30,14 @@ export function Header() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'py-3' : 'py-5'}`}
+        className="fixed top-0 left-0 w-full z-50 transition-all duration-500 py-3 mt-2"
       >
         <div className="max-w-7xl mx-auto px-6">
-          <div className={`flex items-center justify-between rounded-full transition-all duration-500 ${isScrolled ? 'bg-stone-900/80 backdrop-blur-xl border border-white/10 shadow-2xl px-6 py-3' : 'bg-transparent px-2 py-2'}`}>
+          <div className="flex items-center justify-between rounded-full transition-all duration-500 bg-stone-900/80 backdrop-blur-xl border border-white/10 shadow-2xl px-6 py-3">
             
             {/* Logo */}
             <div className="flex items-center gap-2">
-              <span className={`font-serif text-2xl font-bold tracking-tighter ${isScrolled ? 'text-white' : 'text-stone-900'} transition-colors`}>
+              <span className="font-serif text-2xl font-bold tracking-tighter text-white transition-colors">
                 Prospera
               </span>
             </div>
@@ -45,7 +45,7 @@ export function Header() {
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-8">
               {links.map((link) => (
-                <a key={link.label} href={link.href} className={`text-sm font-bold tracking-widest uppercase transition-colors hover:text-orange-500 ${isScrolled ? 'text-stone-300' : 'text-stone-700'}`}>
+                <a key={link.label} href={link.href} className="text-sm font-bold tracking-widest uppercase transition-colors hover:text-orange-500 text-stone-300">
                   {link.label}
                 </a>
               ))}
@@ -61,7 +61,7 @@ export function Header() {
             {/* Mobile Toggle */}
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`md:hidden p-2 rounded-full ${isScrolled ? 'text-white' : 'text-stone-900'}`}
+              className="md:hidden p-2 rounded-full text-white"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
