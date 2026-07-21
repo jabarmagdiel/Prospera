@@ -78,13 +78,11 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
         <div className="about-copy">
           <motion.p variants={fadeUp} className="eyebrow"><span></span> Quiénes somos</motion.p>
           <motion.h2 variants={fadeUp}>Planificamos tierra.<br/><em>Impulsamos futuro.</em></motion.h2>
-          <motion.p variants={fadeUp} className="about-lead">Prospera Desarrollos Inmobiliarios es una empresa cruceña dedicada a planificar, gestionar y comercializar proyectos urbanísticos.</motion.p>
-          <motion.p variants={fadeUp}>Trabajamos cada desarrollo desde una mirada integral: entendemos el territorio, ordenamos la propuesta y acompañamos al cliente para que pueda saber dónde compra, cómo avanza y cuál proyecto responde mejor a su realidad.</motion.p>
-          <motion.div variants={fadeUp} className="about-principles">
-            <div><b>Claridad</b><span>Para entender antes de decidir.</span></div>
-            <div><b>Posibilidad</b><span>Para encontrar una entrada que puedas sostener.</span></div>
-            <div><b>Visión</b><span>Para transformar una compra en patrimonio.</span></div>
-          </motion.div>
+          <motion.p variants={fadeUp} className="about-lead">Prospera es una empresa de desarrollos inmobiliarios situada en Santa Cruz de la Sierra, Bolivia.</motion.p>
+          <motion.p variants={fadeUp}>Los proyectos de desarrollo inmobiliario que se gestionan en Prospera son analizados con criterios de rentabilidad, seguridad jurídica, ubicación y entorno, potencialidad y proyección de las zonas de desarrollo.</motion.p>
+          <motion.p variants={fadeUp}>Las garantías en la gestión del desarrollo de proyectos inmobiliarios en Prospera suponen tener las cautelas necesarias para poder generar confianza y seguridad a nuestros inversores.</motion.p>
+          <motion.p variants={fadeUp}>La aprobación de los proyectos se hace imperativa antes de continuar con las fases de ingeniería y arquitectura. Nuestros expertos en el área de proyectos, analizan las posibilidades inversoras de nuestros clientes y asociados para garantizar una gestión transparente y rentable en la que ambas partes acuerdan asumir los riesgos propios de cada inversión.</motion.p>
+          <motion.p variants={fadeUp}>La gestión de riesgos en el ámbito de las inversiones en Bolivia debe tener en cuenta varios factores: La evolución del sector, la proyección económica y sobre todo la rigurosidad de la gestión de las garantías de transmisión de la propiedad y la aprobación correcta de los proyectos.</motion.p>
         </div>
       </motion.section>
 
