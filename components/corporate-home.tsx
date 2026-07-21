@@ -83,6 +83,11 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           <motion.p variants={fadeUp}>Las garantías en la gestión del desarrollo de proyectos inmobiliarios en Prospera suponen tener las cautelas necesarias para poder generar confianza y seguridad a nuestros inversores.</motion.p>
           <motion.p variants={fadeUp}>La aprobación de los proyectos se hace imperativa antes de continuar con las fases de ingeniería y arquitectura. Nuestros expertos en el área de proyectos, analizan las posibilidades inversoras de nuestros clientes y asociados para garantizar una gestión transparente y rentable en la que ambas partes acuerdan asumir los riesgos propios de cada inversión.</motion.p>
           <motion.p variants={fadeUp}>La gestión de riesgos en el ámbito de las inversiones en Bolivia debe tener en cuenta varios factores: La evolución del sector, la proyección económica y sobre todo la rigurosidad de la gestión de las garantías de transmisión de la propiedad y la aprobación correcta de los proyectos.</motion.p>
+          <motion.div variants={fadeUp} className="about-principles mt-8">
+            <div><b>Misión</b><span>[Texto de tu misión aquí]</span></div>
+            <div><b>Visión</b><span>[Texto de tu visión aquí]</span></div>
+            <div><b>Valores</b><span>[Texto de tus valores aquí]</span></div>
+          </motion.div>
         </div>
       </motion.section>
 
