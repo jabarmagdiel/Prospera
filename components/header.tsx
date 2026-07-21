@@ -37,7 +37,7 @@ export function Header() {
             
             {/* Logo */}
             <div className="flex items-center gap-2">
-              <img src="/prosperalogo.png" alt="Prospera" className="h-8 w-auto object-contain" />
+              <img src="/prosperalogo.png" alt="Prospera" className="h-14 w-auto object-contain drop-shadow-md" />
             </div>
 
             {/* Desktop Nav */}
