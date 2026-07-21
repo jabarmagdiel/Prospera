@@ -83,53 +83,72 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           <motion.p variants={fadeUp}>Las garantías en la gestión del desarrollo de proyectos inmobiliarios en Prospera suponen tener las cautelas necesarias para poder generar confianza y seguridad a nuestros inversores.</motion.p>
           <motion.p variants={fadeUp}>La aprobación de los proyectos se hace imperativa antes de continuar con las fases de ingeniería y arquitectura. Nuestros expertos en el área de proyectos, analizan las posibilidades inversoras de nuestros clientes y asociados para garantizar una gestión transparente y rentable en la que ambas partes acuerdan asumir los riesgos propios de cada inversión.</motion.p>
           <motion.p variants={fadeUp}>La gestión de riesgos en el ámbito de las inversiones en Bolivia debe tener en cuenta varios factores: La evolución del sector, la proyección económica y sobre todo la rigurosidad de la gestión de las garantías de transmisión de la propiedad y la aprobación correcta de los proyectos.</motion.p>
-          <motion.div variants={fadeUp} className="mt-14 space-y-8">
-            {/* Misión y Visión */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-stone-50 p-8 rounded-2xl border border-stone-200 shadow-sm">
-                <h3 className="text-2xl font-serif text-stone-900 mb-4">Misión</h3>
-                <p className="text-stone-600 leading-relaxed text-sm">Desarrollar e implementar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario para nuestros clientes e inversionistas, en función a sus necesidades y expectativas; mediante una gestión innovadora y eficiente de nuestros recursos y procesos.</p>
-              </div>
-              <div className="bg-stone-50 p-8 rounded-2xl border border-stone-200 shadow-sm">
-                <h3 className="text-2xl font-serif text-stone-900 mb-4">Visión</h3>
-                <p className="text-stone-600 leading-relaxed text-sm">Somos un referente sólido, confiable e innovador que gestiona inversiones en el sector inmobiliario, superando las expectativas de nuestros clientes y generando una atractiva rentabilidad para nuestros inversionistas.</p>
-              </div>
-            </div>
+        </div>
+      </motion.section>
 
-            {/* Valores */}
-            <div className="bg-stone-50 p-8 rounded-2xl border border-stone-200 shadow-sm">
-              <h3 className="text-2xl font-serif text-stone-900 mb-6">Valores</h3>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div><strong className="text-orange-600 block mb-1">Profesionalismo</strong><p className="text-xs text-stone-600">Aplicar las habilidades y experiencia de todos los miembros del equipo en el logro de los objetivos de la empresa.</p></div>
-                <div><strong className="text-orange-600 block mb-1">Transparencia</strong><p className="text-xs text-stone-600">Comportamiento honesto e íntegro en todas nuestras actividades y hacia las personas con las que nos relacionamos.</p></div>
-                <div><strong className="text-orange-600 block mb-1">Compromiso</strong><p className="text-xs text-stone-600">Perseverar y entregar todo nuestro esfuerzo, ética y profesionalismo en cada una de las actividades y tareas que asumimos.</p></div>
-                <div><strong className="text-orange-600 block mb-1">Enfoque al cliente</strong><p className="text-xs text-stone-600">Dirigir todas nuestras acciones a superar las expectativas de nuestros clientes.</p></div>
-                <div><strong className="text-orange-600 block mb-1">Respeto</strong><p className="text-xs text-stone-600">Aceptar otros puntos de vista, opiniones y creencias de las demás personas, aunque no coincidan con las propias.</p></div>
-                <div><strong className="text-orange-600 block mb-1">Innovación</strong><p className="text-xs text-stone-600">Promover la búsqueda continua de nuevas alternativas que den soluciones en el mercado inmobiliario.</p></div>
-                <div><strong className="text-orange-600 block mb-1">Trabajo en equipo</strong><p className="text-xs text-stone-600">Fomentar la participación de todos los integrantes de la empresa y una colaboración efectiva alineada con un objetivo común.</p></div>
-                <div><strong className="text-orange-600 block mb-1">Mejora continua</strong><p className="text-xs text-stone-600">Promover la presentación de propuestas que permitan mejorar el desempeño de nuestros procesos y resultados.</p></div>
-                <div><strong className="text-orange-600 block mb-1">Confiabilidad</strong><p className="text-xs text-stone-600">Proporcionar seguridad, fiabilidad e inspirar confianza a nuestros clientes e inversionistas.</p></div>
-                <div><strong className="text-orange-600 block mb-1">Disciplina</strong><p className="text-xs text-stone-600">Constancia en el cumplimiento de nuestras responsabilidades, en base a normativas enfocadas a alcanzar los objetivos.</p></div>
-              </div>
-            </div>
+      {/* NUEVA SECCIÓN: Misión, Visión, Valores */}
+      <section className="bg-stone-100 py-24 border-t border-stone-200">
+        <motion.div 
+          className="max-w-7xl mx-auto px-6 space-y-12"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={stagger}
+        >
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <motion.p variants={fadeUp} className="text-orange-600 font-bold tracking-widest uppercase text-sm mb-4">Nuestra Esencia</motion.p>
+            <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-serif text-stone-900 mb-6">Los cimientos de nuestro trabajo</motion.h2>
+          </div>
 
-            {/* Política de Calidad */}
-            <div className="bg-stone-50 p-8 rounded-2xl border border-stone-200 shadow-sm">
-              <h3 className="text-2xl font-serif text-stone-900 mb-4">Política de la Calidad</h3>
-              <p className="text-stone-600 text-sm mb-4 leading-relaxed">Nuestra empresa busca dar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario para nuestros clientes e inversionistas, en función a sus necesidades y expectativas; mediante una gestión innovadora y eficiente de nuestros recursos y procesos. Para poder cumplir con este propósito es que la Gerencia y personal de la empresa se comprometen a:</p>
-              <ul className="list-disc pl-5 space-y-2 text-sm text-stone-600">
+          {/* Misión y Visión */}
+          <div className="grid md:grid-cols-2 gap-8">
+            <motion.div variants={fadeUp} className="bg-white p-10 md:p-12 rounded-3xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
+              <h3 className="text-3xl font-serif text-stone-900 mb-6 text-center md:text-left">Misión</h3>
+              <p className="text-stone-600 leading-relaxed text-lg text-center md:text-left">Desarrollar e implementar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario para nuestros clientes e inversionistas, en función a sus necesidades y expectativas; mediante una gestión innovadora y eficiente de nuestros recursos y procesos.</p>
+            </motion.div>
+            <motion.div variants={fadeUp} className="bg-white p-10 md:p-12 rounded-3xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
+              <h3 className="text-3xl font-serif text-stone-900 mb-6 text-center md:text-left">Visión</h3>
+              <p className="text-stone-600 leading-relaxed text-lg text-center md:text-left">Somos un referente sólido, confiable e innovador que gestiona inversiones en el sector inmobiliario, superando las expectativas de nuestros clientes y generando una atractiva rentabilidad para nuestros inversionistas.</p>
+            </motion.div>
+          </div>
+
+          {/* Valores */}
+          <motion.div variants={fadeUp} className="bg-white p-10 md:p-12 rounded-3xl border border-stone-200 shadow-sm">
+            <h3 className="text-3xl font-serif text-stone-900 mb-10 text-center">Nuestros Valores</h3>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
+              <div><strong className="text-orange-600 block mb-2 text-lg">Profesionalismo</strong><p className="text-sm text-stone-600 leading-relaxed">Aplicar las habilidades y experiencia de todos los miembros del equipo en el logro de los objetivos de la empresa.</p></div>
+              <div><strong className="text-orange-600 block mb-2 text-lg">Transparencia</strong><p className="text-sm text-stone-600 leading-relaxed">Comportamiento honesto e íntegro en todas nuestras actividades y hacia las personas con las que nos relacionamos.</p></div>
+              <div><strong className="text-orange-600 block mb-2 text-lg">Compromiso</strong><p className="text-sm text-stone-600 leading-relaxed">Perseverar y entregar todo nuestro esfuerzo, ética y profesionalismo en cada una de las actividades y tareas que asumimos.</p></div>
+              <div><strong className="text-orange-600 block mb-2 text-lg">Enfoque al cliente</strong><p className="text-sm text-stone-600 leading-relaxed">Dirigir todas nuestras acciones a superar las expectativas de nuestros clientes.</p></div>
+              <div><strong className="text-orange-600 block mb-2 text-lg">Respeto</strong><p className="text-sm text-stone-600 leading-relaxed">Aceptar otros puntos de vista, opiniones y creencias de las demás personas, aunque no coincidan con las propias.</p></div>
+              <div><strong className="text-orange-600 block mb-2 text-lg">Innovación</strong><p className="text-sm text-stone-600 leading-relaxed">Promover la búsqueda continua de nuevas alternativas que den soluciones en el mercado inmobiliario.</p></div>
+              <div><strong className="text-orange-600 block mb-2 text-lg">Trabajo en equipo</strong><p className="text-sm text-stone-600 leading-relaxed">Fomentar la participación de todos los integrantes de la empresa y una colaboración efectiva alineada con un objetivo común.</p></div>
+              <div><strong className="text-orange-600 block mb-2 text-lg">Mejora continua</strong><p className="text-sm text-stone-600 leading-relaxed">Promover la presentación de propuestas que permitan mejorar el desempeño de nuestros procesos y resultados.</p></div>
+              <div><strong className="text-orange-600 block mb-2 text-lg">Confiabilidad</strong><p className="text-sm text-stone-600 leading-relaxed">Proporcionar seguridad, fiabilidad e inspirar confianza a nuestros clientes e inversionistas.</p></div>
+              <div><strong className="text-orange-600 block mb-2 text-lg">Disciplina</strong><p className="text-sm text-stone-600 leading-relaxed">Constancia en el cumplimiento de nuestras responsabilidades, en base a normativas enfocadas a alcanzar los objetivos.</p></div>
+            </div>
+          </motion.div>
+
+          {/* Política de Calidad */}
+          <motion.div variants={fadeUp} className="bg-white p-10 md:p-12 rounded-3xl border border-stone-200 shadow-sm">
+            <h3 className="text-3xl font-serif text-stone-900 mb-6 text-center md:text-left">Política de la Calidad</h3>
+            <p className="text-stone-600 text-lg mb-8 leading-relaxed max-w-5xl">Nuestra empresa busca dar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario para nuestros clientes e inversionistas, en función a sus necesidades y expectativas; mediante una gestión innovadora y eficiente de nuestros recursos y procesos. Para poder cumplir con este propósito es que la Gerencia y personal de la empresa se comprometen a:</p>
+            <div className="grid md:grid-cols-2 gap-x-12 gap-y-4 text-stone-600">
+              <ul className="list-disc pl-5 space-y-4">
                 <li>Fortalecer la capacidad de ventas de la empresa.</li>
                 <li>Estandarizar los procesos para facilitar su seguimiento, control y mejora continua.</li>
                 <li>Adecuar y mantener una estructura formal que se ajuste al propósito organizacional.</li>
                 <li>Promover una cultura organizacional coherente con los valores de la empresa.</li>
+              </ul>
+              <ul className="list-disc pl-5 space-y-4">
                 <li>Desarrollar y promover proyectos complementarios que permitan mayor valor y plusvalía para nuestros clientes e inversionistas.</li>
                 <li>Cumplir con lo comprometido a nuestros clientes e inversionistas.</li>
                 <li>Cumplir con los requisitos legales y reglamentarios aplicables.</li>
               </ul>
             </div>
           </motion.div>
-        </div>
-      </motion.section>
+        </motion.div>
+      </section>
 
       <section className="portfolio-section" id="proyectos">
         <motion.div 
