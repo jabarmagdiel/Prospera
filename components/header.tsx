@@ -37,9 +37,7 @@ export function Header() {
             
             {/* Logo */}
             <div className="flex items-center gap-2">
-              <span className="font-serif text-2xl font-bold tracking-tighter text-white transition-colors">
-                Prospera
-              </span>
+              <img src="/prosperalogo.png" alt="Prospera" className="h-8 w-auto object-contain" />
             </div>
 
             {/* Desktop Nav */}
