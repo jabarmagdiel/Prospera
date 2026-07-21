@@ -41,17 +41,17 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
       
       <section className="corp-hero" id="inicio">
         <motion.div 
-          className="corp-hero-copy"
+          className="corp-hero-copy !py-10 md:!py-16 lg:!py-20"
           initial="hidden"
           animate="visible"
           variants={stagger}
         >
-          <motion.p variants={fadeUp} className="eyebrow light"><span></span> Santa Cruz de la Sierra</motion.p>
-          <motion.h1 variants={fadeUp}>Un terreno puede ser<br/><em>el comienzo de algo grande.</em></motion.h1>
-          <motion.p variants={fadeUp}>En Prospera desarrollamos proyectos urbanísticos para quienes quieren vivir mejor, invertir con criterio o dejar patrimonio. Te ayudamos a entender cada opción y avanzar con una condición que sí puedas sostener.</motion.p>
-          <motion.div variants={fadeUp} className="hero-actions">
-            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="button primary" onClick={() => window.location.href = '#proyectos'}>Encontrá tu proyecto <span>↓</span></motion.button>
-            <motion.button whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.8)" }} whileTap={{ scale: 0.95 }} className="button ghost" onClick={() => window.location.href = '#nosotros'}>Conocé Prospera</motion.button>
+          <motion.p variants={fadeUp} className="eyebrow light !mb-2"><span></span> Santa Cruz de la Sierra</motion.p>
+          <motion.h1 variants={fadeUp} className="!text-4xl md:!text-5xl lg:!text-6xl !leading-tight !mb-4 !mt-0">Un terreno puede ser<br/><em>el comienzo de algo grande.</em></motion.h1>
+          <motion.p variants={fadeUp} className="!text-base !mb-6 !mt-2">En Prospera desarrollamos proyectos urbanísticos para quienes quieren vivir mejor, invertir con criterio o dejar patrimonio. Te ayudamos a entender cada opción y avanzar con una condición que sí puedas sostener.</motion.p>
+          <motion.div variants={fadeUp} className="hero-actions flex gap-4">
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="button primary !py-3 !px-6 !text-sm" onClick={() => window.location.href = '#proyectos'}>Encontrá tu proyecto <span>↓</span></motion.button>
+            <motion.button whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.8)" }} whileTap={{ scale: 0.95 }} className="button ghost !py-3 !px-6 !text-sm" onClick={() => window.location.href = '#nosotros'}>Conocé Prospera</motion.button>
           </motion.div>
         </motion.div>
         <HeroCarousel />
