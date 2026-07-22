@@ -109,22 +109,33 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           </div>
 
           {/* Misión y Visión */}
-          <div className="grid md:grid-cols-2 gap-8">
-            <motion.div variants={fadeUp} className="group bg-white p-10 md:p-14 rounded-[2rem] border border-stone-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-50 to-orange-100 rounded-bl-[4rem] -z-0 opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
-              <div className="w-16 h-16 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mb-8 relative z-10">
-                <Target className="w-8 h-8" />
+          <div className="flex flex-col gap-12">
+            <motion.div variants={fadeUp} className="group bg-white rounded-[2rem] border border-stone-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500 overflow-hidden flex flex-col md:flex-row">
+              <div className="md:w-[55%] p-10 md:p-16 flex flex-col justify-center">
+                <div className="w-16 h-16 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mb-8 relative z-10">
+                  <Target className="w-8 h-8" />
+                </div>
+                <h3 className="text-3xl md:text-4xl font-serif text-stone-900 mb-6">Misión</h3>
+                <p className="text-stone-600 leading-relaxed text-lg">Desarrollar e implementar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario para nuestros clientes e inversionistas, en función a sus necesidades y expectativas; mediante una gestión innovadora y eficiente de nuestros recursos y procesos.</p>
               </div>
-              <h3 className="text-3xl font-serif text-stone-900 mb-6 relative z-10">Misión</h3>
-              <p className="text-stone-600 leading-relaxed text-lg relative z-10">Desarrollar e implementar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario para nuestros clientes e inversionistas, en función a sus necesidades y expectativas; mediante una gestión innovadora y eficiente de nuestros recursos y procesos.</p>
+              <div className="md:w-[45%] min-h-[350px] relative overflow-hidden">
+                <img src="/hero/slide1.png" alt="Misión Prospera" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s] ease-out" />
+                <div className="absolute inset-0 bg-gradient-to-r from-white to-transparent opacity-30 md:opacity-100 w-1/4"></div>
+              </div>
             </motion.div>
-            <motion.div variants={fadeUp} className="group bg-white p-10 md:p-14 rounded-[2rem] border border-stone-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-50 to-blue-100 rounded-bl-[4rem] -z-0 opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
-              <div className="w-16 h-16 bg-blue-50 text-blue-800 rounded-2xl flex items-center justify-center mb-8 relative z-10">
-                <Eye className="w-8 h-8" />
+            
+            <motion.div variants={fadeUp} className="group bg-white rounded-[2rem] border border-stone-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500 overflow-hidden flex flex-col md:flex-row-reverse">
+              <div className="md:w-[55%] p-10 md:p-16 flex flex-col justify-center">
+                <div className="w-16 h-16 bg-blue-50 text-blue-800 rounded-2xl flex items-center justify-center mb-8 relative z-10">
+                  <Eye className="w-8 h-8" />
+                </div>
+                <h3 className="text-3xl md:text-4xl font-serif text-stone-900 mb-6">Visión</h3>
+                <p className="text-stone-600 leading-relaxed text-lg">Somos un referente sólido, confiable e innovador que gestiona inversiones en el sector inmobiliario, superando las expectativas de nuestros clientes y generando una atractiva rentabilidad para nuestros inversionistas.</p>
               </div>
-              <h3 className="text-3xl font-serif text-stone-900 mb-6 relative z-10">Visión</h3>
-              <p className="text-stone-600 leading-relaxed text-lg relative z-10">Somos un referente sólido, confiable e innovador que gestiona inversiones en el sector inmobiliario, superando las expectativas de nuestros clientes y generando una atractiva rentabilidad para nuestros inversionistas.</p>
+              <div className="md:w-[45%] min-h-[350px] relative overflow-hidden">
+                <img src="/hero/slide2.png" alt="Visión Prospera" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s] ease-out" />
+                <div className="absolute inset-0 bg-gradient-to-l from-white to-transparent opacity-30 md:opacity-100 w-1/4 right-0"></div>
+              </div>
             </motion.div>
           </div>
 
@@ -147,9 +158,9 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
                 { icon: BadgeCheck, title: "Confiabilidad", text: "Proporcionar seguridad e inspirar confianza a clientes." },
                 { icon: CheckCircle, title: "Disciplina", text: "Constancia en el cumplimiento de responsabilidades y normativas." },
               ].map((val, idx) => (
-                <div key={idx} className="group bg-white p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all duration-300 flex flex-col items-center text-center">
-                  <div className="w-12 h-12 bg-stone-50 rounded-full flex items-center justify-center mb-4 text-orange-500 group-hover:bg-orange-50 group-hover:scale-110 transition-all duration-300">
-                    <val.icon className="w-5 h-5" />
+                <div key={idx} className="group bg-white p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-orange-200 transition-all duration-300 flex flex-col items-center text-center">
+                  <div className="w-14 h-14 bg-stone-50 rounded-full flex items-center justify-center mb-5 text-orange-500 group-hover:bg-orange-50 group-hover:scale-110 transition-all duration-300">
+                    <val.icon className="w-6 h-6" />
                   </div>
                   <strong className="text-stone-900 block mb-2 text-[15px]">{val.title}</strong>
                   <p className="text-xs text-stone-500 leading-relaxed">{val.text}</p>
@@ -159,25 +170,26 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           </motion.div>
 
           {/* Política de Calidad */}
-          <motion.div variants={fadeUp} className="bg-stone-900 rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden shadow-2xl">
-            <div className="absolute inset-0 bg-[url('/images/pattern-bg.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
+          <motion.div variants={fadeUp} className="rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden shadow-2xl group">
+            <img src="/hero/slide3.png" alt="Política de Calidad" className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-[2s] ease-out" />
+            <div className="absolute inset-0 bg-stone-900/85 backdrop-blur-[2px]"></div>
             <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-bl from-orange-500/20 to-transparent rounded-full blur-[100px] -z-0 pointer-events-none"></div>
             
             <div className="relative z-10 flex flex-col lg:flex-row gap-16">
-              <div className="lg:w-1/3">
+              <div className="lg:w-[40%]">
                 <div className="w-16 h-16 bg-white/10 text-orange-400 rounded-2xl flex items-center justify-center mb-8 backdrop-blur-md">
                   <FileText className="w-8 h-8" />
                 </div>
-                <h3 className="text-4xl font-serif text-white mb-6">Política de la Calidad</h3>
+                <h3 className="text-4xl md:text-5xl font-serif text-white mb-6 leading-tight">Política de la Calidad</h3>
                 <p className="text-stone-300 text-lg leading-relaxed">
                   Nuestra empresa busca dar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario para nuestros clientes e inversionistas.
                 </p>
               </div>
               
-              <div className="lg:w-2/3">
-                <div className="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-10 backdrop-blur-md">
-                  <p className="text-white/80 font-medium mb-8">Para cumplir con este propósito, nos comprometemos a:</p>
-                  <div className="grid md:grid-cols-2 gap-x-10 gap-y-6">
+              <div className="lg:w-[60%]">
+                <div className="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-10 backdrop-blur-md h-full flex flex-col justify-center">
+                  <p className="text-white font-medium mb-8 text-lg">Para cumplir con este propósito, nos comprometemos a:</p>
+                  <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
                     {[
                       "Fortalecer la capacidad de ventas.",
                       "Estandarizar procesos para seguimiento y mejora continua.",
@@ -188,7 +200,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
                       "Cumplir con los requisitos legales y reglamentarios."
                     ].map((item, idx) => (
                       <div key={idx} className="flex gap-4 items-start">
-                        <CheckCircle className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
+                        <CheckCircle className="w-6 h-6 text-orange-500 shrink-0 mt-0.5" />
                         <span className="text-stone-300 text-sm leading-relaxed">{item}</span>
                       </div>
                     ))}
