@@ -9,6 +9,7 @@ import { ProjectCardCarousel } from "./project-card-carousel";
 import { PaymentSimulator } from "./payment-simulator";
 import { SmartWhatsapp } from "./smart-whatsapp";
 import { Header } from "./header";
+import { Target, Eye, Briefcase, ShieldCheck, Handshake, Heart, Users, Lightbulb, TrendingUp, CheckCircle, FileText, BadgeCheck } from "lucide-react";
 
 export function CorporateHome({ onOpenProject, content, projects }: { onOpenProject: (project: Project) => void, content?: any, projects?: any[] }) {
   const [toast, setToast] = useState("");
@@ -87,64 +88,113 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
       </motion.section>
 
       {/* NUEVA SECCIÓN: Misión, Visión, Valores */}
-      <section className="bg-stone-100 py-24 border-t border-stone-200">
+      <section className="bg-stone-50 py-32 border-t border-stone-200 relative overflow-hidden">
+        {/* Background decorations */}
+        <div className="absolute top-0 right-0 -mt-20 -mr-20 w-[600px] h-[600px] bg-orange-100 rounded-full blur-[120px] opacity-40 pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-[500px] h-[500px] bg-blue-100 rounded-full blur-[100px] opacity-40 pointer-events-none"></div>
+
         <motion.div 
-          className="max-w-7xl mx-auto px-6 space-y-12"
+          className="max-w-7xl mx-auto px-6 space-y-24 relative z-10"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
           variants={stagger}
         >
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <motion.p variants={fadeUp} className="text-orange-600 font-bold tracking-widest uppercase text-sm mb-4">Nuestra Esencia</motion.p>
-            <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-serif text-stone-900 mb-6">Los cimientos de nuestro trabajo</motion.h2>
+          <div className="text-center max-w-3xl mx-auto">
+            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100/50 border border-orange-200/50 mb-6">
+              <Star className="w-4 h-4 text-orange-600" />
+              <span className="text-orange-700 font-semibold tracking-wider uppercase text-xs">Nuestra Esencia</span>
+            </motion.div>
+            <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl lg:text-6xl font-serif text-stone-900 mb-6">Los cimientos de nuestro trabajo</motion.h2>
           </div>
 
           {/* Misión y Visión */}
           <div className="grid md:grid-cols-2 gap-8">
-            <motion.div variants={fadeUp} className="bg-white p-10 md:p-12 rounded-3xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-3xl font-serif text-stone-900 mb-6 text-center md:text-left">Misión</h3>
-              <p className="text-stone-600 leading-relaxed text-lg text-center md:text-left">Desarrollar e implementar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario para nuestros clientes e inversionistas, en función a sus necesidades y expectativas; mediante una gestión innovadora y eficiente de nuestros recursos y procesos.</p>
+            <motion.div variants={fadeUp} className="group bg-white p-10 md:p-14 rounded-[2rem] border border-stone-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-50 to-orange-100 rounded-bl-[4rem] -z-0 opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
+              <div className="w-16 h-16 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mb-8 relative z-10">
+                <Target className="w-8 h-8" />
+              </div>
+              <h3 className="text-3xl font-serif text-stone-900 mb-6 relative z-10">Misión</h3>
+              <p className="text-stone-600 leading-relaxed text-lg relative z-10">Desarrollar e implementar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario para nuestros clientes e inversionistas, en función a sus necesidades y expectativas; mediante una gestión innovadora y eficiente de nuestros recursos y procesos.</p>
             </motion.div>
-            <motion.div variants={fadeUp} className="bg-white p-10 md:p-12 rounded-3xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-3xl font-serif text-stone-900 mb-6 text-center md:text-left">Visión</h3>
-              <p className="text-stone-600 leading-relaxed text-lg text-center md:text-left">Somos un referente sólido, confiable e innovador que gestiona inversiones en el sector inmobiliario, superando las expectativas de nuestros clientes y generando una atractiva rentabilidad para nuestros inversionistas.</p>
+            <motion.div variants={fadeUp} className="group bg-white p-10 md:p-14 rounded-[2rem] border border-stone-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-50 to-blue-100 rounded-bl-[4rem] -z-0 opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
+              <div className="w-16 h-16 bg-blue-50 text-blue-800 rounded-2xl flex items-center justify-center mb-8 relative z-10">
+                <Eye className="w-8 h-8" />
+              </div>
+              <h3 className="text-3xl font-serif text-stone-900 mb-6 relative z-10">Visión</h3>
+              <p className="text-stone-600 leading-relaxed text-lg relative z-10">Somos un referente sólido, confiable e innovador que gestiona inversiones en el sector inmobiliario, superando las expectativas de nuestros clientes y generando una atractiva rentabilidad para nuestros inversionistas.</p>
             </motion.div>
           </div>
 
           {/* Valores */}
-          <motion.div variants={fadeUp} className="bg-white p-10 md:p-12 rounded-3xl border border-stone-200 shadow-sm">
-            <h3 className="text-3xl font-serif text-stone-900 mb-10 text-center">Nuestros Valores</h3>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
-              <div><strong className="text-orange-600 block mb-2 text-lg">Profesionalismo</strong><p className="text-sm text-stone-600 leading-relaxed">Aplicar las habilidades y experiencia de todos los miembros del equipo en el logro de los objetivos de la empresa.</p></div>
-              <div><strong className="text-orange-600 block mb-2 text-lg">Transparencia</strong><p className="text-sm text-stone-600 leading-relaxed">Comportamiento honesto e íntegro en todas nuestras actividades y hacia las personas con las que nos relacionamos.</p></div>
-              <div><strong className="text-orange-600 block mb-2 text-lg">Compromiso</strong><p className="text-sm text-stone-600 leading-relaxed">Perseverar y entregar todo nuestro esfuerzo, ética y profesionalismo en cada una de las actividades y tareas que asumimos.</p></div>
-              <div><strong className="text-orange-600 block mb-2 text-lg">Enfoque al cliente</strong><p className="text-sm text-stone-600 leading-relaxed">Dirigir todas nuestras acciones a superar las expectativas de nuestros clientes.</p></div>
-              <div><strong className="text-orange-600 block mb-2 text-lg">Respeto</strong><p className="text-sm text-stone-600 leading-relaxed">Aceptar otros puntos de vista, opiniones y creencias de las demás personas, aunque no coincidan con las propias.</p></div>
-              <div><strong className="text-orange-600 block mb-2 text-lg">Innovación</strong><p className="text-sm text-stone-600 leading-relaxed">Promover la búsqueda continua de nuevas alternativas que den soluciones en el mercado inmobiliario.</p></div>
-              <div><strong className="text-orange-600 block mb-2 text-lg">Trabajo en equipo</strong><p className="text-sm text-stone-600 leading-relaxed">Fomentar la participación de todos los integrantes de la empresa y una colaboración efectiva alineada con un objetivo común.</p></div>
-              <div><strong className="text-orange-600 block mb-2 text-lg">Mejora continua</strong><p className="text-sm text-stone-600 leading-relaxed">Promover la presentación de propuestas que permitan mejorar el desempeño de nuestros procesos y resultados.</p></div>
-              <div><strong className="text-orange-600 block mb-2 text-lg">Confiabilidad</strong><p className="text-sm text-stone-600 leading-relaxed">Proporcionar seguridad, fiabilidad e inspirar confianza a nuestros clientes e inversionistas.</p></div>
-              <div><strong className="text-orange-600 block mb-2 text-lg">Disciplina</strong><p className="text-sm text-stone-600 leading-relaxed">Constancia en el cumplimiento de nuestras responsabilidades, en base a normativas enfocadas a alcanzar los objetivos.</p></div>
+          <motion.div variants={fadeUp}>
+            <div className="text-center mb-12">
+              <h3 className="text-4xl font-serif text-stone-900">Nuestros Valores</h3>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+              {/* Valor Cards */}
+              {[
+                { icon: Briefcase, title: "Profesionalismo", text: "Aplicar habilidades y experiencia de todos en el logro de los objetivos." },
+                { icon: ShieldCheck, title: "Transparencia", text: "Comportamiento honesto e íntegro en todas nuestras actividades." },
+                { icon: Handshake, title: "Compromiso", text: "Entregar todo nuestro esfuerzo, ética y profesionalismo." },
+                { icon: Heart, title: "Enfoque al cliente", text: "Dirigir nuestras acciones a superar las expectativas." },
+                { icon: Users, title: "Respeto", text: "Aceptar otros puntos de vista, opiniones y creencias." },
+                { icon: Lightbulb, title: "Innovación", text: "Búsqueda continua de nuevas alternativas que den soluciones." },
+                { icon: Users, title: "Trabajo en equipo", text: "Fomentar la colaboración efectiva alineada con un objetivo común." },
+                { icon: TrendingUp, title: "Mejora continua", text: "Propuestas que permitan mejorar el desempeño de procesos." },
+                { icon: BadgeCheck, title: "Confiabilidad", text: "Proporcionar seguridad e inspirar confianza a clientes." },
+                { icon: CheckCircle, title: "Disciplina", text: "Constancia en el cumplimiento de responsabilidades y normativas." },
+              ].map((val, idx) => (
+                <div key={idx} className="group bg-white p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all duration-300 flex flex-col items-center text-center">
+                  <div className="w-12 h-12 bg-stone-50 rounded-full flex items-center justify-center mb-4 text-orange-500 group-hover:bg-orange-50 group-hover:scale-110 transition-all duration-300">
+                    <val.icon className="w-5 h-5" />
+                  </div>
+                  <strong className="text-stone-900 block mb-2 text-[15px]">{val.title}</strong>
+                  <p className="text-xs text-stone-500 leading-relaxed">{val.text}</p>
+                </div>
+              ))}
             </div>
           </motion.div>
 
           {/* Política de Calidad */}
-          <motion.div variants={fadeUp} className="bg-white p-10 md:p-12 rounded-3xl border border-stone-200 shadow-sm">
-            <h3 className="text-3xl font-serif text-stone-900 mb-6 text-center md:text-left">Política de la Calidad</h3>
-            <p className="text-stone-600 text-lg mb-8 leading-relaxed max-w-5xl">Nuestra empresa busca dar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario para nuestros clientes e inversionistas, en función a sus necesidades y expectativas; mediante una gestión innovadora y eficiente de nuestros recursos y procesos. Para poder cumplir con este propósito es que la Gerencia y personal de la empresa se comprometen a:</p>
-            <div className="grid md:grid-cols-2 gap-x-12 gap-y-4 text-stone-600">
-              <ul className="list-disc pl-5 space-y-4">
-                <li>Fortalecer la capacidad de ventas de la empresa.</li>
-                <li>Estandarizar los procesos para facilitar su seguimiento, control y mejora continua.</li>
-                <li>Adecuar y mantener una estructura formal que se ajuste al propósito organizacional.</li>
-                <li>Promover una cultura organizacional coherente con los valores de la empresa.</li>
-              </ul>
-              <ul className="list-disc pl-5 space-y-4">
-                <li>Desarrollar y promover proyectos complementarios que permitan mayor valor y plusvalía para nuestros clientes e inversionistas.</li>
-                <li>Cumplir con lo comprometido a nuestros clientes e inversionistas.</li>
-                <li>Cumplir con los requisitos legales y reglamentarios aplicables.</li>
-              </ul>
+          <motion.div variants={fadeUp} className="bg-stone-900 rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden shadow-2xl">
+            <div className="absolute inset-0 bg-[url('/images/pattern-bg.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
+            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-bl from-orange-500/20 to-transparent rounded-full blur-[100px] -z-0 pointer-events-none"></div>
+            
+            <div className="relative z-10 flex flex-col lg:flex-row gap-16">
+              <div className="lg:w-1/3">
+                <div className="w-16 h-16 bg-white/10 text-orange-400 rounded-2xl flex items-center justify-center mb-8 backdrop-blur-md">
+                  <FileText className="w-8 h-8" />
+                </div>
+                <h3 className="text-4xl font-serif text-white mb-6">Política de la Calidad</h3>
+                <p className="text-stone-300 text-lg leading-relaxed">
+                  Nuestra empresa busca dar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario para nuestros clientes e inversionistas.
+                </p>
+              </div>
+              
+              <div className="lg:w-2/3">
+                <div className="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-10 backdrop-blur-md">
+                  <p className="text-white/80 font-medium mb-8">Para cumplir con este propósito, nos comprometemos a:</p>
+                  <div className="grid md:grid-cols-2 gap-x-10 gap-y-6">
+                    {[
+                      "Fortalecer la capacidad de ventas.",
+                      "Estandarizar procesos para seguimiento y mejora continua.",
+                      "Mantener una estructura formal ajustada al propósito.",
+                      "Promover una cultura coherente con nuestros valores.",
+                      "Desarrollar proyectos que permitan mayor plusvalía.",
+                      "Cumplir con lo comprometido a clientes e inversionistas.",
+                      "Cumplir con los requisitos legales y reglamentarios."
+                    ].map((item, idx) => (
+                      <div key={idx} className="flex gap-4 items-start">
+                        <CheckCircle className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
+                        <span className="text-stone-300 text-sm leading-relaxed">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         </motion.div>
