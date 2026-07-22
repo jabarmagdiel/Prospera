@@ -76,7 +76,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
         >
           <span>P</span><i>PROSPERA</i>
         </motion.div>
-        <div className="about-copy">
+        <div className="about-copy !px-8 md:!px-16 lg:!px-24 xl:!px-32 [&>p]:!max-w-[1000px]">
           <motion.p variants={fadeUp} className="eyebrow"><span></span> Quiénes somos</motion.p>
           <motion.h2 variants={fadeUp}>Planificamos tierra.<br/><em>Impulsamos futuro.</em></motion.h2>
           <motion.p variants={fadeUp} className="about-lead">Prospera es una empresa de desarrollos inmobiliarios situada en Santa Cruz de la Sierra, Bolivia.</motion.p>
@@ -120,7 +120,6 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
               </div>
               <div className="md:w-[45%] min-h-[350px] relative overflow-hidden">
                 <img src="/hero/slide1.png" alt="Misión Prospera" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s] ease-out" />
-                <div className="absolute inset-0 bg-gradient-to-r from-white to-transparent opacity-30 md:opacity-100 w-1/4"></div>
               </div>
             </motion.div>
             
@@ -134,7 +133,6 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
               </div>
               <div className="md:w-[45%] min-h-[350px] relative overflow-hidden">
                 <img src="/hero/slide2.png" alt="Visión Prospera" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s] ease-out" />
-                <div className="absolute inset-0 bg-gradient-to-l from-white to-transparent opacity-30 md:opacity-100 w-1/4 right-0"></div>
               </div>
             </motion.div>
           </div>
