@@ -340,24 +340,103 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
       <PaymentSimulator />
       
       {/* ── RESPALDO / PROCESO ───────────────────────────────── */}
+      {/* ── RESPALDO / PROCESO ───────────────────────────────── */}
       <motion.section 
-        className="prospera-value" 
+        className="py-24 bg-stone-900 text-white relative overflow-hidden" 
         id="respaldo"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
       >
-        <motion.div variants={fadeUp} className="value-intro">
-          <p className="eyebrow light"><span></span> Una decisión importante merece claridad</p>
-          <h2>Comprar terreno no debería sentirse<br/><em>como un salto a ciegas.</em></h2>
-          <p>Por eso te ayudamos a comparar, preguntar, visitar y entender la opción antes de avanzar.</p>
-        </motion.div>
-        <div className="value-grid">
-          <motion.article variants={fadeUp}><span>01</span><h3>Entendé</h3><p>Conocé qué propone cada proyecto y para quién puede funcionar mejor.</p></motion.article>
-          <motion.article variants={fadeUp}><span>02</span><h3>Compará</h3><p>Revisá ubicación, etapa, formas de compra y disponibilidad vigente.</p></motion.article>
-          <motion.article variants={fadeUp}><span>03</span><h3>Conocé</h3><p>Visitá el terreno o recorré el proyecto en vivo por videollamada.</p></motion.article>
-          <motion.article variants={fadeUp}><span>04</span><h3>Decidí</h3><p>Avanzá cuando la opción tenga sentido para tu objetivo y presupuesto.</p></motion.article>
+        {/* Ambient light glow */}
+        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 bg-orange-500/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="grid lg:grid-cols-12 gap-12 items-center mb-16">
+            <motion.div variants={fadeUp} className="lg:col-span-7">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-semibold tracking-wider uppercase mb-6">
+                <ShieldCheck className="w-4 h-4" />
+                Una decisión importante merece claridad
+              </div>
+              <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-6">
+                Comprar terreno no debería sentirse <span className="italic text-orange-400">como un salto a ciegas.</span>
+              </h2>
+              <p className="text-stone-300 text-lg max-w-2xl leading-relaxed">
+                Por eso te acompañamos en cada paso con información transparente, asesoría personalizada y recorridos en vivo antes de tomar cualquier decisión.
+              </p>
+            </motion.div>
+
+            {/* Feature Highlight Box / Image on the right to fill empty space */}
+            <motion.div variants={fadeUp} className="lg:col-span-5">
+              <div className="bg-stone-800/80 border border-stone-700/80 rounded-3xl p-8 backdrop-blur-md relative overflow-hidden shadow-2xl">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 rounded-2xl bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-xl">
+                    ✓
+                  </div>
+                  <div>
+                    <h4 className="font-serif text-xl text-white">Garantía Prospera</h4>
+                    <p className="text-stone-400 text-xs">Transparencia y respaldo jurídico total</p>
+                  </div>
+                </div>
+                <p className="text-stone-300 text-sm leading-relaxed mb-6">
+                  Verificamos cada aspecto técnico y legal para que tu inversión esté 100% resguardada desde el primer día.
+                </p>
+                <div className="pt-4 border-t border-stone-700/60 flex items-center justify-between text-xs text-stone-400">
+                  <span>Asesoría gratuita</span>
+                  <button onClick={() => window.open('https://wa.me/59177820003', '_blank')} className="text-orange-400 font-medium hover:underline flex items-center gap-1">Sin compromisos →</button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* 4 Process Cards */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                num: "01",
+                title: "Entendé",
+                desc: "Conocé qué propone cada proyecto, su ubicación estratégica y para quién funciona mejor.",
+                icon: Lightbulb
+              },
+              {
+                num: "02",
+                title: "Compará",
+                desc: "Revisá las etapas de desarrollo, modalidades de pago y opciones de plusvalía a futuro.",
+                icon: TrendingUp
+              },
+              {
+                num: "03",
+                title: "Conocé",
+                desc: "Visitá el terreno en persona o realizá un recorrido interactivo guiado por videollamada.",
+                icon: Eye
+              },
+              {
+                num: "04",
+                title: "Decidí",
+                desc: "Avanzá con total tranquilidad cuando la alternativa se ajuste a tu plan y presupuesto.",
+                icon: CheckCircle
+              }
+            ].map((step, idx) => (
+              <motion.div
+                key={idx}
+                variants={fadeUp}
+                className="group bg-stone-800/50 border border-stone-700/60 hover:border-orange-500/50 rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="font-serif text-3xl text-orange-400/80 font-bold">{step.num}</span>
+                    <div className="w-10 h-10 rounded-xl bg-stone-700/50 text-stone-300 group-hover:bg-orange-500 group-hover:text-white flex items-center justify-center transition-colors">
+                      <step.icon className="w-5 h-5" />
+                    </div>
+                  </div>
+                  <h3 className="font-serif text-2xl text-white mb-3">{step.title}</h3>
+                  <p className="text-stone-400 text-sm leading-relaxed">{step.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </motion.section>
       
