@@ -9,7 +9,7 @@ import { ProjectCardCarousel } from "./project-card-carousel";
 import { PaymentSimulator } from "./payment-simulator";
 import { SmartWhatsapp } from "./smart-whatsapp";
 import { Header } from "./header";
-import { Target, Eye, Briefcase, ShieldCheck, Handshake, Heart, Users, Lightbulb, TrendingUp, CheckCircle, FileText, BadgeCheck } from "lucide-react";
+import { Star, Target, Eye, Briefcase, ShieldCheck, Handshake, Heart, Users, Lightbulb, TrendingUp, CheckCircle, FileText, BadgeCheck } from "lucide-react";
 
 export function CorporateHome({ onOpenProject, content, projects }: { onOpenProject: (project: Project) => void, content?: any, projects?: any[] }) {
   const [toast, setToast] = useState("");
