@@ -2,6 +2,33 @@ import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
+
+  // 1. Handle proxied requests to view.gestor.php (server-side data cleaning)
+  if (searchParams.has('gestor')) {
+    const params = new URLSearchParams(searchParams);
+    params.delete('gestor');
+    const gestorUrl = `https://prospera-nuevo.sistemas.com.bo/modulos/uv/view.gestor.php?${params.toString()}`;
+
+    try {
+      const response = await fetch(gestorUrl);
+      let text = await response.text();
+
+      // Server-side sanitization: remove Cliente and Precio fields completely
+      text = text.replace(/(?:<b[^>]*>)?Cliente:[\s\S]*?(?:<br\s*\/?>|\n|$)/gi, '');
+      text = text.replace(/(?:<b[^>]*>)?Precio:[\s\S]*?(?:<br\s*\/?>|\n|$)/gi, '');
+
+      return new NextResponse(text, {
+        headers: {
+          'Content-Type': response.headers.get('content-type') || 'text/html; charset=utf-8',
+          'X-Robots-Tag': 'noindex, nofollow'
+        }
+      });
+    } catch (error) {
+      return new NextResponse('Error loading map data', { status: 500 });
+    }
+  }
+
+  // 2. Handle main map HTML page request
   const projectId = searchParams.get('u');
 
   if (!projectId) {
@@ -14,86 +41,97 @@ export async function GET(request: Request) {
     const response = await fetch(targetUrl);
     let html = await response.text();
 
-    // Inject base href so relative assets load from the original server
+    // Inject base href so relative assets load from original server
     html = html.replace('<head>', `<head><base href="https://prospera-nuevo.sistemas.com.bo/modulos/uv/" />`);
 
-    // Override the API endpoint to use the absolute URL to bypass local proxy issues
+    // Override mapServRest to route through our server-side sanitizing proxy
     html = html.replace(
       'var mapServRest = "./view.gestor.php";', 
-      'var mapServRest = "https://prospera-nuevo.sistemas.com.bo/modulos/uv/view.gestor.php";'
+      'var mapServRest = "/api/map-proxy?gestor=1";'
+    );
+    html = html.replace(
+      'var mapServRest = "https://prospera-nuevo.sistemas.com.bo/modulos/uv/view.gestor.php";',
+      'var mapServRest = "/api/map-proxy?gestor=1";'
     );
 
-    // Inject script to hide price and CSS to hide panel
+    // Inject CSS & JS sanitization layers
     const scriptToInject = `
       <style>
-        /* Hide the left panel and toggle button completely */
+        /* Hide left panel and toggle button completely */
         #panelColumn, #panelToggleBtn { display: none !important; }
         #mapColumn { left: 0 !important; width: 100% !important; margin-left: 0 !important; }
         .leaflet-popup-content { font-family: sans-serif !important; }
       </style>
       <script>
-        // Ultimate Network Interceptor to remove prices and client info before they reach the map's JS
+        // Triple-layer client sanitizer for Leaflet popups
         
-        // 1. Intercept XMLHttpRequest (used by jQuery/older scripts)
+        function cleanHtmlText(input) {
+          if (!input || typeof input !== 'string') return input;
+          return input
+            .replace(/(?:<b[^>]*>)?Cliente:[\s\S]*?(?:<br\s*\/?>|\\n|$)/gi, '')
+            .replace(/(?:<b[^>]*>)?Precio:[\s\S]*?(?:<br\s*\/?>|\\n|$)/gi, '');
+        }
+
+        // Layer 1: XHR Interceptor
         const origOpen = XMLHttpRequest.prototype.open;
         XMLHttpRequest.prototype.open = function() {
             this.addEventListener('readystatechange', function() {
-                if (this.readyState === 4 && typeof this.responseText === 'string' && (this.responseText.includes('Precio:') || this.responseText.includes('Cliente:'))) {
+                if (this.readyState === 4 && typeof this.responseText === 'string') {
                     try {
-                        let text = this.responseText;
-                        // Match "Precio:" or "Cliente:" followed by anything until a <br>, </div>, </p>, </li>, or \n
-                        text = text.replace(/(<b[^>]*>)?(?:Precio|Cliente):.*?(\n|<br|<\/div|<\/p|<\/li|$)/gi, '$2');
-                        
+                        let text = cleanHtmlText(this.responseText);
                         Object.defineProperty(this, 'responseText', {
                             get: function() { return text; }
                         });
-                    } catch(e) {
-                        console.error("Error intercepting XHR", e);
-                    }
+                    } catch(e) {}
                 }
             });
             origOpen.apply(this, arguments);
         };
 
-        // 2. Intercept Fetch API (used by modern scripts)
+        // Layer 2: Fetch Interceptor
         const origFetch = window.fetch;
-        window.fetch = async function() {
-            const response = await origFetch.apply(this, arguments);
-            const clone = response.clone();
-            
-            response.text = async function() {
-                let text = await clone.text();
-                if (text.includes('Precio:') || text.includes('Cliente:')) {
-                    text = text.replace(/(<b[^>]*>)?(?:Precio|Cliente):.*?(\n|<br|<\/div|<\/p|<\/li|$)/gi, '$2');
-                }
-                return text;
-            };
-            
-            response.json = async function() {
-                let text = await clone.text();
-                if (text.includes('Precio:') || text.includes('Cliente:')) {
-                    text = text.replace(/(<b[^>]*>)?(?:Precio|Cliente):.*?(\n|<br|<\/div|<\/p|<\/li|$)/gi, '$2');
-                }
-                return JSON.parse(text);
-            };
-            
-            return response;
-        };
+        if (origFetch) {
+          window.fetch = async function() {
+              const response = await origFetch.apply(this, arguments);
+              const clone = response.clone();
+              response.text = async function() {
+                  let text = await clone.text();
+                  return cleanHtmlText(text);
+              };
+              return response;
+          };
+        }
 
-        // Fallback MutationObserver just in case the HTML was already in the page source
+        // Layer 3: Continuous 100ms DOM Cleaner + Leaflet popup listener
         document.addEventListener("DOMContentLoaded", () => {
-          const observer = new MutationObserver(() => {
+          // Continuous DOM cleaner loop
+          setInterval(() => {
             document.querySelectorAll('.leaflet-popup-content').forEach(popup => {
-              if (popup.innerHTML.includes('Precio:') || popup.innerHTML.includes('Cliente:')) {
-                let html = popup.innerHTML;
-                html = html.replace(/(<b[^>]*>)?(?:Precio|Cliente):.*?(<br|<\/div|<\/p|<\/li|$)/gi, '$2');
-                if (html !== popup.innerHTML) {
-                    popup.innerHTML = html;
-                }
+              if (popup.innerHTML && (popup.innerHTML.includes('Cliente:') || popup.innerHTML.includes('Precio:'))) {
+                popup.innerHTML = cleanHtmlText(popup.innerHTML);
               }
             });
-          });
-          observer.observe(document.body, { childList: true, subtree: true });
+          }, 100);
+
+          // Leaflet event listener
+          const checkMap = setInterval(() => {
+            if (window.map && window.map.on) {
+              window.map.on('popupopen', (e) => {
+                if (e.popup && e.popup._content) {
+                  let content = typeof e.popup._content === 'string' ? e.popup._content : e.popup._content.innerHTML;
+                  if (content) {
+                    let cleaned = cleanHtmlText(content);
+                    if (typeof e.popup._content === 'string') {
+                      e.popup.setContent(cleaned);
+                    } else {
+                      e.popup._content.innerHTML = cleaned;
+                    }
+                  }
+                }
+              });
+              clearInterval(checkMap);
+            }
+          }, 200);
         });
       </script>
     `;
