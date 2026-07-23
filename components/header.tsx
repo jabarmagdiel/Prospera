@@ -18,9 +18,9 @@ export function Header() {
   });
 
   const links = [
-    { label: "Inicio", href: "#" },
+    { label: "Inicio", href: "#inicio" },
     { label: "Nosotros", href: "#nosotros" },
-    { label: "Proyectos", href: "#proyectos-section" },
+    { label: "Proyectos", href: "#proyectos" },
     { label: "Contacto", href: "#contacto" },
   ];
 
