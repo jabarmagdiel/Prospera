@@ -1,20 +1,14 @@
 import { NextResponse } from 'next/server';
 
-const GESTOR_URL = 'https://prospera-nuevo.sistemas.com.bo/modulos/uv/view.gestor.php';
-const BASE_URL = 'https://prospera-nuevo.sistemas.com.bo/modulos/uv/';
-
-/** Strip sensitive fields from map API responses */
+/** Strip sensitive fields from map popup HTML */
 function sanitize(text: string): string {
-  // Remove "Cliente: NOMBRE" lines (with or without <b> tag, ending in <br> or end-of-string)
   text = text.replace(/<b>Cliente:<\/b>[^<]*(<br\s*\/?>)?/gi, '');
   text = text.replace(/Cliente:[^\n<]*(<br\s*\/?>|\n)?/gi, '');
-  // Remove "Precio: X" lines
   text = text.replace(/<b>Precio:<\/b>[^<]*(<br\s*\/?>)?/gi, '');
   text = text.replace(/Precio:[^\n<]*(<br\s*\/?>|\n)?/gi, '');
   return text;
 }
 
-/** GET: serve the main map HTML */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const projectId = searchParams.get('u');
@@ -30,53 +24,84 @@ export async function GET(request: Request) {
     let html = await response.text();
 
     // Inject base href so relative assets load from original server
-    html = html.replace('<head>', `<head><base href="${BASE_URL}" />`);
+    html = html.replace('<head>', `<head><base href="https://prospera-nuevo.sistemas.com.bo/modulos/uv/" />`);
 
-    // Re-route mapServRest to our POST proxy so data is sanitized server-side
+    // Keep mapServRest pointing directly to PHP (so the map loads without errors)
+    // but replace relative path with absolute URL
     html = html.replace(
       'var mapServRest = "./view.gestor.php";',
-      'var mapServRest = "/api/map-proxy";'
-    );
-    html = html.replace(
-      /var mapServRest = "https?:\/\/[^"]+view\.gestor\.php";/,
-      'var mapServRest = "/api/map-proxy";'
+      'var mapServRest = "https://prospera-nuevo.sistemas.com.bo/modulos/uv/view.gestor.php";'
     );
 
-    // Inject CSS to hide panel + last-resort DOM cleaner
+    // Inject CSS & aggressive hide-then-clean interceptor
     const inject = `
       <style>
         #panelColumn, #panelToggleBtn { display: none !important; }
         #mapColumn { left: 0 !important; width: 100% !important; margin-left: 0 !important; }
-        .leaflet-popup-content { font-family: sans-serif !important; }
+        /* Popups start invisible; JS will clean then reveal them */
+        .leaflet-popup-content-wrapper { opacity: 0; transition: opacity 0.15s ease; }
+        .leaflet-popup-content-wrapper.prospera-ready { opacity: 1; }
       </style>
       <script>
-        (function() {
-          // DOM safety net: clean any popup that slips through
-          function clean(s) {
-            if (!s) return s;
-            s = s.replace(/<b>Cliente:<\\/b>[^<]*(<br\\s*\\/?>)?/gi, '');
-            s = s.replace(/Cliente:[^\\n<]*(<br\\s*\\/?>|\\n)?/gi, '');
-            s = s.replace(/<b>Precio:<\\/b>[^<]*(<br\\s*\\/?>)?/gi, '');
-            s = s.replace(/Precio:[^\\n<]*(<br\\s*\\/?>|\\n)?/gi, '');
-            return s;
+      (function() {
+        function clean(html) {
+          if (!html) return html;
+          html = html.replace(/<b>Cliente:<\\/b>[^<]*(<br\\s*\\/?>)?/gi, '');
+          html = html.replace(/Cliente:[^\\n<]*(<br\\s*\\/?>|\\n)?/gi, '');
+          html = html.replace(/<b>Precio:<\\/b>[^<]*(<br\\s*\\/?>)?/gi, '');
+          html = html.replace(/Precio:[^\\n<]*(<br\\s*\\/?>|\\n)?/gi, '');
+          return html;
+        }
+
+        function processPopup(wrapper) {
+          if (!wrapper) return;
+          var content = wrapper.querySelector('.leaflet-popup-content');
+          if (content) {
+            content.innerHTML = clean(content.innerHTML);
           }
-          var obs = new MutationObserver(function(muts) {
-            muts.forEach(function(m) {
-              m.addedNodes.forEach(function(n) {
-                if (n.nodeType === 1) {
-                  var p = n.classList && n.classList.contains('leaflet-popup-content')
-                    ? n : n.querySelector && n.querySelector('.leaflet-popup-content');
-                  if (p && (p.innerHTML.includes('Cliente:') || p.innerHTML.includes('Precio:'))) {
-                    p.innerHTML = clean(p.innerHTML);
-                  }
-                }
-              });
+          wrapper.classList.add('prospera-ready');
+        }
+
+        // MutationObserver: fires as soon as popup is added to DOM (before paint)
+        var obs = new MutationObserver(function(mutations) {
+          mutations.forEach(function(m) {
+            m.addedNodes.forEach(function(n) {
+              if (n.nodeType !== 1) return;
+              // Check if added node is or contains a popup wrapper
+              var wrapper = null;
+              if (n.classList && n.classList.contains('leaflet-popup-content-wrapper')) {
+                wrapper = n;
+              } else if (n.querySelector) {
+                wrapper = n.querySelector('.leaflet-popup-content-wrapper');
+              }
+              if (wrapper) {
+                processPopup(wrapper);
+              }
             });
           });
-          document.addEventListener('DOMContentLoaded', function() {
-            obs.observe(document.body, { childList: true, subtree: true });
-          });
-        })();
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+          obs.observe(document.body, { childList: true, subtree: true });
+        });
+
+        // Backup: also hook into Leaflet's popupopen event once map is ready
+        var checkMap = setInterval(function() {
+          if (window.map && typeof window.map.on === 'function') {
+            window.map.on('popupopen', function(e) {
+              if (e.popup && e.popup._wrapper) {
+                processPopup(e.popup._wrapper);
+              } else {
+                // Find the open popup in DOM
+                setTimeout(function() {
+                  document.querySelectorAll('.leaflet-popup-content-wrapper').forEach(processPopup);
+                }, 0);
+              }
+            });
+            clearInterval(checkMap);
+          }
+        }, 200);
+      })();
       </script>`;
 
     html = html.replace('</head>', `${inject}</head>`);
@@ -90,40 +115,5 @@ export async function GET(request: Request) {
     });
   } catch (error) {
     return new NextResponse('Error loading map', { status: 500 });
-  }
-}
-
-/** POST: proxy to view.gestor.php and sanitize the response */
-export async function POST(request: Request) {
-  try {
-    // Forward the raw body as-is
-    const body = await request.text();
-
-    const response = await fetch(GESTOR_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': request.headers.get('content-type') || 'application/x-www-form-urlencoded',
-        'X-Requested-With': 'XMLHttpRequest',
-      },
-      body,
-    });
-
-    let text = await response.text();
-
-    // Server-side sanitization – runs before the browser ever sees the data
-    text = sanitize(text);
-
-    const contentType = response.headers.get('content-type') || 'text/html; charset=utf-8';
-
-    return new NextResponse(text, {
-      status: response.status,
-      headers: {
-        'Content-Type': contentType,
-        'X-Robots-Tag': 'noindex, nofollow',
-        'Cache-Control': 'no-store',
-      }
-    });
-  } catch (error) {
-    return new NextResponse('Error loading map data', { status: 500 });
   }
 }
