@@ -1,14 +1,5 @@
 import { NextResponse } from 'next/server';
 
-/** Strip sensitive fields from map popup HTML */
-function sanitize(text: string): string {
-  text = text.replace(/<b>Cliente:<\/b>[^<]*(<br\s*\/?>)?/gi, '');
-  text = text.replace(/Cliente:[^\n<]*(<br\s*\/?>|\n)?/gi, '');
-  text = text.replace(/<b>Precio:<\/b>[^<]*(<br\s*\/?>)?/gi, '');
-  text = text.replace(/Precio:[^\n<]*(<br\s*\/?>|\n)?/gi, '');
-  return text;
-}
-
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const projectId = searchParams.get('u');
@@ -26,81 +17,69 @@ export async function GET(request: Request) {
     // Inject base href so relative assets load from original server
     html = html.replace('<head>', `<head><base href="https://prospera-nuevo.sistemas.com.bo/modulos/uv/" />`);
 
-    // Keep mapServRest pointing directly to PHP (so the map loads without errors)
-    // but replace relative path with absolute URL
+    // Keep mapServRest pointing directly to PHP
     html = html.replace(
       'var mapServRest = "./view.gestor.php";',
       'var mapServRest = "https://prospera-nuevo.sistemas.com.bo/modulos/uv/view.gestor.php";'
     );
 
-    // Inject CSS & aggressive hide-then-clean interceptor
+    // Inject CSS & Fail-proof multi-layer sanitizer script
     const inject = `
       <style>
         #panelColumn, #panelToggleBtn { display: none !important; }
         #mapColumn { left: 0 !important; width: 100% !important; margin-left: 0 !important; }
-        /* Popups start invisible; JS will clean then reveal them */
-        .leaflet-popup-content-wrapper { opacity: 0; transition: opacity 0.15s ease; }
-        .leaflet-popup-content-wrapper.prospera-ready { opacity: 1; }
+        .leaflet-popup-content { font-family: sans-serif !important; }
       </style>
       <script>
       (function() {
-        function clean(html) {
-          if (!html) return html;
-          html = html.replace(/<b>Cliente:<\\/b>[^<]*(<br\\s*\\/?>)?/gi, '');
-          html = html.replace(/Cliente:[^\\n<]*(<br\\s*\\/?>|\\n)?/gi, '');
-          html = html.replace(/<b>Precio:<\\/b>[^<]*(<br\\s*\\/?>)?/gi, '');
-          html = html.replace(/Precio:[^\\n<]*(<br\\s*\\/?>|\\n)?/gi, '');
-          return html;
+        function clean(text) {
+          if (!text || typeof text !== 'string') return text;
+          // Strip "Precio: ..." lines
+          text = text.replace(/(?:<b[^>]*>)?\\s*Precio:\\s*[\\s\\S]*?(?:<br\\s*\\/?>|\\n|<\\/p>|(?=<div)|$)/gi, '');
+          // Strip "Cliente: ..." lines
+          text = text.replace(/(?:<b[^>]*>)?\\s*Cliente:\\s*[\\s\\S]*?(?:<br\\s*\\/?>|\\n|<\\/p>|(?=<div)|$)/gi, '');
+          // Clean duplicate breaks
+          text = text.replace(/(<br\\s*\\/?>\\s*){2,}/gi, '<br>');
+          return text;
         }
 
-        function processPopup(wrapper) {
-          if (!wrapper) return;
-          var content = wrapper.querySelector('.leaflet-popup-content');
-          if (content) {
-            content.innerHTML = clean(content.innerHTML);
-          }
-          wrapper.classList.add('prospera-ready');
-        }
-
-        // MutationObserver: fires as soon as popup is added to DOM (before paint)
-        var obs = new MutationObserver(function(mutations) {
-          mutations.forEach(function(m) {
-            m.addedNodes.forEach(function(n) {
-              if (n.nodeType !== 1) return;
-              // Check if added node is or contains a popup wrapper
-              var wrapper = null;
-              if (n.classList && n.classList.contains('leaflet-popup-content-wrapper')) {
-                wrapper = n;
-              } else if (n.querySelector) {
-                wrapper = n.querySelector('.leaflet-popup-content-wrapper');
-              }
-              if (wrapper) {
-                processPopup(wrapper);
-              }
-            });
+        function sanitizeAllPopups() {
+          var popups = document.querySelectorAll('.leaflet-popup-content, .leaflet-popup-content-wrapper');
+          popups.forEach(function(el) {
+            if (el && el.innerHTML && (el.innerHTML.includes('Cliente:') || el.innerHTML.includes('Precio:'))) {
+              el.innerHTML = clean(el.innerHTML);
+            }
           });
+        }
+
+        // Layer 1: Continuous 50ms cleaner loop
+        setInterval(sanitizeAllPopups, 50);
+
+        // Layer 2: MutationObserver watching all DOM changes (characterData & childList)
+        var obs = new MutationObserver(function() {
+          sanitizeAllPopups();
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-          obs.observe(document.body, { childList: true, subtree: true });
+          obs.observe(document.body, { childList: true, subtree: true, characterData: true });
+          sanitizeAllPopups();
         });
 
-        // Backup: also hook into Leaflet's popupopen event once map is ready
-        var checkMap = setInterval(function() {
-          if (window.map && typeof window.map.on === 'function') {
-            window.map.on('popupopen', function(e) {
-              if (e.popup && e.popup._wrapper) {
-                processPopup(e.popup._wrapper);
-              } else {
-                // Find the open popup in DOM
-                setTimeout(function() {
-                  document.querySelectorAll('.leaflet-popup-content-wrapper').forEach(processPopup);
-                }, 0);
+        // Layer 3: Intercept Leaflet L.Popup.prototype.setContent
+        var checkL = setInterval(function() {
+          if (window.L && window.L.Popup && window.L.Popup.prototype) {
+            var origSetContent = window.L.Popup.prototype.setContent;
+            window.L.Popup.prototype.setContent = function(content) {
+              if (typeof content === 'string') {
+                content = clean(content);
+              } else if (content && content.innerHTML) {
+                content.innerHTML = clean(content.innerHTML);
               }
-            });
-            clearInterval(checkMap);
+              return origSetContent.call(this, content);
+            };
+            clearInterval(checkL);
           }
-        }, 200);
+        }, 100);
       })();
       </script>`;
 
