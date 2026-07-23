@@ -37,11 +37,9 @@ export function Header() {
     const el = document.getElementById(targetId) || document.getElementById(`${targetId}-section`);
 
     if (el) {
-      const yOffset = -80; // Account for fixed header
-      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
     } else {
-      window.location.href = href;
+      window.location.hash = href;
     }
   };
 
