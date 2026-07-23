@@ -32,17 +32,17 @@ export async function GET(request: Request) {
         .leaflet-popup-content { font-family: sans-serif !important; }
       </style>
       <script>
-        // Ultimate Network Interceptor to remove prices before they even reach the map's JS
+        // Ultimate Network Interceptor to remove prices and client info before they reach the map's JS
         
         // 1. Intercept XMLHttpRequest (used by jQuery/older scripts)
         const origOpen = XMLHttpRequest.prototype.open;
         XMLHttpRequest.prototype.open = function() {
             this.addEventListener('readystatechange', function() {
-                if (this.readyState === 4 && typeof this.responseText === 'string' && this.responseText.includes('Precio:')) {
+                if (this.readyState === 4 && typeof this.responseText === 'string' && (this.responseText.includes('Precio:') || this.responseText.includes('Cliente:'))) {
                     try {
                         let text = this.responseText;
-                        // Match "Precio:" followed by anything until a <br>, </div>, </p>, </li>, or \\n
-                        text = text.replace(/(<b[^>]*>)?Precio:.*?(\\n|<br|\\<\\/div|\\<\\/p|\\<\\/li|$)/gi, '$2');
+                        // Match "Precio:" or "Cliente:" followed by anything until a <br>, </div>, </p>, </li>, or \n
+                        text = text.replace(/(<b[^>]*>)?(?:Precio|Cliente):.*?(\n|<br|<\/div|<\/p|<\/li|$)/gi, '$2');
                         
                         Object.defineProperty(this, 'responseText', {
                             get: function() { return text; }
@@ -63,16 +63,16 @@ export async function GET(request: Request) {
             
             response.text = async function() {
                 let text = await clone.text();
-                if (text.includes('Precio:')) {
-                    text = text.replace(/(<b[^>]*>)?Precio:.*?(\\n|<br|\\<\\/div|\\<\\/p|\\<\\/li|$)/gi, '$2');
+                if (text.includes('Precio:') || text.includes('Cliente:')) {
+                    text = text.replace(/(<b[^>]*>)?(?:Precio|Cliente):.*?(\n|<br|<\/div|<\/p|<\/li|$)/gi, '$2');
                 }
                 return text;
             };
             
             response.json = async function() {
                 let text = await clone.text();
-                if (text.includes('Precio:')) {
-                    text = text.replace(/(<b[^>]*>)?Precio:.*?(\\n|<br|\\<\\/div|\\<\\/p|\\<\\/li|$)/gi, '$2');
+                if (text.includes('Precio:') || text.includes('Cliente:')) {
+                    text = text.replace(/(<b[^>]*>)?(?:Precio|Cliente):.*?(\n|<br|<\/div|<\/p|<\/li|$)/gi, '$2');
                 }
                 return JSON.parse(text);
             };
@@ -84,9 +84,9 @@ export async function GET(request: Request) {
         document.addEventListener("DOMContentLoaded", () => {
           const observer = new MutationObserver(() => {
             document.querySelectorAll('.leaflet-popup-content').forEach(popup => {
-              if (popup.innerHTML.includes('Precio:')) {
+              if (popup.innerHTML.includes('Precio:') || popup.innerHTML.includes('Cliente:')) {
                 let html = popup.innerHTML;
-                html = html.replace(/(<b[^>]*>)?Precio:.*?(<br|\\<\\/div|\\<\\/p|\\<\\/li|$)/gi, '$2');
+                html = html.replace(/(<b[^>]*>)?(?:Precio|Cliente):.*?(<br|<\/div|<\/p|<\/li|$)/gi, '$2');
                 if (html !== popup.innerHTML) {
                     popup.innerHTML = html;
                 }
