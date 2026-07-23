@@ -23,7 +23,7 @@ export async function GET(request: Request) {
       'var mapServRest = "https://prospera-nuevo.sistemas.com.bo/modulos/uv/view.gestor.php";'
     );
 
-    // Inject CSS & Pure Non-blocking DOM Sanitizer (Zero XHR touch = Zero network errors)
+    // Inject CSS & Bulletproof Line-by-Line DOM Filter
     const inject = `
       <style>
         #panelColumn, #panelToggleBtn { display: none !important; }
@@ -32,30 +32,43 @@ export async function GET(request: Request) {
       </style>
       <script>
       (function() {
-        function cleanText(text) {
-          if (!text || typeof text !== 'string') return text;
-          if (!text.includes('Precio:') && !text.includes('Cliente:')) return text;
-          // Strip "Precio: ..." lines completely
-          text = text.replace(/(?:<b[^>]*>)?\\s*Precio\\s*:\\s*[\\s\\S]*?(?:<br\\s*\\/?>|\\n|<\\/p>|(?=<div)|$)/gi, '');
-          // Strip "Cliente: ..." lines completely
-          text = text.replace(/(?:<b[^>]*>)?\\s*Cliente\\s*:\\s*[\\s\\S]*?(?:<br\\s*\\/?>|\\n|<\\/p>|(?=<div)|$)/gi, '');
-          // Clean duplicate breaks
-          text = text.replace(/(<br\\s*\\/?>\\s*){2,}/gi, '<br>');
-          return text;
+        function cleanHtml(html) {
+          if (!html || typeof html !== 'string') return html;
+          var lower = html.toLowerCase();
+          if (!lower.includes('precio') && !lower.includes('cliente')) return html;
+
+          var parts = html.split(/(<br\\s*\\/?>|\\n)/gi);
+          var cleanParts = [];
+
+          for (var i = 0; i < parts.length; i++) {
+            var p = parts[i];
+            var pLower = p.toLowerCase();
+            if (pLower.includes('precio') || pLower.includes('cliente')) {
+              continue;
+            }
+            cleanParts.push(p);
+          }
+
+          var result = cleanParts.join('');
+          return result.replace(/(<br\\s*\\/?>\\s*){2,}/gi, '<br>');
         }
 
         function sanitizeDOM() {
-          var elements = document.querySelectorAll('.leaflet-popup-content, .leaflet-popup-content-wrapper');
+          var elements = document.querySelectorAll('.leaflet-popup-content, .leaflet-popup-content-wrapper, .leaflet-popup');
           for (var i = 0; i < elements.length; i++) {
             var el = elements[i];
-            if (el && el.innerHTML && (el.innerHTML.includes('Precio:') || el.innerHTML.includes('Cliente:'))) {
-              el.innerHTML = cleanText(el.innerHTML);
+            if (el && el.innerHTML) {
+              var lower = el.innerHTML.toLowerCase();
+              if (lower.includes('precio') || lower.includes('cliente')) {
+                var target = el.querySelector ? (el.querySelector('.leaflet-popup-content') || el) : el;
+                target.innerHTML = cleanHtml(target.innerHTML);
+              }
             }
           }
         }
 
-        // 30ms high-frequency DOM scanner
-        setInterval(sanitizeDOM, 30);
+        // 20ms high-frequency DOM scanner
+        setInterval(sanitizeDOM, 20);
 
         // Observer for DOM mutations
         document.addEventListener('DOMContentLoaded', function() {
