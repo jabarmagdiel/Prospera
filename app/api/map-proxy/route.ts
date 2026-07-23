@@ -23,7 +23,7 @@ export async function GET(request: Request) {
       'var mapServRest = "https://prospera-nuevo.sistemas.com.bo/modulos/uv/view.gestor.php";'
     );
 
-    // Inject CSS & Safe jQuery/Leaflet/DOM Multi-Layer Sanitizer
+    // Inject CSS & Pure Non-blocking DOM Sanitizer (Zero XHR touch = Zero network errors)
     const inject = `
       <style>
         #panelColumn, #panelToggleBtn { display: none !important; }
@@ -32,7 +32,7 @@ export async function GET(request: Request) {
       </style>
       <script>
       (function() {
-        function clean(text) {
+        function cleanText(text) {
           if (!text || typeof text !== 'string') return text;
           if (!text.includes('Precio:') && !text.includes('Cliente:')) return text;
           // Strip "Precio: ..." lines completely
@@ -44,69 +44,24 @@ export async function GET(request: Request) {
           return text;
         }
 
-        // Layer 1: jQuery dataFilter AJAX Sanitizer (Official jQuery Hook)
-        var checkJQuery = setInterval(function() {
-          if (window.$ && window.$.ajaxSetup) {
-            try {
-              window.$.ajaxSetup({
-                dataFilter: function(data) {
-                  return clean(data);
-                }
-              });
-            } catch(e) {}
-            clearInterval(checkJQuery);
-          }
-        }, 30);
-
-        // Layer 2: Safe XHR responseText Override (with try-catch to prevent DOMExceptions)
-        try {
-          var xhrProto = XMLHttpRequest.prototype;
-          var origResponseText = Object.getOwnPropertyDescriptor(xhrProto, 'responseText');
-          if (origResponseText && origResponseText.get) {
-            Object.defineProperty(xhrProto, 'responseText', {
-              get: function() {
-                try {
-                  var val = origResponseText.get.call(this);
-                  return clean(val);
-                } catch(err) {
-                  return origResponseText.get ? origResponseText.get.call(this) : "";
-                }
-              },
-              configurable: true,
-              enumerable: true
-            });
-          }
-        } catch(e) {}
-
-        // Layer 3: Leaflet L.Popup.prototype.setContent Interceptor
-        var checkL = setInterval(function() {
-          if (window.L && window.L.Popup && window.L.Popup.prototype) {
-            var origSetContent = window.L.Popup.prototype.setContent;
-            window.L.Popup.prototype.setContent = function(content) {
-              if (typeof content === 'string') {
-                content = clean(content);
-              } else if (content && content.innerHTML) {
-                content.innerHTML = clean(content.innerHTML);
-              }
-              return origSetContent.call(this, content);
-            };
-            clearInterval(checkL);
-          }
-        }, 50);
-
-        // Layer 4: Continuous DOM Sanitizer + MutationObserver
         function sanitizeDOM() {
-          var popups = document.querySelectorAll('.leaflet-popup-content, .leaflet-popup-content-wrapper');
-          popups.forEach(function(el) {
-            if (el && el.innerHTML && (el.innerHTML.includes('Cliente:') || el.innerHTML.includes('Precio:'))) {
-              el.innerHTML = clean(el.innerHTML);
+          var elements = document.querySelectorAll('.leaflet-popup-content, .leaflet-popup-content-wrapper');
+          for (var i = 0; i < elements.length; i++) {
+            var el = elements[i];
+            if (el && el.innerHTML && (el.innerHTML.includes('Precio:') || el.innerHTML.includes('Cliente:'))) {
+              el.innerHTML = cleanText(el.innerHTML);
             }
-          });
+          }
         }
-        setInterval(sanitizeDOM, 50);
+
+        // 30ms high-frequency DOM scanner
+        setInterval(sanitizeDOM, 30);
+
+        // Observer for DOM mutations
         document.addEventListener('DOMContentLoaded', function() {
           var obs = new MutationObserver(sanitizeDOM);
           obs.observe(document.body, { childList: true, subtree: true, characterData: true });
+          sanitizeDOM();
         });
       })();
       </script>`;
