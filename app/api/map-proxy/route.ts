@@ -23,7 +23,7 @@ export async function GET(request: Request) {
       'var mapServRest = "https://prospera-nuevo.sistemas.com.bo/modulos/uv/view.gestor.php";'
     );
 
-    // Inject CSS & Bulletproof Prototype Descriptor Interceptors
+    // Inject CSS & Safe jQuery/Leaflet/DOM Multi-Layer Sanitizer
     const inject = `
       <style>
         #panelColumn, #panelToggleBtn { display: none !important; }
@@ -34,6 +34,7 @@ export async function GET(request: Request) {
       (function() {
         function clean(text) {
           if (!text || typeof text !== 'string') return text;
+          if (!text.includes('Precio:') && !text.includes('Cliente:')) return text;
           // Strip "Precio: ..." lines completely
           text = text.replace(/(?:<b[^>]*>)?\\s*Precio\\s*:\\s*[\\s\\S]*?(?:<br\\s*\\/?>|\\n|<\\/p>|(?=<div)|$)/gi, '');
           // Strip "Cliente: ..." lines completely
@@ -43,53 +44,41 @@ export async function GET(request: Request) {
           return text;
         }
 
-        // Layer 1: Global XHR Prototype Descriptor Getter Override (Intercepts jQuery $.ajax, native XHR, etc.)
+        // Layer 1: jQuery dataFilter AJAX Sanitizer (Official jQuery Hook)
+        var checkJQuery = setInterval(function() {
+          if (window.$ && window.$.ajaxSetup) {
+            try {
+              window.$.ajaxSetup({
+                dataFilter: function(data) {
+                  return clean(data);
+                }
+              });
+            } catch(e) {}
+            clearInterval(checkJQuery);
+          }
+        }, 30);
+
+        // Layer 2: Safe XHR responseText Override (with try-catch to prevent DOMExceptions)
         try {
           var xhrProto = XMLHttpRequest.prototype;
           var origResponseText = Object.getOwnPropertyDescriptor(xhrProto, 'responseText');
           if (origResponseText && origResponseText.get) {
             Object.defineProperty(xhrProto, 'responseText', {
               get: function() {
-                var val = origResponseText.get.call(this);
-                return clean(val);
+                try {
+                  var val = origResponseText.get.call(this);
+                  return clean(val);
+                } catch(err) {
+                  return origResponseText.get ? origResponseText.get.call(this) : "";
+                }
               },
               configurable: true,
               enumerable: true
             });
-          }
-
-          var origResponse = Object.getOwnPropertyDescriptor(xhrProto, 'response');
-          if (origResponse && origResponse.get) {
-            Object.defineProperty(xhrProto, 'response', {
-              get: function() {
-                var val = origResponse.get.call(this);
-                return clean(val);
-              },
-              configurable: true,
-              enumerable: true
-            });
-          }
-        } catch(e) {
-          console.error("XHR interceptor error", e);
-        }
-
-        // Layer 2: Fetch API Interceptor
-        try {
-          if (window.fetch) {
-            var origFetch = window.fetch;
-            window.fetch = async function() {
-              var res = await origFetch.apply(this, arguments);
-              var clone = res.clone();
-              res.text = async function() {
-                var txt = await clone.text();
-                return clean(txt);
-              };
-              return res;
-            };
           }
         } catch(e) {}
 
-        // Layer 3: Leaflet Popup setContent Prototype Interceptor
+        // Layer 3: Leaflet L.Popup.prototype.setContent Interceptor
         var checkL = setInterval(function() {
           if (window.L && window.L.Popup && window.L.Popup.prototype) {
             var origSetContent = window.L.Popup.prototype.setContent;
@@ -105,7 +94,7 @@ export async function GET(request: Request) {
           }
         }, 50);
 
-        // Layer 4: DOM MutationObserver & 50ms Backup Sanitizer
+        // Layer 4: Continuous DOM Sanitizer + MutationObserver
         function sanitizeDOM() {
           var popups = document.querySelectorAll('.leaflet-popup-content, .leaflet-popup-content-wrapper');
           popups.forEach(function(el) {
