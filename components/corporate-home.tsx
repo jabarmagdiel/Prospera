@@ -288,7 +288,8 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
       </section>
 
       {/* ── PROYECTOS ─────────────────────────────────────────── */}
-      <section className="portfolio-section" id="proyectos">
+      <div id="proyectos-section" className="scroll-mt-24" />
+      <section className="portfolio-section scroll-mt-24" id="proyectos">
         <motion.div 
           className="portfolio-heading"
           initial="hidden"

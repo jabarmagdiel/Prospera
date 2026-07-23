@@ -24,6 +24,27 @@ export function Header() {
     { label: "Contacto", href: "#contacto" },
   ];
 
+  const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+
+    if (href === "#" || href === "#inicio") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const targetId = href.replace("#", "");
+    const el = document.getElementById(targetId) || document.getElementById(`${targetId}-section`);
+
+    if (el) {
+      const yOffset = -80; // Account for fixed header
+      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    } else {
+      window.location.href = href;
+    }
+  };
+
   return (
     <>
       <motion.header 
@@ -36,14 +57,19 @@ export function Header() {
           <div className="flex items-center justify-between rounded-full transition-all duration-500 bg-stone-900/80 backdrop-blur-xl border border-white/10 shadow-2xl px-6 py-3">
             
             {/* Logo */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 cursor-pointer" onClick={(e) => handleScrollTo(e as any, "#inicio")}>
               <img src="/prosperalogo.png" alt="Prospera" className="h-14 w-auto object-contain drop-shadow-md" />
             </div>
 
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-8">
               {links.map((link) => (
-                <a key={link.label} href={link.href} className="text-sm font-bold tracking-widest uppercase transition-colors hover:text-orange-500 text-stone-300">
+                <a 
+                  key={link.label} 
+                  href={link.href} 
+                  onClick={(e) => handleScrollTo(e, link.href)}
+                  className="text-sm font-bold tracking-widest uppercase transition-colors hover:text-orange-500 text-stone-300"
+                >
                   {link.label}
                 </a>
               ))}
@@ -51,7 +77,10 @@ export function Header() {
 
             {/* Actions */}
             <div className="hidden md:flex items-center gap-4">
-              <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2.5 rounded-full font-bold transition-all shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:shadow-[0_0_30px_rgba(249,115,22,0.5)] flex items-center gap-2 text-sm" onClick={() => document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' })}>
+              <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2.5 rounded-full font-bold transition-all shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:shadow-[0_0_30px_rgba(249,115,22,0.5)] flex items-center gap-2 text-sm" onClick={() => {
+                const el = document.getElementById('contacto');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}>
                 Asesoría <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -75,7 +104,7 @@ export function Header() {
               <a 
                 key={link.label} 
                 href={link.href} 
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={(e) => handleScrollTo(e, link.href)}
                 className="text-2xl font-serif text-white hover:text-orange-500 transition-colors"
               >
                 {link.label}
