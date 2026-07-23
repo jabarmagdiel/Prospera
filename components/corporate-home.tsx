@@ -73,7 +73,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
       >
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
-            { value: "4+", label: "Proyectos activos", icon: Building2 },
+            { value: "+5.000", label: "Familias ya confiaron en nosotros", icon: Users },
             { value: "10 años", label: "En el mercado boliviano", icon: Award },
             { value: "Santa Cruz", label: "Sede principal", icon: MapPin },
             { value: "100%", label: "Financiamiento directo", icon: CheckCircle },
