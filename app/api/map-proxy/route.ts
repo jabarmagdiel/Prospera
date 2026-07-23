@@ -23,12 +23,12 @@ export async function GET(request: Request) {
       'var mapServRest = "https://prospera-nuevo.sistemas.com.bo/modulos/uv/view.gestor.php";'
     );
 
-    // Inject CSS & Bulletproof Line-by-Line DOM Filter
+    // Inject CSS & Bootstrap Popover + DOM Sanitizer
     const inject = `
       <style>
         #panelColumn, #panelToggleBtn { display: none !important; }
         #mapColumn { left: 0 !important; width: 100% !important; margin-left: 0 !important; }
-        .leaflet-popup-content { font-family: sans-serif !important; }
+        .popover-content { font-family: sans-serif !important; }
       </style>
       <script>
       (function() {
@@ -53,15 +53,36 @@ export async function GET(request: Request) {
           return result.replace(/(<br\\s*\\/?>\\s*){2,}/gi, '<br>');
         }
 
+        // Layer 1: Hook Bootstrap Popover constructor directly
+        var checkPopover = setInterval(function() {
+          if (window.$ && window.$.fn && window.$.fn.popover && window.$.fn.popover.Constructor) {
+            try {
+              var origSetContent = window.$.fn.popover.Constructor.prototype.setContent;
+              window.$.fn.popover.Constructor.prototype.setContent = function() {
+                origSetContent.apply(this, arguments);
+                var $tip = this.tip();
+                if ($tip && $tip.length) {
+                  var html = $tip.html();
+                  if (html && (html.toLowerCase().includes('precio') || html.toLowerCase().includes('cliente'))) {
+                    $tip.html(cleanHtml(html));
+                  }
+                }
+              };
+            } catch(e) {}
+            clearInterval(checkPopover);
+          }
+        }, 30);
+
+        // Layer 2: High-frequency DOM scanner for Bootstrap Popovers & Leaflet popups
         function sanitizeDOM() {
-          var elements = document.querySelectorAll('.leaflet-popup-content, .leaflet-popup-content-wrapper, .leaflet-popup');
+          var selectors = '#markerInfoPopover, .cfm-marker-popover, .popover-content, .popover, .leaflet-popup-content, .leaflet-popup-content-wrapper';
+          var elements = document.querySelectorAll(selectors);
           for (var i = 0; i < elements.length; i++) {
             var el = elements[i];
             if (el && el.innerHTML) {
               var lower = el.innerHTML.toLowerCase();
               if (lower.includes('precio') || lower.includes('cliente')) {
-                var target = el.querySelector ? (el.querySelector('.leaflet-popup-content') || el) : el;
-                target.innerHTML = cleanHtml(target.innerHTML);
+                el.innerHTML = cleanHtml(el.innerHTML);
               }
             }
           }
