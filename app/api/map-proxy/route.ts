@@ -17,13 +17,13 @@ export async function GET(request: Request) {
     // Inject base href so relative assets load from original server
     html = html.replace('<head>', `<head><base href="https://prospera-nuevo.sistemas.com.bo/modulos/uv/" />`);
 
-    // Keep mapServRest pointing directly to PHP
+    // Ensure mapServRest points to absolute URL of original PHP script
     html = html.replace(
       'var mapServRest = "./view.gestor.php";',
       'var mapServRest = "https://prospera-nuevo.sistemas.com.bo/modulos/uv/view.gestor.php";'
     );
 
-    // Inject CSS & Fail-proof multi-layer sanitizer script
+    // Inject CSS & Bulletproof Prototype Descriptor Interceptors
     const inject = `
       <style>
         #panelColumn, #panelToggleBtn { display: none !important; }
@@ -34,38 +34,62 @@ export async function GET(request: Request) {
       (function() {
         function clean(text) {
           if (!text || typeof text !== 'string') return text;
-          // Strip "Precio: ..." lines
-          text = text.replace(/(?:<b[^>]*>)?\\s*Precio:\\s*[\\s\\S]*?(?:<br\\s*\\/?>|\\n|<\\/p>|(?=<div)|$)/gi, '');
-          // Strip "Cliente: ..." lines
-          text = text.replace(/(?:<b[^>]*>)?\\s*Cliente:\\s*[\\s\\S]*?(?:<br\\s*\\/?>|\\n|<\\/p>|(?=<div)|$)/gi, '');
+          // Strip "Precio: ..." lines completely
+          text = text.replace(/(?:<b[^>]*>)?\\s*Precio\\s*:\\s*[\\s\\S]*?(?:<br\\s*\\/?>|\\n|<\\/p>|(?=<div)|$)/gi, '');
+          // Strip "Cliente: ..." lines completely
+          text = text.replace(/(?:<b[^>]*>)?\\s*Cliente\\s*:\\s*[\\s\\S]*?(?:<br\\s*\\/?>|\\n|<\\/p>|(?=<div)|$)/gi, '');
           // Clean duplicate breaks
           text = text.replace(/(<br\\s*\\/?>\\s*){2,}/gi, '<br>');
           return text;
         }
 
-        function sanitizeAllPopups() {
-          var popups = document.querySelectorAll('.leaflet-popup-content, .leaflet-popup-content-wrapper');
-          popups.forEach(function(el) {
-            if (el && el.innerHTML && (el.innerHTML.includes('Cliente:') || el.innerHTML.includes('Precio:'))) {
-              el.innerHTML = clean(el.innerHTML);
-            }
-          });
+        // Layer 1: Global XHR Prototype Descriptor Getter Override (Intercepts jQuery $.ajax, native XHR, etc.)
+        try {
+          var xhrProto = XMLHttpRequest.prototype;
+          var origResponseText = Object.getOwnPropertyDescriptor(xhrProto, 'responseText');
+          if (origResponseText && origResponseText.get) {
+            Object.defineProperty(xhrProto, 'responseText', {
+              get: function() {
+                var val = origResponseText.get.call(this);
+                return clean(val);
+              },
+              configurable: true,
+              enumerable: true
+            });
+          }
+
+          var origResponse = Object.getOwnPropertyDescriptor(xhrProto, 'response');
+          if (origResponse && origResponse.get) {
+            Object.defineProperty(xhrProto, 'response', {
+              get: function() {
+                var val = origResponse.get.call(this);
+                return clean(val);
+              },
+              configurable: true,
+              enumerable: true
+            });
+          }
+        } catch(e) {
+          console.error("XHR interceptor error", e);
         }
 
-        // Layer 1: Continuous 50ms cleaner loop
-        setInterval(sanitizeAllPopups, 50);
+        // Layer 2: Fetch API Interceptor
+        try {
+          if (window.fetch) {
+            var origFetch = window.fetch;
+            window.fetch = async function() {
+              var res = await origFetch.apply(this, arguments);
+              var clone = res.clone();
+              res.text = async function() {
+                var txt = await clone.text();
+                return clean(txt);
+              };
+              return res;
+            };
+          }
+        } catch(e) {}
 
-        // Layer 2: MutationObserver watching all DOM changes (characterData & childList)
-        var obs = new MutationObserver(function() {
-          sanitizeAllPopups();
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-          obs.observe(document.body, { childList: true, subtree: true, characterData: true });
-          sanitizeAllPopups();
-        });
-
-        // Layer 3: Intercept Leaflet L.Popup.prototype.setContent
+        // Layer 3: Leaflet Popup setContent Prototype Interceptor
         var checkL = setInterval(function() {
           if (window.L && window.L.Popup && window.L.Popup.prototype) {
             var origSetContent = window.L.Popup.prototype.setContent;
@@ -79,7 +103,22 @@ export async function GET(request: Request) {
             };
             clearInterval(checkL);
           }
-        }, 100);
+        }, 50);
+
+        // Layer 4: DOM MutationObserver & 50ms Backup Sanitizer
+        function sanitizeDOM() {
+          var popups = document.querySelectorAll('.leaflet-popup-content, .leaflet-popup-content-wrapper');
+          popups.forEach(function(el) {
+            if (el && el.innerHTML && (el.innerHTML.includes('Cliente:') || el.innerHTML.includes('Precio:'))) {
+              el.innerHTML = clean(el.innerHTML);
+            }
+          });
+        }
+        setInterval(sanitizeDOM, 50);
+        document.addEventListener('DOMContentLoaded', function() {
+          var obs = new MutationObserver(sanitizeDOM);
+          obs.observe(document.body, { childList: true, subtree: true, characterData: true });
+        });
       })();
       </script>`;
 
