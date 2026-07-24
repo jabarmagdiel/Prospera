@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { Project } from "../lib/types";
-import { ArrowLeft, Check } from "lucide-react";
+import { ArrowLeft, Check, MapPin } from "lucide-react";
 import { ProjectMap } from "./project-map";
 
 export function ProjectDetail({ project, allProjects, onSelectProject, onBack }: { project: Project; allProjects?: Project[]; onSelectProject: (p: Project) => void; onBack: () => void }) {
@@ -121,19 +121,28 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
 
           {/* PROJECT TABS */}
           {allProjects && (
-            <div className="flex overflow-x-auto border border-[#e9e2d5] bg-white mb-10 shadow-sm">
-              {allProjects.map((p) => (
-                <button 
-                  key={p.key}
-                  onClick={() => onSelectProject(p)}
-                  className={`flex-1 py-8 px-6 flex items-center justify-center gap-4 border-r border-[#e9e2d5] transition-colors whitespace-nowrap min-w-[200px] ${project.key === p.key ? "border-b-4 border-b-[#db7844]" : "hover:bg-stone-50"}`}
-                >
-                  <span className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold ${project.key === p.key ? "bg-[#db7844] text-white" : "border border-stone-200 text-stone-400"}`}>
-                    {p.key === 'la-fortuna' ? 'LF' : p.key.replace('campo-grande-', 'CG')}
-                  </span>
-                  <span className={`text-sm font-bold ${project.key === p.key ? "text-stone-900" : "text-stone-500"}`}>{p.name}</span>
-                </button>
-              ))}
+            <div className="flex overflow-x-auto border border-[#e9e2d5] bg-white mb-10 shadow-sm rounded-2xl p-2 gap-2">
+              {allProjects.map((p) => {
+                const isActive = project.key === p.key;
+                return (
+                  <button 
+                    key={p.key}
+                    onClick={() => onSelectProject(p)}
+                    className={`flex-1 py-4 px-6 flex items-center justify-center gap-3 rounded-xl transition-all whitespace-nowrap min-w-[180px] cursor-pointer ${
+                      isActive 
+                        ? "bg-[#463323] text-white shadow-md" 
+                        : "bg-transparent text-stone-600 hover:bg-stone-100 hover:text-stone-900"
+                    }`}
+                  >
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                      isActive ? "bg-[#db7844] text-white shadow-sm" : "bg-stone-100 text-stone-500 border border-stone-200"
+                    }`}>
+                      <MapPin className="w-4 h-4" />
+                    </div>
+                    <span className={`text-sm font-bold tracking-wide ${isActive ? "text-white" : "text-stone-700"}`}>{p.name}</span>
+                  </button>
+                );
+              })}
             </div>
           )}
 
