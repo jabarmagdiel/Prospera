@@ -49,60 +49,72 @@ export async function GET(request: Request) {
       (function() {
         var lastPostedData = "";
 
+        function postToParent(lotData) {
+          try {
+            var currentDataStr = JSON.stringify(lotData);
+            if (currentDataStr === lastPostedData) return;
+            lastPostedData = currentDataStr;
+
+            var msgObj = { type: 'PROSPERA_LOT_SELECTED', lot: lotData };
+            var msgStr = JSON.stringify(msgObj);
+
+            try { window.parent.postMessage(msgObj, '*'); } catch(e){}
+            try { window.parent.postMessage(msgStr, '*'); } catch(e){}
+            try { window.top.postMessage(msgObj, '*'); } catch(e){}
+            try { window.top.postMessage(msgStr, '*'); } catch(e){}
+          } catch(e) {}
+        }
+
+        function parseAndSend(fullStr) {
+          if (!fullStr || fullStr.length < 10) return;
+          var cleanStr = fullStr.replace(/<[^>]+>/g, ' ');
+
+          var mMatch = cleanStr.match(/(?:manzano|manz)\s*:?\s*([0-9]+)/i) || cleanStr.match(/\bM-?([0-9]+)\b/i);
+          var lMatch = cleanStr.match(/(?:lote|lot)\s*:?\s*([0-9]+)/i) || cleanStr.match(/\bL-?([0-9]+)\b/i);
+
+          if (mMatch && lMatch) {
+            var mVal = mMatch[1];
+            var lVal = lMatch[1];
+            if (mVal.toLowerCase() === 'ano') return;
+
+            var supMatch = cleanStr.match(/superficie:?\s*([0-9\.,]+)/i);
+            var estadoMatch = cleanStr.match(/estado:?\s*([a-z]+)/i) || cleanStr.match(/(disponible|vendido|reservado|bloqueado|minuta)/i);
+            var precioMatch = cleanStr.match(/precio:?\s*([0-9\.,]+)/i) || cleanStr.match(/([0-9\.,]+)\s*(?:\$us|usd|\$)/i) || cleanStr.match(/(?:\$us|usd|\$)\s*([0-9\.,]+)/i);
+            var idMatch = cleanStr.match(/(#[0-9]+)/i) || cleanStr.match(/id:?\s*([0-9]+)/i);
+
+            var supStr = supMatch ? (supMatch[1].trim() + " m²") : "300 m²";
+            var estadoStr = estadoMatch ? (estadoMatch[1].charAt(0).toUpperCase() + estadoMatch[1].slice(1).toLowerCase()) : "Disponible";
+            var priceStr = precioMatch ? precioMatch[1].trim() : "7.500";
+            var idStr = idMatch ? idMatch[1] : ("#" + mVal + (lVal.length < 2 ? "0" + lVal : lVal));
+
+            var lotData = {
+              manzano: mVal,
+              lote: lVal,
+              superficie: supStr,
+              estado: estadoStr,
+              id: idStr,
+              precio: priceStr
+            };
+
+            postToParent(lotData);
+          }
+        }
+
         function scanAndExtract() {
           try {
-            var popups = document.querySelectorAll('.popover, #markerInfoPopover, .cfm-marker-popover, .popover-content, .leaflet-popup, .leaflet-popup-content, .leaflet-popup-content-wrapper');
+            if (document.body) {
+              parseAndSend(document.body.innerText || document.body.textContent || "");
+            }
+            var popups = document.querySelectorAll('.popover, #markerInfoPopover, .cfm-marker-popover, .popover-content, .leaflet-popup, [class*="popover"], [class*="popup"]');
             for (var i = 0; i < popups.length; i++) {
-              try {
-                var el = popups[i];
-                if (!el) continue;
-                var text = (el.innerText || el.textContent || "").trim();
-                var html = (el.innerHTML || "").trim();
-                if (!text && !html) continue;
-
-                var fullStr = (html + " " + text).replace(/<[^>]+>/g, ' ');
-
-                var mMatch = fullStr.match(/(?:manzano|manz)\s*:?\s*([0-9]+)/i) || fullStr.match(/\bM-?([0-9]+)\b/i);
-                var lMatch = fullStr.match(/(?:lote|lot)\s*:?\s*([0-9]+)/i) || fullStr.match(/\bL-?([0-9]+)\b/i);
-
-                if (mMatch && lMatch) {
-                  var mVal = mMatch[1];
-                  var lVal = lMatch[1];
-                  if (mVal.toLowerCase() === 'ano') continue;
-
-                  var supMatch = fullStr.match(/superficie:?\s*([0-9\.,]+)/i);
-                  var estadoMatch = fullStr.match(/estado:?\s*([a-z]+)/i) || fullStr.match(/(disponible|vendido|reservado|bloqueado|minuta)/i);
-                  var precioMatch = fullStr.match(/precio:?\s*([0-9\.,]+)/i) || fullStr.match(/([0-9\.,]+)\s*(?:\$us|usd|\$)/i) || fullStr.match(/(?:\$us|usd|\$)\s*([0-9\.,]+)/i);
-                  var idMatch = fullStr.match(/(#[0-9]+)/i) || fullStr.match(/id:?\s*([0-9]+)/i);
-
-                  var supStr = supMatch ? (supMatch[1].trim() + " m²") : "300 m²";
-                  var estadoStr = estadoMatch ? (estadoMatch[1].charAt(0).toUpperCase() + estadoMatch[1].slice(1).toLowerCase()) : "Disponible";
-                  var priceStr = precioMatch ? precioMatch[1].trim() : "7.500";
-                  var idStr = idMatch ? idMatch[1] : ("#" + mVal + (lVal.length < 2 ? "0" + lVal : lVal));
-
-                  var lotData = {
-                    manzano: mVal,
-                    lote: lVal,
-                    superficie: supStr,
-                    estado: estadoStr,
-                    id: idStr,
-                    precio: priceStr
-                  };
-
-                  var currentDataStr = JSON.stringify(lotData);
-                  if (currentDataStr !== lastPostedData) {
-                    lastPostedData = currentDataStr;
-                    try { window.parent.postMessage({ type: 'PROSPERA_LOT_SELECTED', lot: lotData }, '*'); } catch(e){}
-                    try { window.top.postMessage({ type: 'PROSPERA_LOT_SELECTED', lot: lotData }, '*'); } catch(e){}
-                  }
-                  break;
-                }
-              } catch(err) {}
+              if (popups[i]) {
+                parseAndSend((popups[i].innerText || popups[i].textContent || "") + " " + (popups[i].innerHTML || ""));
+              }
             }
           } catch(err) {}
         }
 
-        setInterval(scanAndExtract, 100);
+        setInterval(scanAndExtract, 80);
 
         document.addEventListener('click', function(e) {
           for (var delay of [10, 50, 150, 350, 700]) {

@@ -32,8 +32,16 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
   // Escuchar eventos de selección de lote desde el iframe de manera global e instantánea
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
-      if (e.data && e.data.type === 'PROSPERA_LOT_SELECTED' && e.data.lot) {
-        const lot = e.data.lot;
+      let data = e.data;
+      if (typeof data === 'string') {
+        try {
+          data = JSON.parse(data);
+        } catch (err) {
+          return;
+        }
+      }
+      if (data && (data.type === 'PROSPERA_LOT_SELECTED' || data.lot) && (data.lot || data.manzano)) {
+        const lot = data.lot || data;
         if (!lot || !lot.manzano || !lot.lote) return;
 
         let priceDisplay = lot.precio || "7.500";
@@ -48,8 +56,8 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
         let numPrice = parseFloat(clean);
 
         setSelectedLot({
-          manzano: lot.manzano,
-          lote: lot.lote,
+          manzano: String(lot.manzano),
+          lote: String(lot.lote),
           superficie: lot.superficie || "300 m²",
           estado: lot.estado || "Disponible",
           id: lot.id || `#${lot.manzano}${lot.lote}`,
