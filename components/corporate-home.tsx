@@ -3,16 +3,17 @@
 import { useState } from "react";
 import type { Project } from "../lib/types";
 import { HeroCarousel } from "./hero-carousel";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 
 import { ProjectCardCarousel } from "./project-card-carousel";
 import { PaymentSimulator } from "./payment-simulator";
 import { SmartWhatsapp } from "./smart-whatsapp";
 import { Header } from "./header";
-import { Star, Target, Eye, Briefcase, ShieldCheck, Handshake, Heart, Users, Lightbulb, TrendingUp, CheckCircle, FileText, BadgeCheck, MapPin, Building2, Award, ArrowRight } from "lucide-react";
+import { Star, Target, Eye, Briefcase, ShieldCheck, Handshake, Heart, Users, Lightbulb, TrendingUp, CheckCircle, FileText, BadgeCheck, MapPin, Building2, Award, ArrowRight, ChevronDown } from "lucide-react";
 
 export function CorporateHome({ onOpenProject, content, projects }: { onOpenProject: (project: Project) => void, content?: any, projects?: any[] }) {
   const [toast, setToast] = useState("");
+  const [openSection, setOpenSection] = useState<string | null>(null);
 
   function notify(message: string) {
     setToast(message);
@@ -153,39 +154,125 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
               La gestión de riesgos, la aprobación rigurosa de proyectos y la rigurosidad jurídica son los pilares que nos permiten ofrecer confianza y seguridad en cada operación.
             </motion.p>
 
-            {/* Targets de Misión y Visión */}
-            <motion.div variants={fadeUp} className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6 mb-6">
-              <button
-                onClick={() => document.getElementById('mision-sec')?.scrollIntoView({ behavior: 'smooth' })}
-                className="group p-3.5 bg-white border border-stone-200 hover:border-orange-500 rounded-2xl shadow-sm hover:shadow-md transition-all text-left flex items-center justify-between cursor-pointer"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-colors">
-                    <Target className="w-5 h-5" />
+            {/* Accordion / Cards Desplegables de Misión, Visión y Nuestros Valores */}
+            <motion.div variants={fadeUp} className="flex flex-col gap-3 mt-6 mb-6">
+              {/* Target Misión */}
+              <div className="bg-white border border-stone-200 hover:border-orange-500 rounded-2xl overflow-hidden shadow-sm transition-all">
+                <button
+                  type="button"
+                  onClick={() => setOpenSection(openSection === 'mision' ? null : 'mision')}
+                  className="w-full p-4 flex items-center justify-between text-left cursor-pointer"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center">
+                      <Target className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-serif font-bold text-stone-900 text-sm">Nuestra Misión</h4>
+                      <span className="text-xs text-stone-500 block">Conocé nuestro propósito</span>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-serif font-bold text-stone-900 group-hover:text-orange-600 transition-colors text-sm">Nuestra Misión</h4>
-                    <span className="text-xs text-stone-500 block">Conocé nuestro propósito</span>
-                  </div>
-                </div>
-                <ArrowRight className="w-4 h-4 text-stone-400 group-hover:text-orange-500 group-hover:translate-x-1 transition-all" />
-              </button>
+                  <ChevronDown className={`w-5 h-5 text-stone-400 transition-transform duration-300 ${openSection === 'mision' ? 'rotate-180 text-orange-500' : ''}`} />
+                </button>
+                <AnimatePresence>
+                  {openSection === 'mision' && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="px-5 pb-5 border-t border-stone-100 bg-orange-50/30"
+                    >
+                      <p className="text-stone-600 text-sm leading-relaxed mt-3 pt-1">
+                        Desarrollar e implementar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario mediante una gestión innovadora y eficiente.
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
 
-              <button
-                onClick={() => document.getElementById('vision-sec')?.scrollIntoView({ behavior: 'smooth' })}
-                className="group p-3.5 bg-white border border-stone-200 hover:border-blue-500 rounded-2xl shadow-sm hover:shadow-md transition-all text-left flex items-center justify-between cursor-pointer"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    <Eye className="w-5 h-5" />
+              {/* Target Visión */}
+              <div className="bg-white border border-stone-200 hover:border-blue-500 rounded-2xl overflow-hidden shadow-sm transition-all">
+                <button
+                  type="button"
+                  onClick={() => setOpenSection(openSection === 'vision' ? null : 'vision')}
+                  className="w-full p-4 flex items-center justify-between text-left cursor-pointer"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
+                      <Eye className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-serif font-bold text-stone-900 text-sm">Nuestra Visión</h4>
+                      <span className="text-xs text-stone-500 block">Hacia dónde vamos</span>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-serif font-bold text-stone-900 group-hover:text-blue-600 transition-colors text-sm">Nuestra Visión</h4>
-                    <span className="text-xs text-stone-500 block">Hacia dónde vamos</span>
+                  <ChevronDown className={`w-5 h-5 text-stone-400 transition-transform duration-300 ${openSection === 'vision' ? 'rotate-180 text-blue-600' : ''}`} />
+                </button>
+                <AnimatePresence>
+                  {openSection === 'vision' && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="px-5 pb-5 border-t border-stone-100 bg-blue-50/30"
+                    >
+                      <p className="text-stone-600 text-sm leading-relaxed mt-3 pt-1">
+                        Ser un referente sólido, confiable e innovador que gestiona inversiones inmobiliarias, superando las expectativas de nuestros clientes e inversionistas.
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Target Nuestros Valores */}
+              <div className="bg-white border border-stone-200 hover:border-amber-500 rounded-2xl overflow-hidden shadow-sm transition-all">
+                <button
+                  type="button"
+                  onClick={() => setOpenSection(openSection === 'valores' ? null : 'valores')}
+                  className="w-full p-4 flex items-center justify-between text-left cursor-pointer"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
+                      <Star className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-serif font-bold text-stone-900 text-sm">Nuestros Valores</h4>
+                      <span className="text-xs text-stone-500 block">Los 5 pilares que nos guían</span>
+                    </div>
                   </div>
-                </div>
-                <ArrowRight className="w-4 h-4 text-stone-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-              </button>
+                  <ChevronDown className={`w-5 h-5 text-stone-400 transition-transform duration-300 ${openSection === 'valores' ? 'rotate-180 text-amber-600' : ''}`} />
+                </button>
+                <AnimatePresence>
+                  {openSection === 'valores' && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="px-5 pb-5 border-t border-stone-100 bg-amber-50/30"
+                    >
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3 pt-1">
+                        {[
+                          { title: "Compromiso", icon: Handshake },
+                          { title: "Transparencia", icon: ShieldCheck },
+                          { title: "Innovación", icon: Lightbulb },
+                          { title: "Confiabilidad", icon: BadgeCheck },
+                          { title: "Profesionalismo", icon: Briefcase },
+                        ].map((val, idx) => (
+                          <div key={idx} className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-stone-200/80 shadow-2xs">
+                            <div className="w-7 h-7 bg-amber-100 text-amber-700 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <val.icon className="w-3.5 h-3.5" />
+                            </div>
+                            <strong className="text-stone-800 text-xs font-semibold block leading-tight">{val.title}</strong>
+                          </div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </motion.div>
           </div>
         </div>
@@ -243,26 +330,23 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
             </motion.div>
           </motion.div>
 
-          {/* Valores — compacto */}
+          {/* Valores — 5 seleccionados */}
           <motion.div
+            id="valores-sec"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
             variants={stagger}
+            className="scroll-mt-28"
           >
             <motion.h3 variants={fadeUp} className="text-3xl font-serif text-stone-900 text-center mb-10">Nuestros Valores</motion.h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
               {[
-                { icon: Briefcase, title: "Profesionalismo" },
-                { icon: ShieldCheck, title: "Transparencia" },
                 { icon: Handshake, title: "Compromiso" },
-                { icon: Heart, title: "Enfoque al cliente" },
-                { icon: Users, title: "Respeto" },
+                { icon: ShieldCheck, title: "Transparencia" },
                 { icon: Lightbulb, title: "Innovación" },
-                { icon: Users, title: "Trabajo en equipo" },
-                { icon: TrendingUp, title: "Mejora continua" },
                 { icon: BadgeCheck, title: "Confiabilidad" },
-                { icon: CheckCircle, title: "Disciplina" },
+                { icon: Briefcase, title: "Profesionalismo" },
               ].map((val, idx) => (
                 <motion.div key={idx} variants={fadeUp} className="group bg-white p-5 rounded-2xl border border-stone-100 shadow-sm hover:shadow-md hover:-translate-y-1 hover:border-orange-200 transition-all duration-300 flex flex-col items-center text-center">
                   <div className="w-12 h-12 bg-stone-50 rounded-full flex items-center justify-center mb-3 text-orange-500 group-hover:bg-orange-50 group-hover:scale-110 transition-all duration-300">
