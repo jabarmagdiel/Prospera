@@ -88,31 +88,48 @@ export async function GET(request: Request) {
         try {
           var text = (el.innerText || el.textContent || '').toLowerCase();
           var estado = 'Disponible';
-          if (text.includes('vendido')) estado = 'Vendido';
-          else if (text.includes('reservado')) estado = 'Reservado';
-          else if (text.includes('bloqueado')) estado = 'Bloqueado';
-          else if (text.includes('minuta')) estado = 'Minuta';
-          else if (text.includes('disponible')) estado = 'Disponible';
+          if (text.indexOf('vendido') !== -1) estado = 'Vendido';
+          else if (text.indexOf('reservado') !== -1) estado = 'Reservado';
+          else if (text.indexOf('bloqueado') !== -1) estado = 'Bloqueado';
+          else if (text.indexOf('minuta') !== -1) estado = 'Minuta';
+          else if (text.indexOf('disponible') !== -1) estado = 'Disponible';
+
+          // Only add badge once - skip if already present and correct
+          var badge = el.querySelector('.prospera-estado-badge');
+          if (badge && badge.getAttribute('data-estado') === estado) return;
 
           var cls = 'badge-' + estado.toLowerCase();
-          var badge = el.querySelector('.prospera-estado-badge');
           if (!badge) {
             badge = document.createElement('span');
             badge.className = 'prospera-estado-badge ' + cls;
+            badge.setAttribute('data-estado', estado);
             badge.innerHTML = '<span class="dot"></span><span class="label">' + estado + '</span>';
             el.appendChild(badge);
           } else {
             badge.className = 'prospera-estado-badge ' + cls;
+            badge.setAttribute('data-estado', estado);
             var lbl = badge.querySelector('.label');
             if (lbl) lbl.textContent = estado;
           }
         } catch(e) {}
       }
 
-      (new MutationObserver(function() {
-        var targets = document.querySelectorAll('.popover-content, .leaflet-popup-content, .cfm-marker-popover');
-        for (var i = 0; i < targets.length; i++) rewritePopup(targets[i]);
-      })).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+      var _isRewriting = false;
+      (new MutationObserver(function(mutations) {
+        if (_isRewriting) return;
+        // Only trigger when real popup elements appear
+        for (var m = 0; m < mutations.length; m++) {
+          var target = mutations[m].target;
+          if (target && typeof target.className === 'string' &&
+              (target.className.indexOf('popover') !== -1 || target.className.indexOf('popup') !== -1)) {
+            _isRewriting = true;
+            var targets = document.querySelectorAll('.popover-content, .leaflet-popup-content, .cfm-marker-popover');
+            for (var i = 0; i < targets.length; i++) rewritePopup(targets[i]);
+            _isRewriting = false;
+            break;
+          }
+        }
+      })).observe(document.documentElement, { childList: true, subtree: true });
       </script>
       <script>
       (function() {
