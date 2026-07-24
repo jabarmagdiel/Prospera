@@ -457,8 +457,6 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
         </motion.p>
       </section>
 
-      <PaymentSimulator />
-      
       {/* ── RESPALDO / PROCESO ───────────────────────────────── */}
       {/* ── RESPALDO / PROCESO ───────────────────────────────── */}
       <motion.section 
