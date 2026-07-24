@@ -73,7 +73,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
             { value: "+5.000", label: "Familias ya confiaron en nosotros", icon: Users },
-            { value: "10 años", label: "En el mercado boliviano", icon: Award },
+            { value: "+15 años", label: "De experiencia en el mercado", icon: Award },
             { value: "Santa Cruz", label: "Sede principal", icon: MapPin },
             { value: "100%", label: "Financiamiento directo", icon: CheckCircle },
           ].map((stat, i) => (
@@ -107,15 +107,32 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
                 alt="Equipo Prospera"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-900/20 to-transparent" />
+
+              {/* Overlay Bar en la imagen con íconos/pills */}
+              <div className="absolute bottom-5 left-5 right-5 bg-stone-900/80 backdrop-blur-md border border-white/15 rounded-2xl p-4 shadow-2xl z-10">
+                <div className="text-[10px] uppercase font-bold tracking-widest text-orange-400 mb-2.5">Garantía y Servicios Prospera</div>
+                <div className="flex flex-wrap gap-2">
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full text-xs font-medium text-white border border-white/10 shadow-sm">
+                    <CheckCircle className="w-3.5 h-3.5 text-orange-400" /> Seguridad jurídica
+                  </div>
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full text-xs font-medium text-white border border-white/10 shadow-sm">
+                    <CheckCircle className="w-3.5 h-3.5 text-orange-400" /> Financiamiento directo
+                  </div>
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full text-xs font-medium text-white border border-white/10 shadow-sm">
+                    <CheckCircle className="w-3.5 h-3.5 text-orange-400" /> Asesoría personalizada
+                  </div>
+                </div>
+              </div>
             </div>
+
             {/* Floating badge */}
-            <div className="absolute -bottom-6 -right-6 bg-orange-500 text-white rounded-3xl px-6 py-4 shadow-xl">
-              <span className="text-3xl font-serif font-bold block">+10</span>
+            <div className="absolute -bottom-6 -right-6 bg-orange-500 text-white rounded-3xl px-6 py-4 shadow-xl z-20">
+              <span className="text-3xl font-serif font-bold block">+15</span>
               <span className="text-xs font-bold tracking-widest uppercase opacity-90">años de experiencia</span>
             </div>
             {/* Second image overlap */}
-            <div className="absolute -top-6 -left-6 w-36 h-36 rounded-2xl overflow-hidden border-4 border-white shadow-xl hidden md:block">
+            <div className="absolute -top-6 -left-6 w-36 h-36 rounded-2xl overflow-hidden border-4 border-white shadow-xl hidden md:block z-20">
               <img src="/hero/slide3.png" alt="Proyecto Prospera" className="w-full h-full object-cover" />
             </div>
           </motion.div>
@@ -126,29 +143,19 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
             <motion.h2 variants={fadeUp} className="about-copy-h2 font-serif text-4xl md:text-5xl text-stone-900 mt-4 mb-6 leading-tight">
               Planificamos tierra.<br/><em className="font-serif italic text-orange-600 not-italic">Impulsamos futuro.</em>
             </motion.h2>
-            <motion.p variants={fadeUp} className="text-stone-700 text-lg font-medium mb-4 leading-relaxed">
+            <motion.p variants={fadeUp} className="text-stone-600 text-base leading-relaxed text-justify mb-4">
               Prospera es una empresa de desarrollos inmobiliarios situada en Santa Cruz de la Sierra, Bolivia.
             </motion.p>
-            <motion.p variants={fadeUp} className="text-stone-500 leading-relaxed mb-4">
+            <motion.p variants={fadeUp} className="text-stone-600 text-base leading-relaxed text-justify mb-4">
               Analizamos cada proyecto con criterios de rentabilidad, seguridad jurídica, ubicación y proyección, para garantizar inversiones transparentes y rentables para nuestros clientes e inversionistas.
             </motion.p>
-            <motion.p variants={fadeUp} className="text-stone-500 leading-relaxed mb-8">
+            <motion.p variants={fadeUp} className="text-stone-600 text-base leading-relaxed text-justify mb-6">
               La gestión de riesgos, la aprobación rigurosa de proyectos y la rigurosidad jurídica son los pilares que nos permiten ofrecer confianza y seguridad en cada operación.
             </motion.p>
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-3">
-              <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 border border-orange-200 rounded-full text-sm text-orange-700 font-medium">
-                <CheckCircle className="w-4 h-4" /> Seguridad jurídica
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 border border-orange-200 rounded-full text-sm text-orange-700 font-medium">
-                <CheckCircle className="w-4 h-4" /> Financiamiento directo
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 border border-orange-200 rounded-full text-sm text-orange-700 font-medium">
-                <CheckCircle className="w-4 h-4" /> Asesoría personalizada
-              </div>
-            </motion.div>
+
             <motion.button
               variants={fadeUp}
-              className="mt-8 flex items-center gap-2 text-orange-600 font-bold hover:gap-4 transition-all text-sm"
+              className="mt-4 flex items-center gap-2 text-orange-600 font-bold hover:gap-4 transition-all text-sm"
               onClick={() => window.open('https://wa.me/59177820003', '_blank')}
             >
               Hablá con un asesor <ArrowRight className="w-4 h-4" />
