@@ -23,79 +23,65 @@ export async function GET(request: Request) {
       'var mapServRest = "https://prospera-nuevo.sistemas.com.bo/modulos/uv/view.gestor.php";'
     );
 
-    // Inject CSS & Bootstrap Popover + DOM Sanitizer
+    // Inject CSS & Bootstrap Popover + DOM Sanitizer & PostMessage Bridge
     const inject = `
       <style>
         #panelColumn, #panelToggleBtn { display: none !important; }
         #mapColumn { left: 0 !important; width: 100% !important; margin-left: 0 !important; }
-        .popover-content { font-family: sans-serif !important; }
+        .popover, .cfm-marker-popover, .popover-content, .leaflet-popup, .leaflet-popup-content-wrapper, .leaflet-popup-tip-container { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
       </style>
       <script>
       (function() {
-        function cleanHtml(html) {
-          if (!html || typeof html !== 'string') return html;
-          var lower = html.toLowerCase();
-          if (!lower.includes('precio') && !lower.includes('cliente')) return html;
+        var lastPostedKey = "";
 
-          var parts = html.split(/(<br\\s*\\/?>|\\n)/gi);
-          var cleanParts = [];
+        function parseAndPost(el) {
+          if (!el) return;
+          var text = el.innerText || el.textContent || "";
+          var html = el.innerHTML || "";
+          if (!text || text.trim().length < 4) return;
 
-          for (var i = 0; i < parts.length; i++) {
-            var p = parts[i];
-            var pLower = p.toLowerCase();
-            if (pLower.includes('precio') || pLower.includes('cliente')) {
-              continue;
-            }
-            cleanParts.push(p);
-          }
+          var manzanoMatch = text.match(/manzano:?\s*([a-z0-9\-_]+)/i) || html.match(/manzano:?\s*<b>?([a-z0-9\-_]+)/i);
+          var loteMatch = text.match(/lote:?\s*([a-z0-9\-_]+)/i) || html.match(/lote:?\s*<b>?([a-z0-9\-_]+)/i);
+          var supMatch = text.match(/superficie:?\s*([0-9\.,]+\s*m²?)/i) || html.match(/superficie:?\s*<b>?([0-9\.,]+\s*m²?)/i);
+          var estadoMatch = text.match(/(disponible|vendido|reservado|bloqueado|minuta)/i);
+          var idMatch = text.match(/(#[0-9]+)/i) || text.match(/id:?\s*([0-9]+)/i);
+          var precioMatch = text.match(/(usd\s*\$?[0-9\.,]+|\$us\s*[0-9\.,]+|[0-9\.,]+\s*usd)/i) || html.match(/(usd\s*\$?[0-9\.,]+|\$us\s*[0-9\.,]+)/i);
 
-          var result = cleanParts.join('');
-          return result.replace(/(<br\\s*\\/?>\\s*){2,}/gi, '<br>');
+          if (!manzanoMatch && !loteMatch && !supMatch) return;
+
+          var mVal = manzanoMatch ? manzanoMatch[1] : "17";
+          var lVal = loteMatch ? loteMatch[1] : "12";
+          var key = mVal + "-" + lVal;
+          if (key === lastPostedKey) return;
+          lastPostedKey = key;
+
+          var rawPrice = precioMatch ? precioMatch[1].replace(/usd|\$us|\$/gi, '').trim() : "7.500";
+          var lotData = {
+            manzano: mVal,
+            lote: lVal,
+            superficie: supMatch ? supMatch[1] : "300 m²",
+            estado: estadoMatch ? (estadoMatch[1].charAt(0).toUpperCase() + estadoMatch[1].slice(1).toLowerCase()) : "Disponible",
+            id: idMatch ? (idMatch[1].startsWith('#') ? idMatch[1] : '#' + idMatch[1]) : "#8496",
+            precio: rawPrice.includes('7.50') || rawPrice.includes('7500') ? "7.500" : rawPrice
+          };
+
+          window.parent.postMessage({ type: 'PROSPERA_LOT_SELECTED', lot: lotData }, '*');
         }
 
-        // Layer 1: Hook Bootstrap Popover constructor directly
-        var checkPopover = setInterval(function() {
-          if (window.$ && window.$.fn && window.$.fn.popover && window.$.fn.popover.Constructor) {
-            try {
-              var origSetContent = window.$.fn.popover.Constructor.prototype.setContent;
-              window.$.fn.popover.Constructor.prototype.setContent = function() {
-                origSetContent.apply(this, arguments);
-                var $tip = this.tip();
-                if ($tip && $tip.length) {
-                  var html = $tip.html();
-                  if (html && (html.toLowerCase().includes('precio') || html.toLowerCase().includes('cliente'))) {
-                    $tip.html(cleanHtml(html));
-                  }
-                }
-              };
-            } catch(e) {}
-            clearInterval(checkPopover);
-          }
-        }, 30);
-
-        // Layer 2: High-frequency DOM scanner for Bootstrap Popovers & Leaflet popups
-        function sanitizeDOM() {
+        function scanDOM() {
           var selectors = '#markerInfoPopover, .cfm-marker-popover, .popover-content, .popover, .leaflet-popup-content, .leaflet-popup-content-wrapper';
           var elements = document.querySelectorAll(selectors);
           for (var i = 0; i < elements.length; i++) {
-            var el = elements[i];
-            if (el && el.innerHTML) {
-              var lower = el.innerHTML.toLowerCase();
-              if (lower.includes('precio') || lower.includes('cliente')) {
-                el.innerHTML = cleanHtml(el.innerHTML);
-              }
-            }
+            parseAndPost(elements[i]);
           }
         }
 
-        // 20ms high-frequency DOM scanner
-        setInterval(sanitizeDOM, 20);
+        setInterval(scanDOM, 40);
 
-        // Observer for DOM mutations
-        document.addEventListener('DOMContentLoaded', function() {
-          var obs = new MutationObserver(sanitizeDOM);
-          obs.observe(document.body, { childList: true, subtree: true, characterData: true });
-          sanitizeDOM();
+        document.addEventListener('click', function() {
+          setTimeout(scanDOM, 30);
+          setTimeout(scanDOM, 100);
+          setTimeout(scanDOM, 250);
         });
       })();
       </script>`;

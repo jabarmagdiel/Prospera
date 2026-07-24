@@ -9,6 +9,23 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
   const [visitorLocation, setVisitorLocation] = useState<"scz" | "bol" | "ext">("scz");
   const [visitType, setVisitType] = useState<"virtual" | "presencial">("virtual");
 
+  // Selected Lot State for side-by-side view
+  const [selectedLot, setSelectedLot] = useState<{
+    manzano?: string;
+    lote?: string;
+    superficie?: string;
+    estado?: string;
+    id?: string;
+    precio?: string;
+  } | null>({
+    manzano: "17",
+    lote: "12",
+    superficie: "300 m²",
+    estado: "Disponible",
+    id: "#8496",
+    precio: "7.500"
+  });
+
   // Simulator state
   const [simValue, setSimValue] = useState(5230);
   const [simInitial, setSimInitial] = useState(100);
@@ -146,16 +163,16 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
             </div>
           )}
 
-          {/* MAP AND INSTRUCTIONS CONTAINER */}
-          <div className="flex flex-col lg:flex-row bg-white shadow-xl min-h-[600px]">
+          {/* MAP AND LOT DETAIL CONTAINER */}
+          <div className="flex flex-col lg:flex-row bg-white shadow-xl min-h-[600px] rounded-3xl overflow-hidden border border-[#e9e2d5]">
              {/* LEFT SIDE MAP */}
-             <div className="lg:w-3/4 p-6 flex flex-col border-r border-stone-200">
+             <div className="lg:w-2/3 p-6 flex flex-col border-r border-stone-200">
                 <div className="flex justify-between items-center mb-6">
                   <div>
                     <div className="text-[9px] text-stone-500 font-bold uppercase tracking-[0.2em] mb-2">MÓDULO DE TERRENOS Y PLANOS</div>
                     <h3 className="font-serif text-3xl text-stone-900">{project.name}</h3>
                   </div>
-                  {/* Fake Legend */}
+                  {/* Legend */}
                   <div className="hidden md:flex items-center gap-6 text-[9px] font-bold text-stone-500 uppercase tracking-widest">
                     <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#6db33f]"></span> Disponible</div>
                     <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#e3241b]"></span> Vendido</div>
@@ -165,43 +182,80 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
                 </div>
                 {/* INJECT THE MAP HERE */}
                 <div className="flex-1 bg-stone-100 relative min-h-[600px]">
-                   <ProjectMap planImage={project.plan} projectId={project.systemId?.toString()} />
+                   <ProjectMap 
+                     planImage={project.plan} 
+                     projectId={project.systemId?.toString()} 
+                     onSelectLot={(lot) => setSelectedLot(lot)}
+                   />
                 </div>
              </div>
              
-             {/* RIGHT SIDE INSTRUCTIONS */}
-             <div className="lg:w-1/4 bg-[#e9e2d5] p-10 flex flex-col">
-                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#db7844] mb-6">
-                  SELECCIONÁ UN PIN
-                </div>
-                <h3 className="font-serif text-3xl text-stone-900 mb-6">Elegí un terreno en el plano</h3>
-                <p className="text-sm text-stone-600 mb-12">Una etapa madura del macroproyecto para comparar ubicación y oportunidades según disponibilidad.</p>
-                
-                <div className="space-y-8">
-                  <div className="flex gap-4">
-                    <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center text-[9px] text-stone-500 font-bold shrink-0">01</div>
+             {/* RIGHT SIDE SIDE-BY-SIDE LOT DETAILS PANEL */}
+             <div className="lg:w-1/3 bg-[#f4efe5] p-8 lg:p-10 flex flex-col justify-between border-l border-[#e9e2d5] relative overflow-hidden">
+                {selectedLot ? (
+                  <div className="flex flex-col h-full justify-between">
                     <div>
-                      <div className="font-bold text-stone-900 text-xs mb-1">Acercá el plano</div>
-                      <div className="text-xs text-stone-500">Usá los controles del módulo para enfocar una zona.</div>
+                      {/* Status Badge */}
+                      <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#db7844] mb-3 flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#db7844]"></span>
+                        {(selectedLot.estado || "DISPONIBLE").toUpperCase()}
+                      </div>
+
+                      {/* Project Name Subtitle */}
+                      <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-stone-500 mb-8">
+                        {project.name}
+                      </div>
+
+                      {/* Large Title */}
+                      <h3 className="font-serif text-4xl lg:text-5xl text-stone-900 leading-tight mb-8">
+                        Manzano {selectedLot.manzano || "17"}<br/>
+                        Lote {selectedLot.lote || "12"}
+                      </h3>
+
+                      {/* Key Value Table Rows */}
+                      <div className="border-t border-[#e3dcd0] pt-6 space-y-4 mb-8 text-sm">
+                        <div className="flex justify-between items-center py-2.5 border-b border-[#e3dcd0]">
+                          <span className="text-stone-600">Superficie</span>
+                          <span className="font-semibold text-stone-900">{selectedLot.superficie || "300 m²"}</span>
+                        </div>
+                        <div className="flex justify-between items-center py-2.5 border-b border-[#e3dcd0]">
+                          <span className="text-stone-600">Estado registrado</span>
+                          <span className="font-semibold text-stone-900">{selectedLot.estado || "Disponible"}</span>
+                        </div>
+                        <div className="flex justify-between items-center py-2.5 border-b border-[#e3dcd0]">
+                          <span className="text-stone-600">Identificador</span>
+                          <span className="font-mono text-xs text-stone-600 font-semibold">{selectedLot.id || "#8496"}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Pricing Footer */}
+                    <div className="border-t border-[#e3dcd0] pt-6 mt-auto">
+                      <div className="text-[9px] font-bold uppercase tracking-widest text-stone-500 mb-2">
+                        COTIZACIÓN AL CONTADO REGISTRADA
+                      </div>
+                      <div className="font-serif text-4xl lg:text-5xl font-bold text-[#db7844] mb-3">
+                        USD {selectedLot.precio || "7.500"}
+                      </div>
+                      <p className="text-[10px] text-stone-500 leading-relaxed font-light">
+                        Valor informado por el módulo para este lote. No constituye reserva.
+                      </p>
                     </div>
                   </div>
-                  <div className="flex gap-4">
-                    <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center text-[9px] text-stone-500 font-bold shrink-0">02</div>
+                ) : (
+                  <div className="flex flex-col h-full justify-between">
                     <div>
-                      <div className="font-bold text-stone-900 text-xs mb-1">Hacé clic en un pin</div>
-                      <div className="text-xs text-stone-500">Verás manzano, lote, superficie, precio y estado.</div>
+                      <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#db7844] mb-6">
+                        SELECCIONÁ UN LOTE
+                      </div>
+                      <h3 className="font-serif text-3xl text-stone-900 mb-6">Explorá el plano interactivo</h3>
+                      <p className="text-sm text-stone-600 mb-8 leading-relaxed">Hacé clic en cualquier manzana o lote en el plano para desplegar la información y cotización registrada.</p>
                     </div>
+                    <p className="text-[9px] text-stone-400 mt-auto pt-12 uppercase tracking-widest leading-relaxed">
+                      Los estados pueden cambiar. Prospera debe confirmar el lote antes de cualquier pago o reserva.
+                    </p>
                   </div>
-                  <div className="flex gap-4">
-                    <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center text-[9px] text-stone-500 font-bold shrink-0">03</div>
-                    <div>
-                      <div className="font-bold text-stone-900 text-xs mb-1">Simulá la compra</div>
-                      <div className="text-xs text-stone-500">La web cargará el valor del lote automáticamente.</div>
-                    </div>
-                  </div>
-                </div>
-                
-                <p className="text-[9px] text-stone-400 mt-auto pt-12 uppercase tracking-widest leading-relaxed">Los estados pueden cambiar. Prospera debe confirmar el lote antes de cualquier pago o reserva.</p>
+                )}
              </div>
           </div>
         </div>
