@@ -23,7 +23,7 @@ export async function GET(request: Request) {
       'var mapServRest = "https://prospera-nuevo.sistemas.com.bo/modulos/uv/view.gestor.php";'
     );
 
-    // Inject CSS & Bootstrap Popover + DOM Sanitizer & PostMessage Bridge
+    // Inject CSS & PostMessage Bridge — intercepts XHR response directly
     const inject = `
       <style>
         #panelColumn, #panelToggleBtn { display: none !important; }
@@ -32,112 +32,156 @@ export async function GET(request: Request) {
           opacity: 1 !important;
           visibility: visible !important;
           pointer-events: auto !important;
-          border-radius: 12px !important;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+          border-radius: 10px !important;
+          box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important;
           border: 1px solid #e3dcd0 !important;
-          background: #ffffff !important;
+          background: #fff !important;
           z-index: 10000 !important;
         }
         .popover-content, .leaflet-popup-content {
           font-family: system-ui, -apple-system, sans-serif !important;
           font-size: 11px !important;
           padding: 8px 12px !important;
-          line-height: 1.4 !important;
+          line-height: 1.5 !important;
         }
       </style>
       <script>
       (function() {
-        var lastPostedData = "";
+        var lastKey = "";
 
-        function postToParent(lotData) {
+        function sendLot(lotData) {
+          var key = lotData.manzano + "-" + lotData.lote;
+          if (key === lastKey) return;
+          lastKey = key;
+          var msg = { type: 'PROSPERA_LOT_SELECTED', lot: lotData };
+          try { window.parent.postMessage(msg, '*'); } catch(e){}
+          try { window.top.postMessage(msg, '*'); } catch(e){}
+        }
+
+        // PRIMARY: intercept XHR to parse server JSON response directly
+        (function() {
+          var OrigXHR = window.XMLHttpRequest;
+          var open = OrigXHR.prototype.open;
+          var send = OrigXHR.prototype.send;
+
+          OrigXHR.prototype.open = function(method, url) {
+            this._xhrUrl = url;
+            return open.apply(this, arguments);
+          };
+
+          OrigXHR.prototype.send = function(body) {
+            var self = this;
+            this.addEventListener('readystatechange', function() {
+              if (self.readyState !== 4 || self.status !== 200) return;
+              try {
+                var text = self.responseText;
+                if (!text || text.length < 5) return;
+
+                // Try to parse as JSON first
+                var json = null;
+                try { json = JSON.parse(text); } catch(e) {}
+
+                if (json) {
+                  // Extract lot data from JSON response
+                  var mVal = null, lVal = null, supVal = "300 m²", estVal = "Disponible", priceVal = "7.500", idVal = null;
+
+                  // Flatten all keys/values from json object
+                  function extract(obj) {
+                    if (!obj || typeof obj !== 'object') return;
+                    var keys = Object.keys(obj);
+                    for (var i = 0; i < keys.length; i++) {
+                      var k = keys[i].toLowerCase();
+                      var v = obj[keys[i]];
+                      if (v === null || v === undefined) continue;
+                      var vs = String(v);
+
+                      if (!mVal && (k === 'manzano' || k === 'manz' || k === 'nmanzano')) mVal = vs;
+                      if (!lVal && (k === 'lote' || k === 'nlote' || k === 'lot')) lVal = vs;
+                      if (k === 'superficie' || k === 'sup' || k === 'area') supVal = vs + (vs.includes('m') ? '' : ' m²');
+                      if (k === 'estado' || k === 'status' || k === 'state') estVal = vs.charAt(0).toUpperCase() + vs.slice(1).toLowerCase();
+                      if (k === 'precio' || k === 'price' || k === 'costo' || k === 'valor') priceVal = vs;
+                      if (k === 'id' || k === 'codigo' || k === 'cod') idVal = vs;
+
+                      if (typeof v === 'object') extract(v);
+                      if (Array.isArray(v)) { for (var j = 0; j < v.length; j++) extract(v[j]); }
+                    }
+                  }
+                  extract(json);
+
+                  if (mVal && lVal) {
+                    sendLot({
+                      manzano: mVal,
+                      lote: lVal,
+                      superficie: supVal,
+                      estado: estVal,
+                      id: idVal || ('#' + mVal + (lVal.length < 2 ? '0' + lVal : lVal)),
+                      precio: priceVal
+                    });
+                    return;
+                  }
+                }
+
+                // Fallback: parse plain text response
+                var cleanStr = text.replace(/<[^>]+>/g, ' ');
+                var mMatch = cleanStr.match(/(?:manzano|manz)\\s*:?\\s*([0-9]+)/i);
+                var lMatch = cleanStr.match(/(?:lote|lot)\\s*:?\\s*([0-9]+)/i);
+                if (mMatch && lMatch) {
+                  var supM = cleanStr.match(/superficie:?\\s*([0-9.,]+)/i);
+                  var estM = cleanStr.match(/estado:?\\s*([a-z]+)/i) || cleanStr.match(/(disponible|vendido|reservado|bloqueado)/i);
+                  var preM = cleanStr.match(/precio:?\\s*([0-9.,]+)/i) || cleanStr.match(/([0-9.,]+)\\s*(?:\\$us|usd|\\$)/i);
+                  sendLot({
+                    manzano: mMatch[1],
+                    lote: lMatch[1],
+                    superficie: supM ? (supM[1] + ' m²') : '300 m²',
+                    estado: estM ? (estM[1].charAt(0).toUpperCase() + estM[1].slice(1).toLowerCase()) : 'Disponible',
+                    id: '#' + mMatch[1] + lMatch[1],
+                    precio: preM ? preM[1] : '7.500'
+                  });
+                }
+              } catch(err) {}
+            });
+            return send.apply(this, arguments);
+          };
+        })();
+
+        // SECONDARY: scan popup DOM on click as fallback
+        function scanPopup() {
           try {
-            var currentDataStr = JSON.stringify(lotData);
-            if (currentDataStr === lastPostedData) return;
-            lastPostedData = currentDataStr;
+            var selectors = ['.popover', '#markerInfoPopover', '.cfm-marker-popover', '.popover-content', '.leaflet-popup', '.leaflet-popup-content'];
+            for (var s = 0; s < selectors.length; s++) {
+              var el = document.querySelector(selectors[s]);
+              if (!el) continue;
+              var fullStr = ((el.innerText || el.textContent || '') + ' ' + (el.innerHTML || '')).replace(/<[^>]+>/g, ' ');
+              if (!fullStr || fullStr.length < 15) continue;
 
-            var msgObj = { type: 'PROSPERA_LOT_SELECTED', lot: lotData };
-            var msgStr = JSON.stringify(msgObj);
+              var mMatch = fullStr.match(/(?:manzano|manz)\\s*:?\\s*([0-9]+)/i);
+              var lMatch = fullStr.match(/(?:lote|lot)\\s*:?\\s*([0-9]+)/i);
+              if (!mMatch || !lMatch) continue;
 
-            try { window.parent.postMessage(msgObj, '*'); } catch(e){}
-            try { window.parent.postMessage(msgStr, '*'); } catch(e){}
-            try { window.top.postMessage(msgObj, '*'); } catch(e){}
-            try { window.top.postMessage(msgStr, '*'); } catch(e){}
+              var mVal = mMatch[1], lVal = lMatch[1];
+              if (mVal.toLowerCase() === 'ano') continue;
+
+              var supM = fullStr.match(/superficie:?\\s*([0-9.,]+)/i);
+              var estM = fullStr.match(/estado:?\\s*([a-z]+)/i) || fullStr.match(/(disponible|vendido|reservado|bloqueado)/i);
+              var preM = fullStr.match(/precio:?\\s*([0-9.,]+)/i) || fullStr.match(/([0-9.,]+)\\s*(?:\\$us|usd|\\$)/i);
+
+              sendLot({
+                manzano: mVal,
+                lote: lVal,
+                superficie: supM ? (supM[1].trim() + ' m²') : '300 m²',
+                estado: estM ? (estM[1].charAt(0).toUpperCase() + estM[1].slice(1).toLowerCase()) : 'Disponible',
+                id: '#' + mVal + (lVal.length < 2 ? '0' + lVal : lVal),
+                precio: preM ? preM[1].trim() : '7.500'
+              });
+              break;
+            }
           } catch(e) {}
         }
 
-        function parseAndSend(fullStr) {
-          if (!fullStr || fullStr.length < 10) return;
-          var cleanStr = fullStr.replace(/<[^>]+>/g, ' ');
-
-          var mMatch = cleanStr.match(/(?:manzano|manz)\s*:?\s*([0-9]+)/i) || cleanStr.match(/\bM-?([0-9]+)\b/i);
-          var lMatch = cleanStr.match(/(?:lote|lot)\s*:?\s*([0-9]+)/i) || cleanStr.match(/\bL-?([0-9]+)\b/i);
-
-          if (mMatch && lMatch) {
-            var mVal = mMatch[1];
-            var lVal = lMatch[1];
-            if (mVal.toLowerCase() === 'ano') return;
-
-            var supMatch = cleanStr.match(/superficie:?\s*([0-9\.,]+)/i);
-            var estadoMatch = cleanStr.match(/estado:?\s*([a-z]+)/i) || cleanStr.match(/(disponible|vendido|reservado|bloqueado|minuta)/i);
-            var precioMatch = cleanStr.match(/precio:?\s*([0-9\.,]+)/i) || cleanStr.match(/([0-9\.,]+)\s*(?:\$us|usd|\$)/i) || cleanStr.match(/(?:\$us|usd|\$)\s*([0-9\.,]+)/i);
-            var idMatch = cleanStr.match(/(#[0-9]+)/i) || cleanStr.match(/id:?\s*([0-9]+)/i);
-
-            var supStr = supMatch ? (supMatch[1].trim() + " m²") : "300 m²";
-            var estadoStr = estadoMatch ? (estadoMatch[1].charAt(0).toUpperCase() + estadoMatch[1].slice(1).toLowerCase()) : "Disponible";
-            var priceStr = precioMatch ? precioMatch[1].trim() : "7.500";
-            var idStr = idMatch ? idMatch[1] : ("#" + mVal + (lVal.length < 2 ? "0" + lVal : lVal));
-
-            var lotData = {
-              manzano: mVal,
-              lote: lVal,
-              superficie: supStr,
-              estado: estadoStr,
-              id: idStr,
-              precio: priceStr
-            };
-
-            postToParent(lotData);
-          }
-        }
-
-        function scanAndExtract() {
-          try {
-            if (document.body) {
-              parseAndSend(document.body.innerText || document.body.textContent || "");
-            }
-            var popups = document.querySelectorAll('.popover, #markerInfoPopover, .cfm-marker-popover, .popover-content, .leaflet-popup, [class*="popover"], [class*="popup"]');
-            for (var i = 0; i < popups.length; i++) {
-              if (popups[i]) {
-                parseAndSend((popups[i].innerText || popups[i].textContent || "") + " " + (popups[i].innerHTML || ""));
-              }
-            }
-          } catch(err) {}
-        }
-
-        setInterval(scanAndExtract, 80);
-
-        document.addEventListener('click', function(e) {
-          for (var delay of [10, 50, 150, 350, 700]) {
-            setTimeout(scanAndExtract, delay);
-          }
+        document.addEventListener('click', function() {
+          [100, 300, 600, 1000].forEach(function(d) { setTimeout(scanPopup, d); });
         }, true);
 
-        try {
-          var origOpen = XMLHttpRequest.prototype.open;
-          var origSend = XMLHttpRequest.prototype.send;
-          XMLHttpRequest.prototype.open = function(method, url) {
-            this._url = url;
-            return origOpen.apply(this, arguments);
-          };
-          XMLHttpRequest.prototype.send = function() {
-            this.addEventListener('load', function() {
-              for (var delay of [10, 50, 200, 500]) {
-                setTimeout(scanAndExtract, delay);
-              }
-            });
-            return origSend.apply(this, arguments);
-          };
-        } catch(e) {}
       })();
       </script>`;
 
