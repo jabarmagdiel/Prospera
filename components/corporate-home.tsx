@@ -110,7 +110,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
               <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-900/20 to-transparent" />
 
               {/* Overlay Bar en la imagen con íconos/pills */}
-              <div className="absolute bottom-5 left-5 right-5 bg-stone-900/80 backdrop-blur-md border border-white/15 rounded-2xl p-4 shadow-2xl z-10">
+              <div className="absolute bottom-5 left-5 right-5 bg-stone-900/85 backdrop-blur-md border border-white/15 rounded-2xl p-4 shadow-2xl z-10">
                 <div className="text-[10px] uppercase font-bold tracking-widest text-orange-400 mb-2.5">Garantía y Servicios Prospera</div>
                 <div className="flex flex-wrap gap-2">
                   <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full text-xs font-medium text-white border border-white/10 shadow-sm">
@@ -126,13 +126,13 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
               </div>
             </div>
 
-            {/* Floating badge */}
-            <div className="absolute -bottom-6 -right-6 bg-orange-500 text-white rounded-3xl px-6 py-4 shadow-xl z-20">
+            {/* Floating badge en la esquina superior derecha para no tapar el card inferior */}
+            <div className="absolute -top-6 -right-4 md:-right-6 bg-orange-500 text-white rounded-3xl px-6 py-4 shadow-xl z-20">
               <span className="text-3xl font-serif font-bold block">+15</span>
               <span className="text-xs font-bold tracking-widest uppercase opacity-90">años de experiencia</span>
             </div>
-            {/* Second image overlap */}
-            <div className="absolute -top-6 -left-6 w-36 h-36 rounded-2xl overflow-hidden border-4 border-white shadow-xl hidden md:block z-20">
+            {/* Second image overlap en la esquina superior izquierda */}
+            <div className="absolute -top-6 -left-4 md:-left-6 w-32 h-32 md:w-36 md:h-36 rounded-2xl overflow-hidden border-4 border-white shadow-xl hidden sm:block z-20">
               <img src="/hero/slide3.png" alt="Proyecto Prospera" className="w-full h-full object-cover" />
             </div>
           </motion.div>
