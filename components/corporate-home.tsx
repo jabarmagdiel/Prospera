@@ -96,7 +96,8 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
         viewport={{ once: true, amount: 0.2 }}
         variants={stagger}
       >
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
           {/* Imagen */}
           <motion.div
             variants={{ hidden: { opacity: 0, x: -40 }, visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } } }}
@@ -275,8 +276,9 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
               </div>
             </motion.div>
           </div>
+        </div>
 
-          {/* Política de Calidad (Movida arriba) */}
+        {/* Política de Calidad (Movida arriba - Ancho Completo) */}
           <motion.div
             className="mt-16 rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden shadow-2xl group"
             initial="hidden"
