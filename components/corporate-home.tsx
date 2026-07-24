@@ -185,16 +185,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
                   </div>
                 </div>
                 <ArrowRight className="w-4 h-4 text-stone-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-              </button>
             </motion.div>
-
-            <motion.button
-              variants={fadeUp}
-              className="mt-4 flex items-center gap-2 text-orange-600 font-bold hover:gap-4 transition-all text-sm"
-              onClick={() => window.open('https://wa.me/59177820003', '_blank')}
-            >
-              Hablá con un asesor <ArrowRight className="w-4 h-4" />
-            </motion.button>
           </div>
         </div>
       </motion.section>
