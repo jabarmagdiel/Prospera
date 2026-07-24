@@ -48,7 +48,6 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           animate="visible"
           variants={stagger}
         >
-          <motion.p variants={fadeUp} className="eyebrow light !mb-2"><span></span> Santa Cruz de la Sierra</motion.p>
           <motion.h1 variants={fadeUp} className="!text-4xl md:!text-5xl lg:!text-6xl !leading-tight !mb-4 !mt-0">
             Un terreno puede ser<br/><em>el comienzo de algo grande.</em>
           </motion.h1>
