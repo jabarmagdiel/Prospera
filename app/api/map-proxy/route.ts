@@ -42,17 +42,21 @@ export async function GET(request: Request) {
 
           var cleanText = html.replace(/<[^>]+>/g, ' ');
 
-          var manzanoMatch = cleanText.match(/manzano:?\s*([a-z0-9\-_]+)/i) || cleanText.match(/manz:?\s*([a-z0-9\-_]+)/i) || cleanText.match(/\bM-?([0-9]+)\b/i);
-          var loteMatch = cleanText.match(/lote:?\s*([a-z0-9\-_]+)/i) || cleanText.match(/\bL-?([0-9]+)\b/i);
+          var mDigitMatch = cleanText.match(/(?:manzano|manz)\s*:?\s*([0-9]+)/i) || cleanText.match(/\bM-?([0-9]+)\b/i);
+          var manzanoMatch = mDigitMatch || cleanText.match(/(?:manzano|manz)\s*:?\s*([a-z0-9\-_]+)/i);
+          
+          var mVal = manzanoMatch ? manzanoMatch[1] : "";
+          if (mVal.toLowerCase() === 'ano') mVal = "";
+
+          var lDigitMatch = cleanText.match(/(?:lote|lot)\s*:?\s*([0-9]+)/i) || cleanText.match(/\bL-?([0-9]+)\b/i);
+          var loteMatch = lDigitMatch || cleanText.match(/(?:lote|lot)\s*:?\s*([a-z0-9\-_]+)/i);
+          var lVal = loteMatch ? loteMatch[1] : "";
+
           var supMatch = cleanText.match(/superficie:?\s*([0-9\.,]+)/i);
           var estadoMatch = cleanText.match(/estado:?\s*([a-z]+)/i) || cleanText.match(/(disponible|vendido|reservado|bloqueado|minuta)/i);
           var idMatch = cleanText.match(/(#[0-9]+)/i) || cleanText.match(/id:?\s*([0-9]+)/i);
-          var precioMatch = cleanText.match(/precio:?\s*([0-9\.,]+)/i) || cleanText.match(/([0-9\.,]+)\s*\$us/i) || cleanText.match(/(\$us|usd)\s*([0-9\.,]+)/i);
+          var precioMatch = cleanText.match(/precio:?\s*([0-9\.,]+)/i) || cleanText.match(/([0-9\.,]+)\s*(?:\$us|usd|\$)/i) || cleanText.match(/(?:\$us|usd|\$)\s*([0-9\.,]+)/i);
 
-          if (!manzanoMatch && !loteMatch) return;
-
-          var mVal = manzanoMatch ? manzanoMatch[1] : "";
-          var lVal = loteMatch ? loteMatch[1] : "";
           if (!mVal || !lVal) return;
 
           var key = mVal + "-" + lVal;

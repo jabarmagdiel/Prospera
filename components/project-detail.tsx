@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { Project } from "../lib/types";
-import { ArrowLeft, Check, MapPin } from "lucide-react";
+import { ArrowLeft, Check, MapPin, Calendar, Clock, User, Phone, Globe, Video, Send, Compass } from "lucide-react";
 import { ProjectMap } from "./project-map";
 
 export function ProjectDetail({ project, allProjects, onSelectProject, onBack }: { project: Project; allProjects?: Project[]; onSelectProject: (p: Project) => void; onBack: () => void }) {
@@ -392,7 +392,6 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
                   setSimValue(val);
                   if (simInitial > val) setSimInitial(val);
                 }} className="w-full h-1 bg-stone-300 rounded-lg appearance-none cursor-pointer accent-[#33261c]" />
-                <div className="text-[9px] text-stone-400 mt-3 uppercase tracking-widest">Rango registrado: USD 3,015 - 10,705</div>
               </div>
 
               <div className="mb-10">
@@ -428,31 +427,170 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
                 </div>
                 
                 <div className="border-t border-stone-300 pt-8">
-                  <div className="text-[10px] uppercase font-bold tracking-[0.2em] text-stone-500 mb-4">CUOTA MENSUAL ESTIMADA*</div>
+                  <div className="text-[10px] uppercase font-bold tracking-[0.2em] text-stone-500 mb-4">CUOTA MENSUAL ESTIMADA</div>
                   <div className="flex items-end gap-3 text-[#db7844]">
                     <div className="font-serif text-6xl font-bold tracking-tight">USD {monthly.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                     <div className="text-xs font-bold pb-2">/mes</div>
                   </div>
-                  <p className="text-[9px] text-stone-500 mt-6 leading-relaxed uppercase tracking-widest">
-                    *Cuota fija calculada con sistema francés, igual que el generador interno. No incluye seguro, descuentos, reserva ni conversión a bolivianos.
-                  </p>
                 </div>
               </div>
               
-              <div className="flex gap-4 items-start mb-10 border border-emerald-100 bg-emerald-50/50 p-4">
-                 <div className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 mt-0.5"><Check className="w-3 h-3" /></div>
-                 <div>
-                   <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-900 mb-1">Fórmula contrastada</div>
-                   <div className="text-[9px] text-stone-500 leading-relaxed uppercase tracking-widest">Verificada contra planes de pago generados por el sistema el 12/07/2026. La disponibilidad y condición comercial final deben confirmarse con un asesor.</div>
-                 </div>
-              </div>
-              
-              <a href="#plano" className="block w-full bg-[#db7844] hover:bg-[#c46838] text-white text-center font-bold py-5 text-xs transition-colors uppercase tracking-[0.2em]">
-                Elegir un lote en el plano <span className="ml-2">→</span>
+              <a href="#agenda" className="block w-full bg-[#db7844] hover:bg-[#c46838] text-white text-center font-bold py-5 text-xs transition-colors uppercase tracking-[0.2em]">
+                Agendar visita para este proyecto <span className="ml-2">→</span>
               </a>
            </div>
         </div>
       </section>
+
+      {/* 5.5. AGENDAR VISITA / CITA (UBICADO DEBAJO DEL SIMULADOR) */}
+      <section className="bg-[#f4efe5] py-28 px-8 lg:px-24 border-t border-[#e9e2d5]" id="agenda">
+         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+            
+            {/* LEFT SIDE COPY */}
+            <div className="lg:w-1/2">
+               <div className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#db7844] mb-6 flex items-center gap-3">
+                 <span className="w-6 h-[1px] bg-[#db7844]"></span>
+                 TU SIGUIENTE PASO
+               </div>
+               
+               <h2 className="font-serif text-5xl lg:text-6xl text-stone-900 mb-6 leading-tight">
+                 Conocé {project.name}<br/>
+                 <em className="text-[#db7844] italic">a tu manera.</em>
+               </h2>
+               
+               <p className="text-stone-600 text-lg mb-12 max-w-lg leading-relaxed">
+                 Elegí una visita, contanos dónde estás y un asesor confirmará el horario por WhatsApp para guiarte en vivo o en terreno.
+               </p>
+
+               {/* TEAM BADGE */}
+               <div className="inline-flex items-center gap-4 bg-[#e9e2d5] p-4 rounded-2xl border border-[#d8d0c2]">
+                 <div className="w-12 h-12 rounded-full bg-[#33261c] text-white flex items-center justify-center font-serif text-xl font-bold">
+                   P
+                 </div>
+                 <div>
+                   <div className="font-bold text-stone-900 text-sm">Equipo Prospera</div>
+                   <div className="text-[10px] text-stone-500 uppercase tracking-widest">Orientación comercial y coordinación de visitas</div>
+                 </div>
+                 <div className="ml-4 px-3 py-1 bg-emerald-100 text-emerald-700 text-[9px] font-bold uppercase tracking-widest rounded-full flex items-center gap-1.5">
+                   <span className="w-2 h-2 rounded-full bg-emerald-500"></span> Disponible
+                 </div>
+               </div>
+            </div>
+
+            {/* RIGHT SIDE FORM CARD WITH ICONS */}
+            <div className="lg:w-1/2 w-full bg-white shadow-2xl rounded-3xl overflow-hidden border border-[#e3dcd0]">
+               {/* TYPE SELECTION TABS */}
+               <div className="flex border-b border-stone-200">
+                  <button 
+                    onClick={() => setVisitType("virtual")}
+                    className={`flex-1 py-5 px-6 font-bold text-xs uppercase tracking-[0.15em] flex items-center justify-center gap-2 transition-all ${
+                      visitType === "virtual" 
+                        ? "bg-[#33261c] text-white" 
+                        : "bg-stone-100 text-stone-500 hover:bg-stone-200"
+                    }`}
+                  >
+                    <Video className="w-4 h-4 text-[#db7844]" />
+                    Visita Virtual
+                  </button>
+                  <button 
+                    onClick={() => setVisitType("presencial")}
+                    className={`flex-1 py-5 px-6 font-bold text-xs uppercase tracking-[0.15em] flex items-center justify-center gap-2 transition-all ${
+                      visitType === "presencial" 
+                        ? "bg-[#33261c] text-white" 
+                        : "bg-stone-100 text-stone-500 hover:bg-stone-200"
+                    }`}
+                  >
+                    <MapPin className="w-4 h-4 text-[#db7844]" />
+                    Visita Presencial
+                  </button>
+               </div>
+
+               {/* FORM BODY */}
+               <form onSubmit={(e) => { e.preventDefault(); alert("¡Solicitud enviada! Un asesor te contactará por WhatsApp."); }} className="p-8 lg:p-10 space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     
+                     {/* NOMBRE */}
+                     <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2 flex items-center gap-2">
+                           <User className="w-3.5 h-3.5 text-[#db7844]" /> Nombre completo
+                        </label>
+                        <input 
+                           type="text" 
+                           placeholder="Tu nombre y apellido" 
+                           required 
+                           className="w-full bg-[#f9f7f4] border border-stone-200 p-3.5 text-sm text-stone-900 rounded-xl focus:outline-none focus:border-[#db7844] transition-colors"
+                        />
+                     </div>
+
+                     {/* WHATSAPP */}
+                     <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2 flex items-center gap-2">
+                           <Phone className="w-3.5 h-3.5 text-[#db7844]" /> WhatsApp
+                        </label>
+                        <input 
+                           type="tel" 
+                           defaultValue="+591 " 
+                           required 
+                           className="w-full bg-[#f9f7f4] border border-stone-200 p-3.5 text-sm text-stone-900 rounded-xl focus:outline-none focus:border-[#db7844] transition-colors font-mono"
+                        />
+                     </div>
+
+                     {/* UBICACIÓN */}
+                     <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2 flex items-center gap-2">
+                           <Globe className="w-3.5 h-3.5 text-[#db7844]" /> ¿Dónde estás?
+                        </label>
+                        <select 
+                           value={visitorLocation} 
+                           onChange={(e) => setVisitorLocation(e.target.value as any)}
+                           className="w-full bg-[#f9f7f4] border border-stone-200 p-3.5 text-sm text-stone-900 rounded-xl focus:outline-none focus:border-[#db7844] transition-colors cursor-pointer"
+                        >
+                           <option value="scz">Santa Cruz</option>
+                           <option value="bol">Resto de Bolivia</option>
+                           <option value="ext">Exterior / Fuera de Bolivia</option>
+                        </select>
+                     </div>
+
+                     {/* OBJETIVO */}
+                     <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2 flex items-center gap-2">
+                           <Compass className="w-3.5 h-3.5 text-[#db7844]" /> Objetivo
+                        </label>
+                        <select className="w-full bg-[#f9f7f4] border border-stone-200 p-3.5 text-sm text-stone-900 rounded-xl focus:outline-none focus:border-[#db7844] transition-colors cursor-pointer">
+                           <option>Inversión a futuro</option>
+                           <option>Vivienda propia</option>
+                           <option>Quinta / Recreación</option>
+                        </select>
+                     </div>
+                  </div>
+
+                  {/* HORARIO PREFERIDO */}
+                  <div>
+                     <label className="block text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2 flex items-center gap-2">
+                        <Calendar className="w-3.5 h-3.5 text-[#db7844]" /> Horario o fecha preferida
+                     </label>
+                     <input 
+                        type="text" 
+                        placeholder="Ej. Mañana por la tarde / Sábado 10:00 AM" 
+                        className="w-full bg-[#f9f7f4] border border-stone-200 p-3.5 text-sm text-stone-900 rounded-xl focus:outline-none focus:border-[#db7844] transition-colors"
+                     />
+                  </div>
+
+                  {/* SUBMIT BUTTON */}
+                  <button 
+                     type="submit" 
+                     className="w-full bg-[#db7844] hover:bg-[#c46838] text-white font-bold py-5 rounded-xl text-xs uppercase tracking-[0.2em] transition-colors shadow-lg flex items-center justify-center gap-2 mt-4"
+                  >
+                     Solicitar visita {visitType === "virtual" ? "virtual" : "presencial"} <Send className="w-4 h-4 ml-1" />
+                  </button>
+
+                  <p className="text-[9px] text-stone-400 text-center leading-relaxed uppercase tracking-widest pt-2">
+                     Al confirmar, aceptás ser contactado para coordinar esta solicitud. No se realiza ningún pago desde este formulario.
+                  </p>
+                </form>
+             </div>
+          </div>
+       </section>
       
       {/* 6. COMPRAR A DISTANCIA */}
       <section className="bg-[#1f1a17] text-[#f4efe5] py-32 px-8 lg:px-24">
