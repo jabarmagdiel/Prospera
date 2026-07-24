@@ -86,15 +86,18 @@ export async function GET(request: Request) {
       // Rewrite popup to show only Estado badge
       function rewritePopup(el) {
         try {
-          var text = (el.innerText || el.textContent || '').toLowerCase();
-          var estado = 'Disponible';
-          if (text.indexOf('vendido') !== -1) estado = 'Vendido';
-          else if (text.indexOf('reservado') !== -1) estado = 'Reservado';
-          else if (text.indexOf('bloqueado') !== -1) estado = 'Bloqueado';
-          else if (text.indexOf('minuta') !== -1) estado = 'Minuta';
-          else if (text.indexOf('disponible') !== -1) estado = 'Disponible';
+          // Skip legend or leyenda elements
+          if (el.closest && (el.closest('#leyenda') || el.closest('[id*="legend"]') || el.closest('[class*="leyenda"]'))) return;
 
-          // Only add badge once - skip if already present and correct
+          var rawText = el.innerText || el.textContent || '';
+
+          // PRIMARY: look for explicit "Estado: X" label in the popup
+          var estadoMatch = rawText.match(/estado\s*:\s*(disponible|vendido|reservado|bloqueado|minuta)/i);
+          if (!estadoMatch) return; // Only rewrite popups that contain an Estado: label
+
+          var estado = estadoMatch[1].charAt(0).toUpperCase() + estadoMatch[1].slice(1).toLowerCase();
+
+          // Only update if badge doesn't already reflect this estado
           var badge = el.querySelector('.prospera-estado-badge');
           if (badge && badge.getAttribute('data-estado') === estado) return;
 
@@ -117,18 +120,12 @@ export async function GET(request: Request) {
       var _isRewriting = false;
       (new MutationObserver(function(mutations) {
         if (_isRewriting) return;
-        // Only trigger when real popup elements appear
-        for (var m = 0; m < mutations.length; m++) {
-          var target = mutations[m].target;
-          if (target && typeof target.className === 'string' &&
-              (target.className.indexOf('popover') !== -1 || target.className.indexOf('popup') !== -1)) {
-            _isRewriting = true;
-            var targets = document.querySelectorAll('.popover-content, .leaflet-popup-content, .cfm-marker-popover');
-            for (var i = 0; i < targets.length; i++) rewritePopup(targets[i]);
-            _isRewriting = false;
-            break;
-          }
-        }
+        _isRewriting = true;
+        try {
+          var targets = document.querySelectorAll('.popover-content, .leaflet-popup-content, .cfm-marker-popover');
+          for (var i = 0; i < targets.length; i++) rewritePopup(targets[i]);
+        } catch(e) {}
+        _isRewriting = false;
       })).observe(document.documentElement, { childList: true, subtree: true });
       </script>
       <script>
