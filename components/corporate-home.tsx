@@ -185,6 +185,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
                   </div>
                 </div>
                 <ArrowRight className="w-4 h-4 text-stone-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+              </button>
             </motion.div>
           </div>
         </div>
