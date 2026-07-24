@@ -58,26 +58,16 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
         <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]"></div>
         
         <div className="lg:w-1/2 p-12 lg:p-24 flex flex-col justify-center relative z-10">
-          <div className="text-[10px] uppercase font-bold tracking-[0.2em] mb-12 flex items-center gap-4">
-            <span className="w-8 h-[1px] bg-[#db7844]"></span>
-            SANTA CRUZ, BOLIVIA
-          </div>
-          
-          <h1 className="font-serif text-6xl lg:text-8xl leading-[0.95] tracking-tight mb-8">
-            Tu terreno,<br/>
-            <em className="text-[#db7844] italic">claro desde</em><br/>
-            <em className="text-[#db7844] italic">cualquier lugar.</em>
+          <h1 className="font-serif text-5xl lg:text-7xl leading-[1.05] tracking-tight mb-8">
+            Tu inversión segura<br/>
+            <em className="text-[#db7844] italic">desde cualquier locación.</em>
           </h1>
-          
-          <div className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#db7844] mb-8">
-            {project.family} - {project.short}
-          </div>
           
           <p className="text-lg max-w-md opacity-90 leading-relaxed mb-12 font-light">
             Conocé {project.name} con información verificable, un recorrido real y acompañamiento humano antes de tomar una decisión.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 mb-20">
+          <div className="flex flex-col sm:flex-row gap-4">
             <a href="#plano" className="bg-[#db7844] hover:bg-[#c46838] text-white px-8 py-5 font-bold text-xs flex justify-between items-center transition-colors min-w-[200px]">
               Ver el plano real <span className="font-serif text-lg leading-none">↓</span>
             </a>
@@ -86,29 +76,18 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
               Visita virtual en vivo
             </a>
           </div>
-
-          <div className="grid grid-cols-3 gap-8 mt-auto border-t border-white/10 pt-10">
-            <div>
-              <div className="font-serif text-3xl lg:text-4xl font-bold text-[#db7844] mb-2">360º</div>
-              <div className="text-[9px] uppercase tracking-widest opacity-60">Recorrido guiado</div>
-            </div>
-            <div>
-              <div className="font-serif text-3xl lg:text-4xl font-bold text-[#db7844] mb-2">1 a 1</div>
-              <div className="text-[9px] uppercase tracking-widest opacity-60">Asesoría humana</div>
-            </div>
-            <div>
-              <div className="font-serif text-2xl lg:text-3xl font-bold text-[#db7844] mb-2 mt-1">2 opciones</div>
-              <div className="text-[9px] uppercase tracking-widest opacity-60">Visita virtual o presencial</div>
-            </div>
-          </div>
         </div>
         
-        {/* RIGHT SIDE 3D MAP VISUAL */}
-        <div className="lg:w-1/2 relative bg-[#8b7e64] overflow-hidden min-h-[400px]">
-           <img 
-             src={project.gallery && project.gallery.length > 0 ? project.gallery[0] : (project.plan || "/images/about.png")} 
-             alt="Vista aérea" 
-             className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-60 scale-105"
+        {/* RIGHT SIDE VIDEO VISUAL */}
+        <div className="lg:w-1/2 relative bg-[#33261c] overflow-hidden min-h-[400px]">
+           <video
+             src={(project as any).video || "/hero/hero-video.mp4"}
+             autoPlay
+             loop
+             muted
+             playsInline
+             className="absolute inset-0 w-full h-full object-cover opacity-70 scale-105"
+             poster={project.gallery && project.gallery.length > 0 ? project.gallery[0] : (project.plan || "/images/about.png")}
            />
            <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[#463323] opacity-60"></div>
            
@@ -126,7 +105,7 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
            
            <div className="absolute top-10 right-10">
              <button className="bg-[#33261c] text-[#f4efe5] text-[10px] font-bold uppercase tracking-[0.2em] px-5 py-3 flex items-center gap-3">
-               RECORRIDO AÉREO <span className="opacity-50 font-normal">DEMO</span>
+               RECORRIDO AÉREO <span className="opacity-50 font-normal">VIDEO HD</span>
              </button>
            </div>
         </div>
