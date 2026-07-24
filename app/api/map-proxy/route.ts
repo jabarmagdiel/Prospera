@@ -14,16 +14,12 @@ export async function GET(request: Request) {
     const response = await fetch(targetUrl);
     let html = await response.text();
 
-    // Inject base href so relative assets load from original server
     html = html.replace('<head>', `<head><base href="https://prospera-nuevo.sistemas.com.bo/modulos/uv/" />`);
-
-    // Ensure mapServRest points to absolute URL of original PHP script
     html = html.replace(
       'var mapServRest = "./view.gestor.php";',
       'var mapServRest = "https://prospera-nuevo.sistemas.com.bo/modulos/uv/view.gestor.php";'
     );
 
-    // Inject CSS & PostMessage Bridge — intercepts XHR response directly
     const inject = `
       <style>
         #panelColumn, #panelToggleBtn { display: none !important; }
@@ -37,232 +33,161 @@ export async function GET(request: Request) {
           border: 1px solid #e3dcd0 !important;
           background: #fff !important;
           z-index: 10000 !important;
+          width: auto !important;
           min-width: 0 !important;
         }
+        .popover-title { display: none !important; }
         .popover-content, .leaflet-popup-content {
-          font-family: system-ui, -apple-system, sans-serif !important;
-          font-size: 13px !important;
-          font-weight: 600 !important;
-          padding: 10px 16px !important;
-          line-height: 1 !important;
+          padding: 10px 14px !important;
           white-space: nowrap !important;
-        }
-        /* Ocultar todos los hijos del popup content excepto el badge inyectado */
-        .popover-content > *:not(.prospera-estado-badge),
-        .leaflet-popup-content > *:not(.prospera-estado-badge) {
-          display: none !important;
-        }
-        /* Estilos de los badges */
-        .prospera-estado-badge {
-          display: inline-flex !important;
-          align-items: center !important;
-          gap: 7px !important;
-          font-size: 12px !important;
-          font-weight: 700 !important;
-          letter-spacing: 0.05em !important;
-          text-transform: uppercase !important;
+          min-width: 0 !important;
           font-family: system-ui, -apple-system, sans-serif !important;
         }
-        .prospera-estado-badge .dot {
-          width: 10px; height: 10px;
+        .leaflet-popup-tip-container { opacity: 1 !important; visibility: visible !important; }
+        .prospera-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          font-family: system-ui, -apple-system, sans-serif;
+        }
+        .prospera-badge .dot {
+          width: 9px; height: 9px;
           border-radius: 50%;
           display: inline-block;
-          flex-shrink: 0;
         }
-        /* Colors by estado */
-        .badge-disponible .dot { background: #22c55e; }
         .badge-disponible { color: #15803d; }
-        .badge-vendido .dot { background: #ef4444; }
+        .badge-disponible .dot { background: #22c55e; }
         .badge-vendido { color: #b91c1c; }
-        .badge-reservado .dot { background: #3b82f6; }
+        .badge-vendido .dot { background: #ef4444; }
         .badge-reservado { color: #1d4ed8; }
-        .badge-bloqueado .dot { background: #9ca3af; }
+        .badge-reservado .dot { background: #3b82f6; }
         .badge-bloqueado { color: #4b5563; }
-        /* También ocultar el title del popover */
-        .popover-title { display: none !important; }
-        .leaflet-popup-tip-container { opacity: 1 !important; visibility: visible !important; }
+        .badge-bloqueado .dot { background: #9ca3af; }
       </style>
       <script>
-      // Rewrite popup to show only Estado badge
-      function rewritePopup(el) {
-        try {
-          // Skip legend or leyenda elements
-          if (el.closest && (el.closest('#leyenda') || el.closest('[id*="legend"]') || el.closest('[class*="leyenda"]'))) return;
-
-          var rawText = el.innerText || el.textContent || '';
-
-          // PRIMARY: look for explicit "Estado: X" label in the popup
-          var estadoMatch = rawText.match(/estado\s*:\s*(disponible|vendido|reservado|bloqueado|minuta)/i);
-          if (!estadoMatch) return; // Only rewrite popups that contain an Estado: label
-
-          var estado = estadoMatch[1].charAt(0).toUpperCase() + estadoMatch[1].slice(1).toLowerCase();
-
-          // Only update if badge doesn't already reflect this estado
-          var badge = el.querySelector('.prospera-estado-badge');
-          if (badge && badge.getAttribute('data-estado') === estado) return;
-
-          var cls = 'badge-' + estado.toLowerCase();
-          if (!badge) {
-            badge = document.createElement('span');
-            badge.className = 'prospera-estado-badge ' + cls;
-            badge.setAttribute('data-estado', estado);
-            badge.innerHTML = '<span class="dot"></span><span class="label">' + estado + '</span>';
-            el.appendChild(badge);
-          } else {
-            badge.className = 'prospera-estado-badge ' + cls;
-            badge.setAttribute('data-estado', estado);
-            var lbl = badge.querySelector('.label');
-            if (lbl) lbl.textContent = estado;
-          }
-        } catch(e) {}
-      }
-
-      var _isRewriting = false;
-      (new MutationObserver(function(mutations) {
-        if (_isRewriting) return;
-        _isRewriting = true;
-        try {
-          var targets = document.querySelectorAll('.popover-content, .leaflet-popup-content, .cfm-marker-popover');
-          for (var i = 0; i < targets.length; i++) rewritePopup(targets[i]);
-        } catch(e) {}
-        _isRewriting = false;
-      })).observe(document.documentElement, { childList: true, subtree: true });
-      </script>
-      <script>
       (function() {
-        var lastKey = "";
 
-        function sendLot(lotData) {
-          var key = lotData.manzano + "-" + lotData.lote;
-          if (key === lastKey) return;
-          lastKey = key;
-          var msg = { type: 'PROSPERA_LOT_SELECTED', lot: lotData };
-          try { window.parent.postMessage(msg, '*'); } catch(e){}
-          try { window.top.postMessage(msg, '*'); } catch(e){}
-        }
+        // ── POPUP REWRITE ──────────────────────────────────────────────────────────
+        var _busy = false;
 
-        // PRIMARY: intercept XHR to parse server JSON response directly
-        (function() {
-          var OrigXHR = window.XMLHttpRequest;
-          var open = OrigXHR.prototype.open;
-          var send = OrigXHR.prototype.send;
-
-          OrigXHR.prototype.open = function(method, url) {
-            this._xhrUrl = url;
-            return open.apply(this, arguments);
-          };
-
-          OrigXHR.prototype.send = function(body) {
-            var self = this;
-            this.addEventListener('readystatechange', function() {
-              if (self.readyState !== 4 || self.status !== 200) return;
-              try {
-                var text = self.responseText;
-                if (!text || text.length < 5) return;
-
-                // Try to parse as JSON first
-                var json = null;
-                try { json = JSON.parse(text); } catch(e) {}
-
-                if (json) {
-                  // Extract lot data from JSON response
-                  var mVal = null, lVal = null, supVal = "300 m²", estVal = "Disponible", priceVal = "7.500", idVal = null;
-
-                  // Flatten all keys/values from json object
-                  function extract(obj) {
-                    if (!obj || typeof obj !== 'object') return;
-                    var keys = Object.keys(obj);
-                    for (var i = 0; i < keys.length; i++) {
-                      var k = keys[i].toLowerCase();
-                      var v = obj[keys[i]];
-                      if (v === null || v === undefined) continue;
-                      var vs = String(v);
-
-                      if (!mVal && (k === 'manzano' || k === 'manz' || k === 'nmanzano')) mVal = vs;
-                      if (!lVal && (k === 'lote' || k === 'nlote' || k === 'lot')) lVal = vs;
-                      if (k === 'superficie' || k === 'sup' || k === 'area') supVal = vs + (vs.includes('m') ? '' : ' m²');
-                      if (k === 'estado' || k === 'status' || k === 'state') estVal = vs.charAt(0).toUpperCase() + vs.slice(1).toLowerCase();
-                      if (k === 'precio' || k === 'price' || k === 'costo' || k === 'valor') priceVal = vs;
-                      if (k === 'id' || k === 'codigo' || k === 'cod') idVal = vs;
-
-                      if (typeof v === 'object') extract(v);
-                      if (Array.isArray(v)) { for (var j = 0; j < v.length; j++) extract(v[j]); }
-                    }
-                  }
-                  extract(json);
-
-                  if (mVal && lVal) {
-                    sendLot({
-                      manzano: mVal,
-                      lote: lVal,
-                      superficie: supVal,
-                      estado: estVal,
-                      id: idVal || ('#' + mVal + (lVal.length < 2 ? '0' + lVal : lVal)),
-                      precio: priceVal
-                    });
-                    return;
-                  }
-                }
-
-                // Fallback: parse plain text response
-                var cleanStr = text.replace(/<[^>]+>/g, ' ');
-                var mMatch = cleanStr.match(/(?:manzano|manz)\\s*:?\\s*([0-9]+)/i);
-                var lMatch = cleanStr.match(/(?:lote|lot)\\s*:?\\s*([0-9]+)/i);
-                if (mMatch && lMatch) {
-                  var supM = cleanStr.match(/superficie:?\\s*([0-9.,]+)/i);
-                  var estM = cleanStr.match(/estado:?\\s*([a-z]+)/i) || cleanStr.match(/(disponible|vendido|reservado|bloqueado)/i);
-                  var preM = cleanStr.match(/precio:?\\s*([0-9.,]+)/i) || cleanStr.match(/([0-9.,]+)\\s*(?:\\$us|usd|\\$)/i);
-                  sendLot({
-                    manzano: mMatch[1],
-                    lote: lMatch[1],
-                    superficie: supM ? (supM[1] + ' m²') : '300 m²',
-                    estado: estM ? (estM[1].charAt(0).toUpperCase() + estM[1].slice(1).toLowerCase()) : 'Disponible',
-                    id: '#' + mMatch[1] + lMatch[1],
-                    precio: preM ? preM[1] : '7.500'
-                  });
-                }
-              } catch(err) {}
-            });
-            return send.apply(this, arguments);
-          };
-        })();
-
-        // SECONDARY: scan popup DOM on click as fallback
-        function scanPopup() {
+        function rewritePopup(el) {
           try {
-            var selectors = ['.popover', '#markerInfoPopover', '.cfm-marker-popover', '.popover-content', '.leaflet-popup', '.leaflet-popup-content'];
-            for (var s = 0; s < selectors.length; s++) {
-              var el = document.querySelector(selectors[s]);
-              if (!el) continue;
-              var fullStr = ((el.innerText || el.textContent || '') + ' ' + (el.innerHTML || '')).replace(/<[^>]+>/g, ' ');
-              if (!fullStr || fullStr.length < 15) continue;
+            // Skip if already a badge element or inside legend
+            if (!el || el.getAttribute('data-pw') === '1') return;
+            if (el.closest && (el.closest('#leyenda') || el.closest('[class*="leyenda"]'))) return;
 
-              var mMatch = fullStr.match(/(?:manzano|manz)\\s*:?\\s*([0-9]+)/i);
-              var lMatch = fullStr.match(/(?:lote|lot)\\s*:?\\s*([0-9]+)/i);
-              if (!mMatch || !lMatch) continue;
+            var raw = el.innerText || el.textContent || '';
+            var m = raw.match(/estado\s*:\s*(disponible|vendido|reservado|bloqueado|minuta)/i);
+            if (!m) return;
 
-              var mVal = mMatch[1], lVal = lMatch[1];
-              if (mVal.toLowerCase() === 'ano') continue;
-
-              var supM = fullStr.match(/superficie:?\\s*([0-9.,]+)/i);
-              var estM = fullStr.match(/estado:?\\s*([a-z]+)/i) || fullStr.match(/(disponible|vendido|reservado|bloqueado)/i);
-              var preM = fullStr.match(/precio:?\\s*([0-9.,]+)/i) || fullStr.match(/([0-9.,]+)\\s*(?:\\$us|usd|\\$)/i);
-
-              sendLot({
-                manzano: mVal,
-                lote: lVal,
-                superficie: supM ? (supM[1].trim() + ' m²') : '300 m²',
-                estado: estM ? (estM[1].charAt(0).toUpperCase() + estM[1].slice(1).toLowerCase()) : 'Disponible',
-                id: '#' + mVal + (lVal.length < 2 ? '0' + lVal : lVal),
-                precio: preM ? preM[1].trim() : '7.500'
-              });
-              break;
-            }
+            var est = m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase();
+            el.setAttribute('data-pw', '1');
+            el.innerHTML = '<span class="prospera-badge badge-' + est.toLowerCase() + '"><span class="dot"></span>' + est + '</span>';
           } catch(e) {}
         }
 
+        var obs = new MutationObserver(function() {
+          if (_busy) return;
+          _busy = true;
+          try {
+            document.querySelectorAll('.popover-content, .leaflet-popup-content').forEach(function(el) {
+              rewritePopup(el);
+            });
+          } catch(e) {}
+          _busy = false;
+        });
+        obs.observe(document.documentElement, { childList: true, subtree: true });
+
+        // ── XHR INTERCEPTOR → postMessage to parent ────────────────────────────────
+        var lastKey = '';
+
+        function sendLot(lot) {
+          var key = lot.manzano + '-' + lot.lote;
+          if (key === lastKey) return;
+          lastKey = key;
+          var msg = { type: 'PROSPERA_LOT_SELECTED', lot: lot };
+          try { window.parent.postMessage(msg, '*'); } catch(e) {}
+          try { window.top.postMessage(msg, '*'); } catch(e) {}
+        }
+
+        function fromText(txt) {
+          var c = txt.replace(/<[^>]+>/g, ' ');
+          var mM = c.match(/(?:manzano|manz)\s*:?\s*([0-9]+)/i);
+          var lM = c.match(/(?:lote|lot)\s*:?\s*([0-9]+)/i);
+          if (!mM || !lM) return;
+          var mV = mM[1], lV = lM[1];
+          if (mV.toLowerCase() === 'ano') return;
+          var sM = c.match(/superficie\s*:?\s*([0-9.,]+)/i);
+          var eM = c.match(/estado\s*:\s*([a-z]+)/i) || c.match(/(disponible|vendido|reservado|bloqueado|minuta)/i);
+          var pM = c.match(/precio\s*:?\s*([0-9.,]+)/i) || c.match(/([0-9.,]+)\s*(?:\$us|usd|\$)/i);
+          sendLot({
+            manzano: mV,
+            lote: lV,
+            superficie: sM ? sM[1] + ' m²' : '300 m²',
+            estado: eM ? eM[1].charAt(0).toUpperCase() + eM[1].slice(1).toLowerCase() : 'Disponible',
+            id: '#' + mV + (lV.length < 2 ? '0' + lV : lV),
+            precio: pM ? pM[1] : '7.500'
+          });
+        }
+
+        // Intercept XHR to read AJAX responses
+        (function() {
+          var oOpen = XMLHttpRequest.prototype.open;
+          var oSend = XMLHttpRequest.prototype.send;
+          XMLHttpRequest.prototype.open = function(m, u) {
+            this._u = u;
+            return oOpen.apply(this, arguments);
+          };
+          XMLHttpRequest.prototype.send = function() {
+            this.addEventListener('readystatechange', function() {
+              if (this.readyState !== 4 || this.status !== 200) return;
+              try {
+                var txt = this.responseText;
+                if (!txt || txt.length < 5) return;
+                // Try JSON parse first
+                try {
+                  var j = JSON.parse(txt);
+                  function dig(o) {
+                    if (!o || typeof o !== 'object') return;
+                    var mV = o.manzano || o.manz || o.nManzano;
+                    var lV = o.lote || o.nlote || o.nLote;
+                    if (mV && lV) {
+                      sendLot({
+                        manzano: String(mV),
+                        lote: String(lV),
+                        superficie: o.superficie ? String(o.superficie) + ' m²' : '300 m²',
+                        estado: o.estado ? (String(o.estado).charAt(0).toUpperCase() + String(o.estado).slice(1).toLowerCase()) : 'Disponible',
+                        id: '#' + mV + lV,
+                        precio: String(o.precio || o.price || o.valor || '7.500')
+                      });
+                      return;
+                    }
+                    Object.values(o).forEach(function(v) { if (v && typeof v === 'object') dig(v); });
+                  }
+                  dig(j);
+                  return;
+                } catch(e) {}
+                // Fallback: parse text
+                fromText(txt);
+              } catch(e) {}
+            });
+            return oSend.apply(this, arguments);
+          };
+        })();
+
+        // Fallback: scan popup DOM on click
+        function scanPopup() {
+          try {
+            var els = document.querySelectorAll('.popover-content, .leaflet-popup-content');
+            els.forEach(function(el) { fromText(el.innerText || el.textContent || ''); });
+          } catch(e) {}
+        }
         document.addEventListener('click', function() {
-          [100, 300, 600, 1000].forEach(function(d) { setTimeout(scanPopup, d); });
+          [100, 300, 700].forEach(function(d) { setTimeout(scanPopup, d); });
         }, true);
 
       })();
