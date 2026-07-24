@@ -31,10 +31,30 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
   const [simInitial, setSimInitial] = useState(100);
   const [simTerm, setSimTerm] = useState(7);
   
-  // Fórmulas ficticias (basadas en la captura)
+  // Tabla de tasas según especificación del usuario:
+  // 1-5 años: 12%, 6 años: 12.5%, 7 años: 13%, 8 años: 13.5%, 9 años: 14%, 10 años: 15%
+  const getAnnualRate = (years: number) => {
+    if (years <= 5) return 0.12;
+    if (years === 6) return 0.125;
+    if (years === 7) return 0.13;
+    if (years === 8) return 0.135;
+    if (years === 9) return 0.14;
+    return 0.15;
+  };
+
+  const annualRate = getAnnualRate(simTerm);
+  const annualRateDisplay = `${(annualRate * 100).toString().replace('.', ',')} %`;
+  
   const balance = simValue - simInitial;
-  // If rate is 0% like in the screenshot
-  const monthly = balance > 0 && simTerm > 0 ? balance / (simTerm * 12) : 0;
+  const numMonths = simTerm * 12;
+  const monthlyRate = annualRate / 12;
+  
+  // Sistema Francés de amortización: P = Saldo * [ r * (1+r)^n ] / [ (1+r)^n - 1 ]
+  const monthly = balance > 0 && numMonths > 0 
+    ? (monthlyRate > 0 
+        ? balance * (monthlyRate * Math.pow(1 + monthlyRate, numMonths)) / (Math.pow(1 + monthlyRate, numMonths) - 1) 
+        : balance / numMonths)
+    : 0;
 
   // Render the floating back button
   const FloatingBack = () => (
@@ -383,7 +403,7 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
                   </div>
                   <div>
                     <div className="text-[9px] uppercase font-bold text-stone-500 mb-2 tracking-widest">Tasa anual aplicada</div>
-                    <div className="font-bold text-stone-900">0 %</div>
+                    <div className="font-bold text-stone-900">{annualRateDisplay}</div>
                   </div>
                   <div>
                     <div className="text-[9px] uppercase font-bold text-stone-500 mb-2 tracking-widest">Número de cuotas</div>
