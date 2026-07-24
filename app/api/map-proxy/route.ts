@@ -28,7 +28,7 @@ export async function GET(request: Request) {
       <style>
         #panelColumn, #panelToggleBtn { display: none !important; }
         #mapColumn { left: 0 !important; width: 100% !important; margin-left: 0 !important; }
-        .popover-content { font-family: sans-serif !important; }
+        .popover, .cfm-marker-popover, .popover-content, .leaflet-popup, .leaflet-popup-content-wrapper, .leaflet-popup-tip-container { position: absolute !important; left: -9999px !important; top: -9999px !important; opacity: 0 !important; pointer-events: none !important; }
       </style>
       <script>
       (function() {
@@ -42,12 +42,12 @@ export async function GET(request: Request) {
 
           var cleanText = html.replace(/<[^>]+>/g, ' ');
 
-          var manzanoMatch = cleanText.match(/manzano:?\s*([a-z0-9\-_]+)/i) || cleanText.match(/\bM-?([0-9]+)\b/i);
+          var manzanoMatch = cleanText.match(/manzano:?\s*([a-z0-9\-_]+)/i) || cleanText.match(/manz:?\s*([a-z0-9\-_]+)/i) || cleanText.match(/\bM-?([0-9]+)\b/i);
           var loteMatch = cleanText.match(/lote:?\s*([a-z0-9\-_]+)/i) || cleanText.match(/\bL-?([0-9]+)\b/i);
-          var supMatch = cleanText.match(/superficie:?\s*([0-9\.,]+\s*m²?)/i) || cleanText.match(/([0-9\.,]+\s*m²)/i);
-          var estadoMatch = cleanText.match(/(disponible|vendido|reservado|bloqueado|minuta)/i);
+          var supMatch = cleanText.match(/superficie:?\s*([0-9\.,]+)/i);
+          var estadoMatch = cleanText.match(/estado:?\s*([a-z]+)/i) || cleanText.match(/(disponible|vendido|reservado|bloqueado|minuta)/i);
           var idMatch = cleanText.match(/(#[0-9]+)/i) || cleanText.match(/id:?\s*([0-9]+)/i);
-          var precioMatch = cleanText.match(/(\$us\s*[0-9\.,]+|usd\s*\$?[0-9\.,]+|[0-9\.,]+\s*usd)/i) || cleanText.match(/([0-9\.,]{4,})/);
+          var precioMatch = cleanText.match(/precio:?\s*([0-9\.,]+)/i) || cleanText.match(/([0-9\.,]+)\s*\$us/i) || cleanText.match(/(\$us|usd)\s*([0-9\.,]+)/i);
 
           if (!manzanoMatch && !loteMatch) return;
 
@@ -59,14 +59,16 @@ export async function GET(request: Request) {
           if (key === lastPostedKey) return;
           lastPostedKey = key;
 
-          var rawPrice = precioMatch ? precioMatch[1].replace(/usd|\$us|\$/gi, '').trim() : "7.500";
+          var rawPriceStr = precioMatch ? precioMatch[1] : "7.500";
+          var supStr = supMatch ? (supMatch[1] + " m²") : "300 m²";
+
           var lotData = {
             manzano: mVal,
             lote: lVal,
-            superficie: supMatch ? supMatch[1] : "300 m²",
+            superficie: supStr,
             estado: estadoMatch ? (estadoMatch[1].charAt(0).toUpperCase() + estadoMatch[1].slice(1).toLowerCase()) : "Disponible",
             id: idMatch ? (idMatch[1].startsWith('#') ? idMatch[1] : '#' + idMatch[1]) : "#" + Math.floor(1000 + Math.random() * 9000),
-            precio: rawPrice
+            precio: rawPriceStr
           };
 
           window.parent.postMessage({ type: 'PROSPERA_LOT_SELECTED', lot: lotData }, '*');
@@ -86,7 +88,7 @@ export async function GET(request: Request) {
           var target = e.target;
           if (target) {
             var targetText = (target.getAttribute && target.getAttribute('title')) || target.innerText || target.textContent || "";
-            if (targetText && (targetText.includes('Manzano') || targetText.includes('Lote'))) {
+            if (targetText && (targetText.includes('Manz') || targetText.includes('Lote') || targetText.includes('Precio'))) {
               parseAndPost({ innerHTML: targetText, textContent: targetText });
             }
           }

@@ -208,12 +208,13 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
                      onSelectLot={(lot) => {
                        setSelectedLot(lot);
                        if (lot && lot.precio) {
-                         // Parse price e.g. "7.500", "9,700.00", "$us 9.700"
                          var rawStr = String(lot.precio).replace(/[^0-9\.,]/g, '');
-                         if (rawStr.includes('.') && rawStr.includes(',')) {
+                         if (rawStr.includes(',') && rawStr.includes('.')) {
                            rawStr = rawStr.replace(/,/g, '');
                          } else if (rawStr.includes('.') && rawStr.split('.')[1].length === 3) {
                            rawStr = rawStr.replace(/\./g, '');
+                         } else if (rawStr.includes(',')) {
+                           rawStr = rawStr.replace(/,/g, '.');
                          }
                          var parsedPrice = parseFloat(rawStr);
                          if (!isNaN(parsedPrice) && parsedPrice > 0) {
