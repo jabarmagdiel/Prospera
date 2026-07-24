@@ -275,11 +275,55 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
               </div>
             </motion.div>
           </div>
+
+          {/* Política de Calidad (Movida arriba) */}
+          <motion.div
+            className="mt-16 rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden shadow-2xl group"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+          >
+            <img src="/hero/slide3.png" alt="Política de Calidad" className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-[2s] ease-out" />
+            <div className="absolute inset-0 bg-stone-900/85 backdrop-blur-[2px]" />
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-orange-500/20 to-transparent rounded-full blur-[100px] pointer-events-none" />
+
+            <div className="relative z-10 flex flex-col lg:flex-row gap-12">
+              <div className="lg:w-[38%]">
+                <div className="w-14 h-14 bg-white/10 text-orange-400 rounded-2xl flex items-center justify-center mb-6">
+                  <FileText className="w-7 h-7" />
+                </div>
+                <h3 className="text-4xl font-serif text-white mb-4 leading-tight">Política de la Calidad</h3>
+                <p className="text-stone-300 leading-relaxed">Nuestra empresa busca dar soluciones de inversión confiables, seguras y rentables para nuestros clientes e inversionistas.</p>
+              </div>
+              <div className="lg:w-[62%]">
+                <div className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-md">
+                  <p className="text-white font-medium mb-6">Nos comprometemos a:</p>
+                  <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
+                    {[
+                      "Fortalecer la capacidad de ventas.",
+                      "Estandarizar procesos para seguimiento y mejora continua.",
+                      "Mantener una estructura formal ajustada al propósito.",
+                      "Promover una cultura coherente con nuestros valores.",
+                      "Desarrollar proyectos que permitan mayor plusvalía.",
+                      "Cumplir con lo comprometido a clientes e inversionistas.",
+                      "Cumplir con los requisitos legales y reglamentarios."
+                    ].map((item, idx) => (
+                      <div key={idx} className="flex gap-3 items-start">
+                        <CheckCircle className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
+                        <span className="text-stone-300 text-sm leading-relaxed">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </motion.section>
 
-      {/* ── MISIÓN / VISIÓN / VALORES (resumido) ─────────────── */}
-      <section className="bg-stone-50 py-24 border-t border-stone-200" id="mision-vision">
+      {/* ── MISIÓN / VISIÓN / VALORES (Ocultado a petición del usuario, se conserva en código) ─────────────── */}
+      <section className="hidden bg-stone-50 py-24 border-t border-stone-200" id="mision-vision">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
             className="text-center mb-16"
@@ -355,50 +399,6 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
                   <strong className="text-stone-800 text-sm leading-tight">{val.title}</strong>
                 </motion.div>
               ))}
-            </div>
-          </motion.div>
-
-          {/* Política de Calidad */}
-          <motion.div
-            className="mt-16 rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden shadow-2xl group"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeUp}
-          >
-            <img src="/hero/slide3.png" alt="Política de Calidad" className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-[2s] ease-out" />
-            <div className="absolute inset-0 bg-stone-900/85 backdrop-blur-[2px]" />
-            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-orange-500/20 to-transparent rounded-full blur-[100px] pointer-events-none" />
-
-            <div className="relative z-10 flex flex-col lg:flex-row gap-12">
-              <div className="lg:w-[38%]">
-                <div className="w-14 h-14 bg-white/10 text-orange-400 rounded-2xl flex items-center justify-center mb-6">
-                  <FileText className="w-7 h-7" />
-                </div>
-                <h3 className="text-4xl font-serif text-white mb-4 leading-tight">Política de la Calidad</h3>
-                <p className="text-stone-300 leading-relaxed">Nuestra empresa busca dar soluciones de inversión confiables, seguras y rentables para nuestros clientes e inversionistas.</p>
-              </div>
-              <div className="lg:w-[62%]">
-                <div className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-md">
-                  <p className="text-white font-medium mb-6">Nos comprometemos a:</p>
-                  <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
-                    {[
-                      "Fortalecer la capacidad de ventas.",
-                      "Estandarizar procesos para seguimiento y mejora continua.",
-                      "Mantener una estructura formal ajustada al propósito.",
-                      "Promover una cultura coherente con nuestros valores.",
-                      "Desarrollar proyectos que permitan mayor plusvalía.",
-                      "Cumplir con lo comprometido a clientes e inversionistas.",
-                      "Cumplir con los requisitos legales y reglamentarios."
-                    ].map((item, idx) => (
-                      <div key={idx} className="flex gap-3 items-start">
-                        <CheckCircle className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
-                        <span className="text-stone-300 text-sm leading-relaxed">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
             </div>
           </motion.div>
         </div>

@@ -17,7 +17,7 @@ export function SmartWhatsapp() {
       href="https://wa.me/59177820003"
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed right-6 bottom-6 z-50 flex items-center justify-center w-14 h-14 bg-green-500 rounded-full shadow-lg border-2 border-white group hover:shadow-xl hover:scale-110 transition-all text-white"
+      className="fixed right-6 bottom-6 z-50 flex items-center justify-center w-14 h-14 bg-orange-600 hover:bg-orange-500 rounded-full shadow-lg group hover:shadow-xl hover:scale-110 transition-all text-white"
       initial={{ scale: 0, opacity: 0, y: 50 }}
       animate={{ scale: 1, opacity: 1, y: 0 }}
       transition={{ type: "spring", bounce: 0.5, delay: 1 }}
@@ -30,9 +30,9 @@ export function SmartWhatsapp() {
       {/* Pulsing Dot Status */}
       {isOnline && (
         <motion.span 
-          className="absolute top-1 right-1 w-3.5 h-3.5 rounded-full bg-orange-500 border-2 border-white"
+          className="absolute top-1 right-1 w-3 h-3 rounded-full bg-white shadow-sm"
           initial={{ scale: 0 }}
-          animate={{ scale: [1, 1.2, 1] }}
+          animate={{ scale: [1, 1.25, 1] }}
           transition={{ repeat: Infinity, duration: 2 }}
         />
       )}
