@@ -28,82 +28,73 @@ export async function GET(request: Request) {
       <style>
         #panelColumn, #panelToggleBtn { display: none !important; }
         #mapColumn { left: 0 !important; width: 100% !important; margin-left: 0 !important; }
-        .popover, .leaflet-popup { font-family: system-ui, -apple-system, sans-serif !important; z-index: 10000 !important; }
-        .popover-content, .leaflet-popup-content { font-size: 12px !important; line-height: 1.4 !important; }
+        .popover, .cfm-marker-popover, .popover-content, .leaflet-popup, .leaflet-popup-content-wrapper, .leaflet-popup-tip-container {
+          opacity: 0 !important;
+          pointer-events: none !important;
+          visibility: hidden !important;
+        }
       </style>
       <script>
       (function() {
         var lastPostedKey = "";
 
-        function parseAndPost(el) {
-          if (!el) return;
-          var html = el.innerHTML || "";
-          var text = el.textContent || el.innerText || "";
-          if (!html || html.trim().length < 4) return;
+        function scanAndExtract() {
+          var popups = document.querySelectorAll('#markerInfoPopover, .cfm-marker-popover, .popover-content, .popover, .leaflet-popup-content, .leaflet-popup-content-wrapper');
+          for (var i = 0; i < popups.length; i++) {
+            var html = popups[i].innerHTML || "";
+            var text = popups[i].textContent || popups[i].innerText || "";
+            var fullStr = (html + " " + text).replace(/<[^>]+>/g, ' ');
 
-          var cleanText = html.replace(/<[^>]+>/g, ' ');
+            var mMatch = fullStr.match(/(?:manzano|manz)\s*:?\s*([0-9]+)/i) || fullStr.match(/\bM-?([0-9]+)\b/i);
+            var lMatch = fullStr.match(/(?:lote|lot)\s*:?\s*([0-9]+)/i) || fullStr.match(/\bL-?([0-9]+)\b/i);
 
-          var mDigitMatch = cleanText.match(/(?:manzano|manz)\s*:?\s*([0-9]+)/i) || cleanText.match(/\bM-?([0-9]+)\b/i);
-          var manzanoMatch = mDigitMatch || cleanText.match(/(?:manzano|manz)\s*:?\s*([a-z0-9\-_]+)/i);
-          
-          var mVal = manzanoMatch ? manzanoMatch[1] : "";
-          if (mVal.toLowerCase() === 'ano') mVal = "";
+            if (mMatch && lMatch) {
+              var mVal = mMatch[1];
+              var lVal = lMatch[1];
+              if (mVal.toLowerCase() === 'ano') continue;
 
-          var lDigitMatch = cleanText.match(/(?:lote|lot)\s*:?\s*([0-9]+)/i) || cleanText.match(/\bL-?([0-9]+)\b/i);
-          var loteMatch = lDigitMatch || cleanText.match(/(?:lote|lot)\s*:?\s*([a-z0-9\-_]+)/i);
-          var lVal = loteMatch ? loteMatch[1] : "";
+              var key = mVal + "-" + lVal;
 
-          var supMatch = cleanText.match(/superficie:?\s*([0-9\.,]+(?:\s*m²?)?)/i);
-          var estadoMatch = cleanText.match(/estado:?\s*([a-z]+)/i) || cleanText.match(/(disponible|vendido|reservado|bloqueado|minuta)/i);
-          var idMatch = cleanText.match(/(#[0-9]+)/i) || cleanText.match(/id:?\s*([0-9]+)/i);
-          var precioMatch = cleanText.match(/precio:?\s*([0-9\.,]+)/i) || cleanText.match(/([0-9\.,]+)\s*(?:\$us|usd|\$)/i) || cleanText.match(/(?:\$us|usd|\$)\s*([0-9\.,]+)/i);
+              var supMatch = fullStr.match(/superficie:?\s*([0-9\.,]+)/i);
+              var estadoMatch = fullStr.match(/estado:?\s*([a-z]+)/i) || fullStr.match(/(disponible|vendido|reservado|bloqueado|minuta)/i);
+              var precioMatch = fullStr.match(/precio:?\s*([0-9\.,]+)/i) || fullStr.match(/([0-9\.,]+)\s*(?:\$us|usd|\$)/i) || fullStr.match(/(?:\$us|usd|\$)\s*([0-9\.,]+)/i);
+              var idMatch = fullStr.match(/(#[0-9]+)/i) || fullStr.match(/id:?\s*([0-9]+)/i);
 
-          if (!mVal || !lVal) return;
+              var supStr = supMatch ? (supMatch[1].trim() + " m²") : "300 m²";
+              var estadoStr = estadoMatch ? (estadoMatch[1].charAt(0).toUpperCase() + estadoMatch[1].slice(1).toLowerCase()) : "Disponible";
+              var priceStr = precioMatch ? precioMatch[1].trim() : "7.500";
+              var idStr = idMatch ? idMatch[1] : ("#" + mVal + (lVal.length < 2 ? "0" + lVal : lVal));
 
-          var key = mVal + "-" + lVal;
-          if (key === lastPostedKey) return;
-          lastPostedKey = key;
+              var lotData = {
+                manzano: mVal,
+                lote: lVal,
+                superficie: supStr,
+                estado: estadoStr,
+                id: idStr,
+                precio: priceStr
+              };
 
-          var rawPriceStr = precioMatch ? precioMatch[1] : "";
-          var supStr = supMatch ? (supMatch[1].includes('m') ? supMatch[1] : supMatch[1] + " m²") : "300 m²";
-
-          var lotData = {
-            manzano: mVal,
-            lote: lVal,
-            superficie: supStr,
-            estado: estadoMatch ? (estadoMatch[1].charAt(0).toUpperCase() + estadoMatch[1].slice(1).toLowerCase()) : "Disponible",
-            id: idMatch ? (idMatch[1].startsWith('#') ? idMatch[1] : '#' + idMatch[1]) : "#" + mVal + lVal,
-            precio: rawPriceStr || "7.500"
-          };
-
-          window.parent.postMessage({ type: 'PROSPERA_LOT_SELECTED', lot: lotData }, '*');
-        }
-
-        function scanDOM() {
-          var selectors = '#markerInfoPopover, .cfm-marker-popover, .popover-content, .popover, .leaflet-popup-content, .leaflet-popup-content-wrapper';
-          var elements = document.querySelectorAll(selectors);
-          for (var i = 0; i < elements.length; i++) {
-            parseAndPost(elements[i]);
+              if (key !== lastPostedKey) {
+                lastPostedKey = key;
+                window.parent.postMessage({ type: 'PROSPERA_LOT_SELECTED', lot: lotData }, '*');
+              }
+              break;
+            }
           }
         }
 
-        try {
-          var observer = new MutationObserver(function() {
-            scanDOM();
-          });
-          if (document.body) {
-            observer.observe(document.body, { childList: true, subtree: true, characterData: true });
-          } else {
-            window.addEventListener('DOMContentLoaded', function() {
-              observer.observe(document.body, { childList: true, subtree: true, characterData: true });
-            });
-          }
-        } catch(e) {}
+        setInterval(scanAndExtract, 100);
 
         document.addEventListener('click', function(e) {
-          setTimeout(scanDOM, 50);
-          setTimeout(scanDOM, 200);
-          setTimeout(scanDOM, 500);
+          for (var delay of [10, 50, 150, 350, 700]) {
+            setTimeout(scanAndExtract, delay);
+          }
+        }, true);
+
+        document.addEventListener('pointerdown', function(e) {
+          for (var delay of [20, 100, 300]) {
+            setTimeout(scanAndExtract, delay);
+          }
         }, true);
       })();
       </script>`;
