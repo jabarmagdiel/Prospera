@@ -664,13 +664,6 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
                </div>
             </div>
             
-            <div className="bg-[#e9e2d5] p-8 flex items-start gap-6 max-w-4xl mx-auto">
-               <div className="w-8 h-8 rounded-full bg-[#525244] text-white flex items-center justify-center shrink-0 mt-1"><Check className="w-4 h-4" /></div>
-               <div>
-                  <h4 className="font-bold text-stone-900 text-lg mb-2">Una regla simple de seguridad</h4>
-                  <p className="text-sm text-stone-600 leading-relaxed">Los asesores orientan y acompañan, no reciben dinero. Todo pago debe realizarse por canales oficialmente aprobados y generar respaldo.</p>
-               </div>
-            </div>
          </div>
       </section>
     </div>
