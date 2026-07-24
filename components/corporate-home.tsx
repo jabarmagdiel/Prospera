@@ -153,6 +153,41 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
               La gestión de riesgos, la aprobación rigurosa de proyectos y la rigurosidad jurídica son los pilares que nos permiten ofrecer confianza y seguridad en cada operación.
             </motion.p>
 
+            {/* Targets de Misión y Visión */}
+            <motion.div variants={fadeUp} className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6 mb-6">
+              <button
+                onClick={() => document.getElementById('mision-sec')?.scrollIntoView({ behavior: 'smooth' })}
+                className="group p-3.5 bg-white border border-stone-200 hover:border-orange-500 rounded-2xl shadow-sm hover:shadow-md transition-all text-left flex items-center justify-between cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                    <Target className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-serif font-bold text-stone-900 group-hover:text-orange-600 transition-colors text-sm">Nuestra Misión</h4>
+                    <span className="text-xs text-stone-500 block">Conocé nuestro propósito</span>
+                  </div>
+                </div>
+                <ArrowRight className="w-4 h-4 text-stone-400 group-hover:text-orange-500 group-hover:translate-x-1 transition-all" />
+              </button>
+
+              <button
+                onClick={() => document.getElementById('vision-sec')?.scrollIntoView({ behavior: 'smooth' })}
+                className="group p-3.5 bg-white border border-stone-200 hover:border-blue-500 rounded-2xl shadow-sm hover:shadow-md transition-all text-left flex items-center justify-between cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                    <Eye className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-serif font-bold text-stone-900 group-hover:text-blue-600 transition-colors text-sm">Nuestra Visión</h4>
+                    <span className="text-xs text-stone-500 block">Hacia dónde vamos</span>
+                  </div>
+                </div>
+                <ArrowRight className="w-4 h-4 text-stone-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+              </button>
+            </motion.div>
+
             <motion.button
               variants={fadeUp}
               className="mt-4 flex items-center gap-2 text-orange-600 font-bold hover:gap-4 transition-all text-sm"
@@ -165,7 +200,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
       </motion.section>
 
       {/* ── MISIÓN / VISIÓN / VALORES (resumido) ─────────────── */}
-      <section className="bg-stone-50 py-24 border-t border-stone-200">
+      <section className="bg-stone-50 py-24 border-t border-stone-200" id="mision-vision">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
             className="text-center mb-16"
@@ -189,7 +224,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
             viewport={{ once: true, amount: 0.1 }}
             variants={stagger}
           >
-            <motion.div variants={fadeUp} className="group bg-white rounded-[2rem] border border-stone-200 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden flex flex-col md:flex-row">
+            <motion.div id="mision-sec" variants={fadeUp} className="scroll-mt-28 group bg-white rounded-[2rem] border border-stone-200 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden flex flex-col md:flex-row">
               <div className="md:w-[55%] p-10 flex flex-col justify-center">
                 <div className="w-14 h-14 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mb-6">
                   <Target className="w-7 h-7" />
@@ -202,7 +237,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
               </div>
             </motion.div>
 
-            <motion.div variants={fadeUp} className="group bg-white rounded-[2rem] border border-stone-200 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden flex flex-col md:flex-row-reverse">
+            <motion.div id="vision-sec" variants={fadeUp} className="scroll-mt-28 group bg-white rounded-[2rem] border border-stone-200 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden flex flex-col md:flex-row-reverse">
               <div className="md:w-[55%] p-10 flex flex-col justify-center">
                 <div className="w-14 h-14 bg-blue-50 text-blue-700 rounded-2xl flex items-center justify-center mb-6">
                   <Eye className="w-7 h-7" />
