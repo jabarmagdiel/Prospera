@@ -50,51 +50,59 @@ export async function GET(request: Request) {
         var lastPostedData = "";
 
         function scanAndExtract() {
-          var popups = document.querySelectorAll('#markerInfoPopover, .cfm-marker-popover, .popover-content, .popover, .leaflet-popup-content, .leaflet-popup-content-wrapper');
-          for (var i = 0; i < popups.length; i++) {
-            var html = popups[i].innerHTML || "";
-            var text = popups[i].textContent || popups[i].innerText || "";
-            var fullStr = (html + " " + text).replace(/<[^>]+>/g, ' ');
+          try {
+            var popups = document.querySelectorAll('.popover, #markerInfoPopover, .cfm-marker-popover, .popover-content, .leaflet-popup, .leaflet-popup-content, .leaflet-popup-content-wrapper');
+            for (var i = 0; i < popups.length; i++) {
+              try {
+                var el = popups[i];
+                if (!el) continue;
+                var text = (el.innerText || el.textContent || "").trim();
+                var html = (el.innerHTML || "").trim();
+                if (!text && !html) continue;
 
-            var mMatch = fullStr.match(/(?:manzano|manz)\s*:?\s*([0-9]+)/i) || fullStr.match(/\bM-?([0-9]+)\b/i);
-            var lMatch = fullStr.match(/(?:lote|lot)\s*:?\s*([0-9]+)/i) || fullStr.match(/\bL-?([0-9]+)\b/i);
+                var fullStr = (html + " " + text).replace(/<[^>]+>/g, ' ');
 
-            if (mMatch && lMatch) {
-              var mVal = mMatch[1];
-              var lVal = lMatch[1];
-              if (mVal.toLowerCase() === 'ano') continue;
+                var mMatch = fullStr.match(/(?:manzano|manz)\s*:?\s*([0-9]+)/i) || fullStr.match(/\bM-?([0-9]+)\b/i);
+                var lMatch = fullStr.match(/(?:lote|lot)\s*:?\s*([0-9]+)/i) || fullStr.match(/\bL-?([0-9]+)\b/i);
 
-              var supMatch = fullStr.match(/superficie:?\s*([0-9\.,]+)/i);
-              var estadoMatch = fullStr.match(/estado:?\s*([a-z]+)/i) || fullStr.match(/(disponible|vendido|reservado|bloqueado|minuta)/i);
-              var precioMatch = fullStr.match(/precio:?\s*([0-9\.,]+)/i) || fullStr.match(/([0-9\.,]+)\s*(?:\$us|usd|\$)/i) || fullStr.match(/(?:\$us|usd|\$)\s*([0-9\.,]+)/i);
-              var idMatch = fullStr.match(/(#[0-9]+)/i) || fullStr.match(/id:?\s*([0-9]+)/i);
+                if (mMatch && lMatch) {
+                  var mVal = mMatch[1];
+                  var lVal = lMatch[1];
+                  if (mVal.toLowerCase() === 'ano') continue;
 
-              var supStr = supMatch ? (supMatch[1].trim() + " m²") : "300 m²";
-              var estadoStr = estadoMatch ? (estadoMatch[1].charAt(0).toUpperCase() + estadoMatch[1].slice(1).toLowerCase()) : "Disponible";
-              var priceStr = precioMatch ? precioMatch[1].trim() : "7.500";
-              var idStr = idMatch ? idMatch[1] : ("#" + mVal + (lVal.length < 2 ? "0" + lVal : lVal));
+                  var supMatch = fullStr.match(/superficie:?\s*([0-9\.,]+)/i);
+                  var estadoMatch = fullStr.match(/estado:?\s*([a-z]+)/i) || fullStr.match(/(disponible|vendido|reservado|bloqueado|minuta)/i);
+                  var precioMatch = fullStr.match(/precio:?\s*([0-9\.,]+)/i) || fullStr.match(/([0-9\.,]+)\s*(?:\$us|usd|\$)/i) || fullStr.match(/(?:\$us|usd|\$)\s*([0-9\.,]+)/i);
+                  var idMatch = fullStr.match(/(#[0-9]+)/i) || fullStr.match(/id:?\s*([0-9]+)/i);
 
-              var lotData = {
-                manzano: mVal,
-                lote: lVal,
-                superficie: supStr,
-                estado: estadoStr,
-                id: idStr,
-                precio: priceStr
-              };
+                  var supStr = supMatch ? (supMatch[1].trim() + " m²") : "300 m²";
+                  var estadoStr = estadoMatch ? (estadoMatch[1].charAt(0).toUpperCase() + estadoMatch[1].slice(1).toLowerCase()) : "Disponible";
+                  var priceStr = precioMatch ? precioMatch[1].trim() : "7.500";
+                  var idStr = idMatch ? idMatch[1] : ("#" + mVal + (lVal.length < 2 ? "0" + lVal : lVal));
 
-              var currentDataStr = JSON.stringify(lotData);
-              if (currentDataStr !== lastPostedData) {
-                lastPostedData = currentDataStr;
-                try { window.parent.postMessage({ type: 'PROSPERA_LOT_SELECTED', lot: lotData }, '*'); } catch(e){}
-                try { window.top.postMessage({ type: 'PROSPERA_LOT_SELECTED', lot: lotData }, '*'); } catch(e){}
-              }
-              break;
+                  var lotData = {
+                    manzano: mVal,
+                    lote: lVal,
+                    superficie: supStr,
+                    estado: estadoStr,
+                    id: idStr,
+                    precio: priceStr
+                  };
+
+                  var currentDataStr = JSON.stringify(lotData);
+                  if (currentDataStr !== lastPostedData) {
+                    lastPostedData = currentDataStr;
+                    try { window.parent.postMessage({ type: 'PROSPERA_LOT_SELECTED', lot: lotData }, '*'); } catch(e){}
+                    try { window.top.postMessage({ type: 'PROSPERA_LOT_SELECTED', lot: lotData }, '*'); } catch(e){}
+                  }
+                  break;
+                }
+              } catch(err) {}
             }
-          }
+          } catch(err) {}
         }
 
-        setInterval(scanAndExtract, 80);
+        setInterval(scanAndExtract, 100);
 
         document.addEventListener('click', function(e) {
           for (var delay of [10, 50, 150, 350, 700]) {
@@ -102,11 +110,22 @@ export async function GET(request: Request) {
           }
         }, true);
 
-        document.addEventListener('pointerdown', function(e) {
-          for (var delay of [20, 100, 300]) {
-            setTimeout(scanAndExtract, delay);
-          }
-        }, true);
+        try {
+          var origOpen = XMLHttpRequest.prototype.open;
+          var origSend = XMLHttpRequest.prototype.send;
+          XMLHttpRequest.prototype.open = function(method, url) {
+            this._url = url;
+            return origOpen.apply(this, arguments);
+          };
+          XMLHttpRequest.prototype.send = function() {
+            this.addEventListener('load', function() {
+              for (var delay of [10, 50, 200, 500]) {
+                setTimeout(scanAndExtract, delay);
+              }
+            });
+            return origSend.apply(this, arguments);
+          };
+        } catch(e) {}
       })();
       </script>`;
 
