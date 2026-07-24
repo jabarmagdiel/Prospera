@@ -24,12 +24,7 @@ export function ProjectMap({ planImage, projectId, onSelectLot }: { planImage: s
 
   // Mapear los IDs del CMS a los IDs de la URL original
   // La Fortuna = 5, Campo Grande 1 = 1, Campo Grande 2 = 2, Campo Grande 3 = 3
-  let mapId = "5"; // Default a La Fortuna
-  if (projectId) {
-    if (projectId.includes("1")) mapId = "1";
-    if (projectId.includes("2")) mapId = "2";
-    if (projectId.includes("3")) mapId = "3";
-  }
+  let mapId = projectId ? String(projectId) : "5";
 
   const iframeSrc = `/api/map-proxy?mapa=Y3Jpcw&u=${mapId}`;
 

@@ -28,10 +28,21 @@ export async function GET(request: Request) {
       <style>
         #panelColumn, #panelToggleBtn { display: none !important; }
         #mapColumn { left: 0 !important; width: 100% !important; margin-left: 0 !important; }
-        .popover, .cfm-marker-popover, .popover-content, .leaflet-popup, .leaflet-popup-content-wrapper, .leaflet-popup-tip-container {
-          opacity: 0 !important;
-          pointer-events: none !important;
-          visibility: hidden !important;
+        .popover, .cfm-marker-popover, .leaflet-popup {
+          opacity: 1 !important;
+          visibility: visible !important;
+          pointer-events: auto !important;
+          border-radius: 12px !important;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+          border: 1px solid #e3dcd0 !important;
+          background: #ffffff !important;
+          z-index: 10000 !important;
+        }
+        .popover-content, .leaflet-popup-content {
+          font-family: system-ui, -apple-system, sans-serif !important;
+          font-size: 11px !important;
+          padding: 8px 12px !important;
+          line-height: 1.4 !important;
         }
       </style>
       <script>
@@ -76,14 +87,15 @@ export async function GET(request: Request) {
 
               if (key !== lastPostedKey) {
                 lastPostedKey = key;
-                window.parent.postMessage({ type: 'PROSPERA_LOT_SELECTED', lot: lotData }, '*');
+                try { window.parent.postMessage({ type: 'PROSPERA_LOT_SELECTED', lot: lotData }, '*'); } catch(e){}
+                try { window.top.postMessage({ type: 'PROSPERA_LOT_SELECTED', lot: lotData }, '*'); } catch(e){}
               }
               break;
             }
           }
         }
 
-        setInterval(scanAndExtract, 100);
+        setInterval(scanAndExtract, 80);
 
         document.addEventListener('click', function(e) {
           for (var delay of [10, 50, 150, 350, 700]) {

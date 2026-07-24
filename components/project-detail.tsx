@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Project } from "../lib/types";
 import { ArrowLeft, Check, MapPin, Calendar, Clock, User, Phone, Globe, Video, Send, Compass } from "lucide-react";
 import { ProjectMap } from "./project-map";
@@ -28,6 +28,43 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
 
   // Simulator state
   const [simValue, setSimValue] = useState(7500);
+
+  // Escuchar eventos de selección de lote desde el iframe de manera global e instantánea
+  useEffect(() => {
+    const handleMessage = (e: MessageEvent) => {
+      if (e.data && e.data.type === 'PROSPERA_LOT_SELECTED' && e.data.lot) {
+        const lot = e.data.lot;
+        if (!lot || !lot.manzano || !lot.lote) return;
+
+        let priceDisplay = lot.precio || "7.500";
+        let clean = String(lot.precio).replace(/[^0-9\.,]/g, '');
+        if (clean.includes(',') && clean.includes('.')) {
+          clean = clean.replace(/,/g, '');
+        } else if (clean.includes('.') && clean.split('.')[1].length === 3) {
+          clean = clean.replace(/\./g, '');
+        } else if (clean.includes(',')) {
+          clean = clean.replace(/,/g, '.');
+        }
+        let numPrice = parseFloat(clean);
+
+        setSelectedLot({
+          manzano: lot.manzano,
+          lote: lot.lote,
+          superficie: lot.superficie || "300 m²",
+          estado: lot.estado || "Disponible",
+          id: lot.id || `#${lot.manzano}${lot.lote}`,
+          precio: priceDisplay
+        });
+
+        if (!isNaN(numPrice) && numPrice > 0) {
+          setSimValue(numPrice);
+        }
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
   const [simInitial, setSimInitial] = useState(100);
   const [simTerm, setSimTerm] = useState(7);
   
