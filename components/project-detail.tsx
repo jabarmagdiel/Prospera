@@ -81,13 +81,12 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
         {/* RIGHT SIDE VIDEO VISUAL */}
         <div className="lg:w-1/2 relative bg-[#33261c] overflow-hidden min-h-[400px]">
            <video
-             src={(project as any).video || "/hero/hero-video.mp4"}
+             src={(project as any).video || "https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-residential-suburb-41551-large.mp4"}
              autoPlay
              loop
              muted
              playsInline
-             className="absolute inset-0 w-full h-full object-cover opacity-70 scale-105"
-             poster={project.gallery && project.gallery.length > 0 ? project.gallery[0] : (project.plan || "/images/about.png")}
+             className="absolute inset-0 w-full h-full object-cover opacity-80 scale-105"
            />
            <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[#463323] opacity-60"></div>
            
