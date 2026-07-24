@@ -28,7 +28,8 @@ export async function GET(request: Request) {
       <style>
         #panelColumn, #panelToggleBtn { display: none !important; }
         #mapColumn { left: 0 !important; width: 100% !important; margin-left: 0 !important; }
-        .popover, .cfm-marker-popover, .popover-content, .leaflet-popup, .leaflet-popup-content-wrapper, .leaflet-popup-tip-container { position: absolute !important; left: -9999px !important; top: -9999px !important; opacity: 0 !important; pointer-events: none !important; }
+        .popover, .leaflet-popup { font-family: system-ui, -apple-system, sans-serif !important; z-index: 10000 !important; }
+        .popover-content, .leaflet-popup-content { font-size: 12px !important; line-height: 1.4 !important; }
       </style>
       <script>
       (function() {
@@ -52,7 +53,7 @@ export async function GET(request: Request) {
           var loteMatch = lDigitMatch || cleanText.match(/(?:lote|lot)\s*:?\s*([a-z0-9\-_]+)/i);
           var lVal = loteMatch ? loteMatch[1] : "";
 
-          var supMatch = cleanText.match(/superficie:?\s*([0-9\.,]+)/i);
+          var supMatch = cleanText.match(/superficie:?\s*([0-9\.,]+(?:\s*m²?)?)/i);
           var estadoMatch = cleanText.match(/estado:?\s*([a-z]+)/i) || cleanText.match(/(disponible|vendido|reservado|bloqueado|minuta)/i);
           var idMatch = cleanText.match(/(#[0-9]+)/i) || cleanText.match(/id:?\s*([0-9]+)/i);
           var precioMatch = cleanText.match(/precio:?\s*([0-9\.,]+)/i) || cleanText.match(/([0-9\.,]+)\s*(?:\$us|usd|\$)/i) || cleanText.match(/(?:\$us|usd|\$)\s*([0-9\.,]+)/i);
@@ -63,16 +64,16 @@ export async function GET(request: Request) {
           if (key === lastPostedKey) return;
           lastPostedKey = key;
 
-          var rawPriceStr = precioMatch ? precioMatch[1] : "7.500";
-          var supStr = supMatch ? (supMatch[1] + " m²") : "300 m²";
+          var rawPriceStr = precioMatch ? precioMatch[1] : "";
+          var supStr = supMatch ? (supMatch[1].includes('m') ? supMatch[1] : supMatch[1] + " m²") : "300 m²";
 
           var lotData = {
             manzano: mVal,
             lote: lVal,
             superficie: supStr,
             estado: estadoMatch ? (estadoMatch[1].charAt(0).toUpperCase() + estadoMatch[1].slice(1).toLowerCase()) : "Disponible",
-            id: idMatch ? (idMatch[1].startsWith('#') ? idMatch[1] : '#' + idMatch[1]) : "#" + Math.floor(1000 + Math.random() * 9000),
-            precio: rawPriceStr
+            id: idMatch ? (idMatch[1].startsWith('#') ? idMatch[1] : '#' + idMatch[1]) : "#" + mVal + lVal,
+            precio: rawPriceStr || "7.500"
           };
 
           window.parent.postMessage({ type: 'PROSPERA_LOT_SELECTED', lot: lotData }, '*');
@@ -86,20 +87,23 @@ export async function GET(request: Request) {
           }
         }
 
-        setInterval(scanDOM, 40);
+        try {
+          var observer = new MutationObserver(function() {
+            scanDOM();
+          });
+          if (document.body) {
+            observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+          } else {
+            window.addEventListener('DOMContentLoaded', function() {
+              observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+            });
+          }
+        } catch(e) {}
 
         document.addEventListener('click', function(e) {
-          var target = e.target;
-          if (target) {
-            var targetText = (target.getAttribute && target.getAttribute('title')) || target.innerText || target.textContent || "";
-            if (targetText && (targetText.includes('Manz') || targetText.includes('Lote') || targetText.includes('Precio'))) {
-              parseAndPost({ innerHTML: targetText, textContent: targetText });
-            }
-          }
-          setTimeout(scanDOM, 30);
-          setTimeout(scanDOM, 100);
-          setTimeout(scanDOM, 300);
-          setTimeout(scanDOM, 600);
+          setTimeout(scanDOM, 50);
+          setTimeout(scanDOM, 200);
+          setTimeout(scanDOM, 500);
         }, true);
       })();
       </script>`;
