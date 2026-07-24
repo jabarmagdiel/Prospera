@@ -242,23 +242,6 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
                    <ProjectMap 
                      planImage={project.plan} 
                      projectId={project.systemId?.toString()} 
-                     onSelectLot={(lot) => {
-                       setSelectedLot(lot);
-                       if (lot && lot.precio) {
-                         var rawStr = String(lot.precio).replace(/[^0-9\.,]/g, '');
-                         if (rawStr.includes(',') && rawStr.includes('.')) {
-                           rawStr = rawStr.replace(/,/g, '');
-                         } else if (rawStr.includes('.') && rawStr.split('.')[1].length === 3) {
-                           rawStr = rawStr.replace(/\./g, '');
-                         } else if (rawStr.includes(',')) {
-                           rawStr = rawStr.replace(/,/g, '.');
-                         }
-                         var parsedPrice = parseFloat(rawStr);
-                         if (!isNaN(parsedPrice) && parsedPrice > 0) {
-                           setSimValue(parsedPrice);
-                         }
-                       }
-                     }}
                    />
                 </div>
              </div>

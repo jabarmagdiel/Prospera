@@ -47,7 +47,7 @@ export async function GET(request: Request) {
       </style>
       <script>
       (function() {
-        var lastPostedKey = "";
+        var lastPostedData = "";
 
         function scanAndExtract() {
           var popups = document.querySelectorAll('#markerInfoPopover, .cfm-marker-popover, .popover-content, .popover, .leaflet-popup-content, .leaflet-popup-content-wrapper');
@@ -63,8 +63,6 @@ export async function GET(request: Request) {
               var mVal = mMatch[1];
               var lVal = lMatch[1];
               if (mVal.toLowerCase() === 'ano') continue;
-
-              var key = mVal + "-" + lVal;
 
               var supMatch = fullStr.match(/superficie:?\s*([0-9\.,]+)/i);
               var estadoMatch = fullStr.match(/estado:?\s*([a-z]+)/i) || fullStr.match(/(disponible|vendido|reservado|bloqueado|minuta)/i);
@@ -85,8 +83,9 @@ export async function GET(request: Request) {
                 precio: priceStr
               };
 
-              if (key !== lastPostedKey) {
-                lastPostedKey = key;
+              var currentDataStr = JSON.stringify(lotData);
+              if (currentDataStr !== lastPostedData) {
+                lastPostedData = currentDataStr;
                 try { window.parent.postMessage({ type: 'PROSPERA_LOT_SELECTED', lot: lotData }, '*'); } catch(e){}
                 try { window.top.postMessage({ type: 'PROSPERA_LOT_SELECTED', lot: lotData }, '*'); } catch(e){}
               }

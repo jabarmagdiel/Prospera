@@ -2,23 +2,12 @@
 
 import { useEffect, useState } from "react";
 
-export function ProjectMap({ planImage, projectId, onSelectLot }: { planImage: string, projectId?: string, onSelectLot?: (lot: any) => void }) {
+export function ProjectMap({ planImage, projectId }: { planImage: string, projectId?: string }) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
-
-    const handleMessage = (e: MessageEvent) => {
-      if (e.data && e.data.type === 'PROSPERA_LOT_SELECTED' && e.data.lot) {
-        if (onSelectLot) {
-          onSelectLot(e.data.lot);
-        }
-      }
-    };
-
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, [onSelectLot]);
+  }, []);
 
   if (!isMounted) return <div className="w-full h-[500px] md:h-[700px] bg-stone-100 rounded-3xl animate-pulse" />;
 
