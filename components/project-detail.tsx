@@ -27,7 +27,7 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
   });
 
   // Simulator state
-  const [simValue, setSimValue] = useState(5230);
+  const [simValue, setSimValue] = useState(7500);
   const [simInitial, setSimInitial] = useState(100);
   const [simTerm, setSimTerm] = useState(7);
   
@@ -205,7 +205,22 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
                    <ProjectMap 
                      planImage={project.plan} 
                      projectId={project.systemId?.toString()} 
-                     onSelectLot={(lot) => setSelectedLot(lot)}
+                     onSelectLot={(lot) => {
+                       setSelectedLot(lot);
+                       if (lot && lot.precio) {
+                         // Parse price e.g. "7.500", "9,700.00", "$us 9.700"
+                         var rawStr = String(lot.precio).replace(/[^0-9\.,]/g, '');
+                         if (rawStr.includes('.') && rawStr.includes(',')) {
+                           rawStr = rawStr.replace(/,/g, '');
+                         } else if (rawStr.includes('.') && rawStr.split('.')[1].length === 3) {
+                           rawStr = rawStr.replace(/\./g, '');
+                         }
+                         var parsedPrice = parseFloat(rawStr);
+                         if (!isNaN(parsedPrice) && parsedPrice > 0) {
+                           setSimValue(parsedPrice);
+                         }
+                       }
+                     }}
                    />
                 </div>
              </div>
@@ -371,7 +386,7 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
                   <div className="text-[10px] font-bold uppercase tracking-widest text-stone-500">Valor del terreno a simular</div>
                   <div className="font-serif text-3xl font-bold text-stone-900">USD {simValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                 </div>
-                <input type="range" min="3000" max="15000" step="100" value={simValue} onChange={e => {
+                <input type="range" min="2000" max={Math.max(25000, Math.ceil(simValue))} step="50" value={simValue} onChange={e => {
                   const val = Number(e.target.value);
                   setSimValue(val);
                   if (simInitial > val) setSimInitial(val);

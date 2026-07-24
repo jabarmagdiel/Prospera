@@ -28,7 +28,7 @@ export async function GET(request: Request) {
       <style>
         #panelColumn, #panelToggleBtn { display: none !important; }
         #mapColumn { left: 0 !important; width: 100% !important; margin-left: 0 !important; }
-        .popover, .cfm-marker-popover, .popover-content, .leaflet-popup, .leaflet-popup-content-wrapper, .leaflet-popup-tip-container { position: absolute !important; left: -9999px !important; top: -9999px !important; opacity: 0 !important; pointer-events: none !important; }
+        .popover-content { font-family: sans-serif !important; }
       </style>
       <script>
       (function() {
