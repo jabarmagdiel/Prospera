@@ -37,14 +37,83 @@ export async function GET(request: Request) {
           border: 1px solid #e3dcd0 !important;
           background: #fff !important;
           z-index: 10000 !important;
+          min-width: 0 !important;
         }
         .popover-content, .leaflet-popup-content {
           font-family: system-ui, -apple-system, sans-serif !important;
-          font-size: 11px !important;
-          padding: 8px 12px !important;
-          line-height: 1.5 !important;
+          font-size: 13px !important;
+          font-weight: 600 !important;
+          padding: 10px 16px !important;
+          line-height: 1 !important;
+          white-space: nowrap !important;
         }
+        /* Ocultar todos los hijos del popup content excepto el badge inyectado */
+        .popover-content > *:not(.prospera-estado-badge),
+        .leaflet-popup-content > *:not(.prospera-estado-badge) {
+          display: none !important;
+        }
+        /* Estilos de los badges */
+        .prospera-estado-badge {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 7px !important;
+          font-size: 12px !important;
+          font-weight: 700 !important;
+          letter-spacing: 0.05em !important;
+          text-transform: uppercase !important;
+          font-family: system-ui, -apple-system, sans-serif !important;
+        }
+        .prospera-estado-badge .dot {
+          width: 10px; height: 10px;
+          border-radius: 50%;
+          display: inline-block;
+          flex-shrink: 0;
+        }
+        /* Colors by estado */
+        .badge-disponible .dot { background: #22c55e; }
+        .badge-disponible { color: #15803d; }
+        .badge-vendido .dot { background: #ef4444; }
+        .badge-vendido { color: #b91c1c; }
+        .badge-reservado .dot { background: #3b82f6; }
+        .badge-reservado { color: #1d4ed8; }
+        .badge-bloqueado .dot { background: #9ca3af; }
+        .badge-bloqueado { color: #4b5563; }
+        /* También ocultar el title del popover */
+        .popover-title { display: none !important; }
+        .leaflet-popup-tip-container { opacity: 1 !important; visibility: visible !important; }
       </style>
+      <script>
+      // Rewrite popup to show only Estado badge
+      function rewritePopup(el) {
+        try {
+          var text = (el.innerText || el.textContent || '').toLowerCase();
+          var estado = 'Disponible';
+          if (text.includes('vendido')) estado = 'Vendido';
+          else if (text.includes('reservado')) estado = 'Reservado';
+          else if (text.includes('bloqueado')) estado = 'Bloqueado';
+          else if (text.includes('minuta')) estado = 'Minuta';
+          else if (text.includes('disponible')) estado = 'Disponible';
+
+          var cls = 'badge-' + estado.toLowerCase();
+          var badge = el.querySelector('.prospera-estado-badge');
+          if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'prospera-estado-badge ' + cls;
+            badge.innerHTML = '<span class="dot"></span><span class="label">' + estado + '</span>';
+            el.appendChild(badge);
+          } else {
+            badge.className = 'prospera-estado-badge ' + cls;
+            var lbl = badge.querySelector('.label');
+            if (lbl) lbl.textContent = estado;
+          }
+        } catch(e) {}
+      }
+
+      (new MutationObserver(function() {
+        var targets = document.querySelectorAll('.popover-content, .leaflet-popup-content, .cfm-marker-popover');
+        for (var i = 0; i < targets.length; i++) rewritePopup(targets[i]);
+      })).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+      </script>
       <script>
       (function() {
         var lastKey = "";
