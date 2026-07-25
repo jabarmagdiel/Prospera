@@ -620,29 +620,25 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
       >
         <div className="video-grid">
           <div className="video-wrapper">
-            <video 
-              controls 
-              preload="metadata" 
+            <iframe 
               className="corp-video" 
-              poster="https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerEscapes.jpg"
-              src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
-            >
-              <source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" type="video/mp4" />
-              Tu navegador no soporta el formato de video.
-            </video>
+              src="https://www.youtube.com/embed/LXb3EKWsInQ?autoplay=1&mute=1&loop=1&playlist=LXb3EKWsInQ&controls=0&showinfo=0&rel=0" 
+              title="Lotes Panorámicos" 
+              frameBorder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowFullScreen>
+            </iframe>
             <span className="video-label">Lotes Panorámicos (Muestra)</span>
           </div>
           <div className="video-wrapper">
-            <video 
-              controls 
-              preload="metadata" 
+            <iframe 
               className="corp-video" 
-              poster="https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerJoyrides.jpg"
-              src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"
-            >
-              <source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4" type="video/mp4" />
-              Tu navegador no soporta el formato de video.
-            </video>
+              src="https://www.youtube.com/embed/Bey4XXJAqS8?autoplay=1&mute=1&loop=1&playlist=Bey4XXJAqS8&controls=0&showinfo=0&rel=0" 
+              title="Vista Aérea" 
+              frameBorder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowFullScreen>
+            </iframe>
             <span className="video-label">Vista Aérea (Muestra)</span>
           </div>
         </div>
