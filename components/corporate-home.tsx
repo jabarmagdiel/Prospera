@@ -624,26 +624,26 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
               controls 
               preload="metadata" 
               className="corp-video" 
-              poster="/images/work.png"
-              src=""
+              poster="https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerEscapes.jpg"
+              src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
             >
-              <source src="" type="video/mp4" />
+              <source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" type="video/mp4" />
               Tu navegador no soporta el formato de video.
             </video>
-            <span className="video-label">Video 1 (16:9)</span>
+            <span className="video-label">Lotes Panorámicos (Muestra)</span>
           </div>
           <div className="video-wrapper">
             <video 
               controls 
               preload="metadata" 
               className="corp-video" 
-              poster="/images/work.png"
-              src=""
+              poster="https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerJoyrides.jpg"
+              src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"
             >
-              <source src="" type="video/mp4" />
+              <source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4" type="video/mp4" />
               Tu navegador no soporta el formato de video.
             </video>
-            <span className="video-label">Video 2 (16:9)</span>
+            <span className="video-label">Vista Aérea (Muestra)</span>
           </div>
         </div>
       </motion.section>
