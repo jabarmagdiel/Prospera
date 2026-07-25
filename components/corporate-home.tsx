@@ -599,15 +599,38 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           <motion.button variants={fadeUp} className="button work-button" onClick={() => window.open('https://wa.me/59177820003', '_blank')}>Quiero ser parte de Prospera <span>→</span></motion.button>
         </div>
         <motion.div 
-          initial={{ opacity: 0, scale: 0.8, rotate: -2 }}
-          whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-          transition={{ duration: 1, type: "spring", bounce: 0.4 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
           viewport={{ once: true, amount: 0.3 }}
-          whileHover={{ scale: 1.02 }}
-          className="work-visual"
+          className="work-videos"
         >
-          <span className="work-word">CRECER</span>
-          <div><b>Equipo</b><b>Compromiso</b><b>Futuro</b></div>
+          <div className="video-wrapper">
+            <video 
+              controls 
+              preload="metadata" 
+              className="corp-video" 
+              poster="/images/work.png"
+              src=""
+            >
+              <source src="" type="video/mp4" />
+              Tu navegador no soporta el formato de video.
+            </video>
+            <span className="video-label">Video 1 (16:9)</span>
+          </div>
+          <div className="video-wrapper">
+            <video 
+              controls 
+              preload="metadata" 
+              className="corp-video" 
+              poster="/images/work.png"
+              src=""
+            >
+              <source src="" type="video/mp4" />
+              Tu navegador no soporta el formato de video.
+            </video>
+            <span className="video-label">Video 2 (16:9)</span>
+          </div>
         </motion.div>
       </motion.section>
       
