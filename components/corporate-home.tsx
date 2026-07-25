@@ -622,7 +622,8 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           <div className="video-wrapper">
             <iframe 
               className="corp-video" 
-              src="https://www.youtube.com/embed/LXb3EKWsInQ?autoplay=1&mute=1&loop=1&playlist=LXb3EKWsInQ&controls=0&showinfo=0&rel=0" 
+              style={{ pointerEvents: 'none' }}
+              src="https://www.youtube-nocookie.com/embed/LXb3EKWsInQ?autoplay=1&mute=1&loop=1&playlist=LXb3EKWsInQ&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1" 
               title="Lotes Panorámicos" 
               frameBorder="0" 
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -633,7 +634,8 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           <div className="video-wrapper">
             <iframe 
               className="corp-video" 
-              src="https://www.youtube.com/embed/Bey4XXJAqS8?autoplay=1&mute=1&loop=1&playlist=Bey4XXJAqS8&controls=0&showinfo=0&rel=0" 
+              style={{ pointerEvents: 'none' }}
+              src="https://www.youtube-nocookie.com/embed/L_tqK4eqelA?autoplay=1&mute=1&loop=1&playlist=L_tqK4eqelA&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1" 
               title="Vista Aérea" 
               frameBorder="0" 
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
