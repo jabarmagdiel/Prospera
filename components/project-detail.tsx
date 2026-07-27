@@ -88,7 +88,7 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
   };
 
   const annualRate = getAnnualRate(simTerm);
-  const annualRateDisplay = `${(annualRate * 100).toString().replace('.', ',')} %`;
+  const annualRateDisplay = `${Number((annualRate * 100).toFixed(2)).toString().replace('.', ',')} %`;
   
   const balance = simValue - simInitial;
   const numMonths = simTerm * 12;
