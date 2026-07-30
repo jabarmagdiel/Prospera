@@ -21,6 +21,7 @@ export function Header() {
     { label: "Inicio", href: "#inicio" },
     { label: "Nosotros", href: "#nosotros" },
     { label: "Proyectos", href: "#proyectos" },
+    { label: "Trabaja con nosotros", href: "#trabaja" },
     { label: "Contacto", href: "#contacto" },
   ];
 
