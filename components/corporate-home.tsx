@@ -184,7 +184,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
                       transition={{ duration: 0.3 }}
                       className="px-5 pb-5 border-t border-stone-100 bg-orange-50/30"
                     >
-                      <p className="text-stone-600 text-sm leading-relaxed mt-3 pt-1">
+                      <p className="text-stone-600 text-sm leading-relaxed mt-3 pt-1 text-justify">
                         Desarrollar e implementar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario mediante una gestión innovadora y eficiente.
                       </p>
                     </motion.div>
@@ -219,7 +219,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
                       transition={{ duration: 0.3 }}
                       className="px-5 pb-5 border-t border-stone-100 bg-blue-50/30"
                     >
-                      <p className="text-stone-600 text-sm leading-relaxed mt-3 pt-1">
+                      <p className="text-stone-600 text-sm leading-relaxed mt-3 pt-1 text-justify">
                         Ser un referente sólido, confiable e innovador que gestiona inversiones inmobiliarias, superando las expectativas de nuestros clientes e inversionistas.
                       </p>
                     </motion.div>
@@ -296,7 +296,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
                   <FileText className="w-7 h-7" />
                 </div>
                 <h3 className="text-4xl font-serif text-white mb-4 leading-tight">Política de la Calidad</h3>
-                <p className="text-stone-300 leading-relaxed">Nuestra empresa busca dar soluciones de inversión confiables, seguras y rentables para nuestros clientes e inversionistas.</p>
+                <p className="text-stone-300 leading-relaxed text-justify">Nuestra empresa busca dar soluciones de inversión confiables, seguras y rentables para nuestros clientes e inversionistas.</p>
               </div>
               <div className="lg:w-[62%]">
                 <div className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-md">
@@ -355,7 +355,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
                   <Target className="w-7 h-7" />
                 </div>
                 <h3 className="text-2xl font-serif text-stone-900 mb-4">Misión</h3>
-                <p className="text-stone-600 leading-relaxed text-base">Desarrollar e implementar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario mediante una gestión innovadora y eficiente.</p>
+                <p className="text-stone-600 leading-relaxed text-base text-justify">Desarrollar e implementar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario mediante una gestión innovadora y eficiente.</p>
               </div>
               <div className="md:w-[45%] min-h-[280px] relative overflow-hidden">
                 <img src="/hero/slide1.png" alt="Misión Prospera" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s] ease-out" />
@@ -368,7 +368,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
                   <Eye className="w-7 h-7" />
                 </div>
                 <h3 className="text-2xl font-serif text-stone-900 mb-4">Visión</h3>
-                <p className="text-stone-600 leading-relaxed text-base">Ser un referente sólido, confiable e innovador que gestiona inversiones inmobiliarias, superando las expectativas de clientes e inversionistas.</p>
+                <p className="text-stone-600 leading-relaxed text-base text-justify">Ser un referente sólido, confiable e innovador que gestiona inversiones inmobiliarias, superando las expectativas de clientes e inversionistas.</p>
               </div>
               <div className="md:w-[45%] min-h-[280px] relative overflow-hidden">
                 <img src="/hero/slide2.png" alt="Visión Prospera" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s] ease-out" />
@@ -444,7 +444,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
                   </div>
                   <div className="p-6">
                     <h3 className="font-serif text-2xl text-stone-900 mb-2">{p.name}</h3>
-                    <p className="text-sm text-stone-600 mb-6 line-clamp-2">{p.description || p.short}</p>
+                    <p className="text-sm text-stone-600 mb-6 line-clamp-2 text-justify">{p.description || p.short}</p>
                     <div className="flex items-center text-orange-600 font-medium text-sm gap-2 group-hover:gap-3 transition-all">
                       Ver detalles <span className="font-bold">→</span>
                     </div>
@@ -526,7 +526,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
               <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-6">
                 Comprar terreno no debería sentirse <span className="italic text-orange-400">como un salto a ciegas.</span>
               </h2>
-              <p className="text-stone-300 text-lg max-w-2xl leading-relaxed">
+              <p className="text-stone-300 text-lg max-w-2xl leading-relaxed text-justify">
                 Por eso te acompañamos en cada paso con información transparente, asesoría personalizada y recorridos en vivo antes de tomar cualquier decisión.
               </p>
             </motion.div>
@@ -543,7 +543,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
                     <p className="text-stone-400 text-xs">Transparencia y respaldo jurídico total</p>
                   </div>
                 </div>
-                <p className="text-stone-300 text-sm leading-relaxed mb-6">
+                <p className="text-stone-300 text-sm leading-relaxed mb-6 text-justify">
                   Verificamos cada aspecto técnico y legal para que tu inversión esté 100% resguardada desde el primer día.
                 </p>
                 <div className="pt-4 border-t border-stone-700/60 flex items-center justify-between text-xs text-stone-400">
@@ -595,7 +595,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
                     </div>
                   </div>
                   <h3 className="font-serif text-2xl text-white mb-3">{step.title}</h3>
-                  <p className="text-stone-400 text-sm leading-relaxed">{step.desc}</p>
+                  <p className="text-stone-400 text-sm leading-relaxed text-justify">{step.desc}</p>
                 </div>
               </motion.div>
             ))}
