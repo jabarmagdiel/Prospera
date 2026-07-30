@@ -266,17 +266,14 @@
 }
 
 /* ── GLOBAL TEXT JUSTIFY ─────────────────────────────────── */
-.about-copy > p,
-.about-copy motion\.p,
-.corp-hero-copy > p,
-.text-stone-600.leading-relaxed,
-.text-stone-300.leading-relaxed,
-.text-stone-400.leading-relaxed {
+/* Force text justification on all body-copy paragraphs sitewide */
+.corporate-site p:not(.eyebrow):not([class*="text-xs"]):not([class*="text-[8"]):not([class*="text-[9"]):not([class*="uppercase"]):not([class*="tracking-wide"]) {
   text-align: justify !important;
 }
 
-/* Target justified paragraphs directly */
-p[style*="justify"],
-.\\!text-justify {
+/* Also target the hero paragraph specifically */
+.corp-hero-copy > p {
   text-align: justify !important;
 }
+
+/* Inline-style fallback already applied via JSX style prop */
