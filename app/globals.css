@@ -264,3 +264,19 @@
   justify-content: center;
   margin-bottom: 0px;
 }
+
+/* ── GLOBAL TEXT JUSTIFY ─────────────────────────────────── */
+.about-copy > p,
+.about-copy motion\.p,
+.corp-hero-copy > p,
+.text-stone-600.leading-relaxed,
+.text-stone-300.leading-relaxed,
+.text-stone-400.leading-relaxed {
+  text-align: justify !important;
+}
+
+/* Target justified paragraphs directly */
+p[style*="justify"],
+.\\!text-justify {
+  text-align: justify !important;
+}
