@@ -57,7 +57,7 @@ export function Header() {
             
             {/* Logo */}
             <div className="flex items-center gap-2 cursor-pointer" onClick={(e) => handleScrollTo(e as any, "#inicio")}>
-              <img src="/prosperalogo.png" alt="Prospera" className="h-14 w-auto object-contain" style={{ filter: 'brightness(0) invert(1)' }} />
+              <img src="/prosperalogo.png" alt="Prospera" className="h-14 w-auto object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
             </div>
 
             {/* Desktop Nav */}
