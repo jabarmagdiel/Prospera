@@ -52,7 +52,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           <motion.h1 variants={fadeUp} className="!text-4xl md:!text-5xl lg:!text-6xl !leading-tight !mb-4 !mt-0">
             Un terreno puede ser<br/><em>el comienzo de algo grande.</em>
           </motion.h1>
-          <motion.p variants={fadeUp} className="!text-base !mb-6 !mt-2">
+          <motion.p variants={fadeUp} className="!text-base !mb-6 !mt-2 text-justify">
             En Prospera desarrollamos proyectos urbanísticos para quienes quieren vivir mejor, invertir con criterio o dejar patrimonio. Te ayudamos a entender cada opción y avanzar con una condición que sí puedas sostener.
           </motion.p>
           <motion.div variants={fadeUp} className="hero-actions flex gap-4">
@@ -408,9 +408,10 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
 
       {/* ── PROYECTOS ─────────────────────────────────────────── */}
       <div id="proyectos-section" className="scroll-mt-24" />
-      <section className="portfolio-section scroll-mt-24" id="proyectos">
+      <section className="portfolio-section scroll-mt-24 relative overflow-hidden" id="proyectos" style={{ backgroundImage: 'url(/images/bg_terrain.png)', backgroundSize: 'cover', backgroundAttachment: 'fixed', backgroundPosition: 'center', paddingBottom: '60px', paddingTop: '60px' }}>
+        <div className="absolute inset-0 bg-stone-100/20 backdrop-blur-[1px] pointer-events-none"></div>
         <motion.div 
-          className="portfolio-heading"
+          className="portfolio-heading relative z-10 backdrop-blur-md bg-white/70 p-8 rounded-3xl shadow-xl border border-white/50 max-w-4xl mx-auto"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -420,10 +421,10 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
             <p className="eyebrow"><span></span> Proyectos Prospera</p>
             <h2>No todos buscan lo mismo.<br/><em>Tu proyecto también puede ser distinto.</em></h2>
           </div>
-          <p className="portfolio-note">Hay quienes compran para vivir, quienes quieren entrar antes a una zona con crecimiento y quienes piensan en el patrimonio de su familia. Empezá por lo que querés lograr.</p>
+          <p className="portfolio-note">Lotes seleccionados con la revalorización más alta del mercado.</p>
         </motion.div>
 
-        <div className="max-w-7xl mx-auto mt-12 mb-12 px-6">
+        <div className="max-w-7xl mx-auto mt-12 mb-12 px-6 relative z-10">
           {projects && projects.length > 0 ? (
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {projects.map((p: any, idx: number) => (
@@ -448,7 +449,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
         </div>
 
         <motion.p 
-          className="portfolio-note text-center"
+          className="portfolio-note text-center relative z-10 backdrop-blur-sm bg-white/50 p-4 rounded-xl border border-white/30 inline-block mx-auto max-w-2xl mt-4"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -456,6 +457,41 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           La disponibilidad, condiciones y estado de cada proyecto se confirman individualmente al momento de la consulta.
         </motion.p>
       </section>
+
+      <motion.section 
+        className="corp-video-section"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        <div className="video-grid">
+          <div className="video-wrapper">
+            <iframe 
+              className="corp-video" 
+              style={{ pointerEvents: 'none' }}
+              src="https://www.youtube-nocookie.com/embed/LXb3EKWsInQ?autoplay=1&mute=1&loop=1&playlist=LXb3EKWsInQ&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1" 
+              title="Lotes Panorámicos" 
+              frameBorder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowFullScreen>
+            </iframe>
+            <span className="video-label">Lotes Panorámicos (Muestra)</span>
+          </div>
+          <div className="video-wrapper">
+            <iframe 
+              className="corp-video" 
+              style={{ pointerEvents: 'none' }}
+              src="https://www.youtube-nocookie.com/embed/L_tqK4eqelA?autoplay=1&mute=1&loop=1&playlist=L_tqK4eqelA&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1" 
+              title="Vista Aérea" 
+              frameBorder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowFullScreen>
+            </iframe>
+            <span className="video-label">Vista Aérea (Muestra)</span>
+          </div>
+        </div>
+      </motion.section>
 
       {/* ── RESPALDO / PROCESO ───────────────────────────────── */}
       {/* ── RESPALDO / PROCESO ───────────────────────────────── */}
@@ -610,42 +646,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           <div><b>Equipo</b><b>Compromiso</b><b>Futuro</b></div>
         </motion.div>
       </motion.section>
-      
-      <motion.section 
-        className="corp-video-section"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true, amount: 0.2 }}
-      >
-        <div className="video-grid">
-          <div className="video-wrapper">
-            <iframe 
-              className="corp-video" 
-              style={{ pointerEvents: 'none' }}
-              src="https://www.youtube-nocookie.com/embed/LXb3EKWsInQ?autoplay=1&mute=1&loop=1&playlist=LXb3EKWsInQ&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1" 
-              title="Lotes Panorámicos" 
-              frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowFullScreen>
-            </iframe>
-            <span className="video-label">Lotes Panorámicos (Muestra)</span>
-          </div>
-          <div className="video-wrapper">
-            <iframe 
-              className="corp-video" 
-              style={{ pointerEvents: 'none' }}
-              src="https://www.youtube-nocookie.com/embed/L_tqK4eqelA?autoplay=1&mute=1&loop=1&playlist=L_tqK4eqelA&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1" 
-              title="Vista Aérea" 
-              frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowFullScreen>
-            </iframe>
-            <span className="video-label">Vista Aérea (Muestra)</span>
-          </div>
-        </div>
-      </motion.section>
-      
+
 
       <motion.section 
         className="corp-contact-section" 
