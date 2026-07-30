@@ -408,23 +408,26 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
 
       {/* ── PROYECTOS ─────────────────────────────────────────── */}
       <div id="proyectos-section" className="scroll-mt-24" />
-      <section className="portfolio-section scroll-mt-24 relative overflow-hidden" id="proyectos" style={{ backgroundImage: 'url(/images/bg_terrain.png)', backgroundSize: 'cover', backgroundAttachment: 'fixed', backgroundPosition: 'center', paddingBottom: '60px', paddingTop: '60px' }}>
-        <div className="absolute inset-0 bg-stone-100/20 backdrop-blur-[1px] pointer-events-none"></div>
+      <section className="portfolio-section scroll-mt-24 relative overflow-hidden" id="proyectos" style={{ backgroundImage: 'url(/images/bg_terrain.png)', backgroundSize: 'cover', backgroundAttachment: 'fixed', backgroundPosition: 'center', paddingBottom: '80px', paddingTop: '100px' }}>
+        {/* Dark overlay for contrast */}
+        <div className="absolute inset-0 bg-stone-900/70 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#f7f3ee] via-transparent to-[#1c1917] pointer-events-none opacity-50"></div>
+        
         <motion.div 
-          className="relative z-10 backdrop-blur-xl bg-white/60 p-10 md:p-16 rounded-[2.5rem] shadow-2xl border border-white/60 max-w-4xl mx-auto text-center mb-16"
+          className="relative z-10 max-w-4xl mx-auto text-center px-6 mb-16"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeUp}
         >
           <div className="flex flex-col items-center justify-center">
-            <p className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-orange-50 text-orange-600 text-xs font-bold tracking-widest uppercase mb-6 shadow-sm border border-orange-200/50">
-              <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span> Proyectos Prospera
+            <p className="inline-flex items-center justify-center gap-2 px-5 py-2 rounded-full bg-white/10 backdrop-blur-md text-orange-400 text-xs font-bold tracking-widest uppercase mb-8 border border-white/10 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse"></span> Proyectos Prospera
             </p>
-            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-stone-900 leading-tight mb-6">
-              No todos buscan lo mismo.<br/><span className="italic text-orange-600">Tu proyecto también puede ser distinto.</span>
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-6 drop-shadow-lg">
+              No todos buscan lo mismo.<br/><span className="italic text-orange-400">Tu proyecto también puede ser distinto.</span>
             </h2>
-            <p className="text-lg md:text-xl text-stone-700 max-w-2xl mx-auto font-medium bg-white/50 py-3 px-6 rounded-2xl border border-white/40 shadow-sm">
+            <p className="text-lg md:text-xl text-stone-300 max-w-2xl mx-auto font-medium drop-shadow-md">
               Lotes seleccionados con la revalorización más alta del mercado.
             </p>
           </div>
@@ -455,7 +458,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
         </div>
 
         <motion.p 
-          className="portfolio-note text-center relative z-10 backdrop-blur-sm bg-white/50 p-4 rounded-xl border border-white/30 inline-block mx-auto max-w-2xl mt-4"
+          className="text-center relative z-10 text-stone-400 text-sm max-w-2xl mx-auto mt-4 px-6"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
