@@ -617,19 +617,46 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
         variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
       >
         <motion.div 
-          initial={{ opacity: 0, scale: 0.8, rotate: -2 }}
-          whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-          transition={{ duration: 1, type: "spring", bounce: 0.4 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
           viewport={{ once: true, amount: 0.3 }}
-          whileHover={{ scale: 1.02 }}
-          className="remote-map"
+          className="relative rounded-3xl overflow-hidden shadow-2xl bg-stone-900 border border-stone-800 min-h-[420px] flex flex-col justify-end p-8 group"
         >
-          <span className="origin">SCZ</span><i className="flight flight-a"></i><i className="flight flight-b"></i><i className="flight flight-c"></i><span className="destination d1">LPB</span><span className="destination d2">MAD</span><span className="destination d3">MIA</span>
+          {/* Airport arrival scene graphic */}
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-900/80 to-stone-900/40 z-10"></div>
+          <img 
+            src="/images/remote.png" 
+            alt="Recepción en aeropuerto Vuelos Nacionales Prospera" 
+            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60"
+          />
+
+          <div className="relative z-20 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/20 border border-orange-500/30 text-orange-400 text-[10px] font-bold uppercase tracking-widest backdrop-blur-md">
+              <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse"></span> Vuelos Nacionales & Recepción
+            </div>
+            
+            <div className="bg-stone-900/90 backdrop-blur-md p-5 rounded-2xl border border-white/10 space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-orange-500/20 border border-orange-500/40 text-orange-400 flex items-center justify-center font-bold text-sm">
+                  🤝
+                </div>
+                <div>
+                  <h4 className="text-white font-serif font-bold text-base">Recepción Personalizada</h4>
+                  <p className="text-stone-300 text-xs">Asesor Prospera disponible en el aeropuerto</p>
+                </div>
+              </div>
+              <p className="text-stone-400 text-xs leading-relaxed">
+                Coordinamos tu llegada desde cualquier departamento de Bolivia y te recibimos personalmente para acompañarte al proyecto.
+              </p>
+            </div>
+          </div>
         </motion.div>
+        
         <div className="remote-copy">
           <motion.p variants={fadeUp} className="eyebrow"><span></span> Tu decisión puede empezar desde cualquier lugar</motion.p>
-          <motion.h2 variants={fadeUp}>Primero conocé.<br/><em>Después decidí si querés viajar.</em></motion.h2>
-          <motion.p variants={fadeUp}>Si vivís en La Paz, Oruro o fuera de Bolivia, un asesor puede mostrarte el proyecto desde el terreno, responder tus preguntas e incorporar a tu familia en la videollamada.</motion.p>
+          <motion.h2 variants={fadeUp}>Primero conoce.<br/><em>Después decide si quieres viajar.</em></motion.h2>
+          <motion.p variants={fadeUp}>Si vives en La Paz, Oruro o fuera de Bolivia, un asesor puede mostrarte el proyecto desde el terreno, responder tus preguntas e incorporar a tu familia en la videollamada.</motion.p>
           <motion.button variants={fadeUp} className="button dark" onClick={() => window.open('https://wa.me/59177820003', '_blank')}>Ver un proyecto en vivo <span>→</span></motion.button>
         </div>
       </motion.section>
