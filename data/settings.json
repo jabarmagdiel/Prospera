@@ -21,20 +21,6 @@
   },
   "projects": [
     {
-      "key": "la-fortuna",
-      "systemId": 5,
-      "name": "La Fortuna",
-      "family": "Expansión · entrada accesible",
-      "short": "LF",
-      "description": "Un proyecto con alternativas para empezar, comparar ubicaciones y construir patrimonio paso a paso.",
-      "tone": "villa",
-      "plan": "/projects/la-fortuna-plan.jpg",
-      "planAlt": "Plano general de la urbanización La Fortuna",
-      "surfaceRange": "274–683 m²",
-      "planDate": "12/07/2026",
-      "logo": "/brand/prospera.png"
-    },
-    {
       "key": "campo-grande-1",
       "systemId": 1,
       "name": "Campo Grande 1",
@@ -75,6 +61,20 @@
       "planAlt": "Plano general de Campo Grande 3",
       "surfaceRange": "202–1.256 m²",
       "planDate": "12/07/2026"
+    },
+    {
+      "key": "la-fortuna",
+      "systemId": 5,
+      "name": "La Fortuna",
+      "family": "Expansión · entrada accesible",
+      "short": "LF",
+      "description": "Un proyecto con alternativas para empezar, comparar ubicaciones y construir patrimonio paso a paso.",
+      "tone": "villa",
+      "plan": "/projects/la-fortuna-plan.jpg",
+      "planAlt": "Plano general de la urbanización La Fortuna",
+      "surfaceRange": "274–683 m²",
+      "planDate": "12/07/2026",
+      "logo": "/brand/prospera.png"
     }
   ]
 }

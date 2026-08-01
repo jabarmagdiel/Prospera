@@ -125,7 +125,7 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
         </div>
         <nav className="hidden md:flex gap-10 text-[10px] font-bold text-stone-900 uppercase tracking-widest">
           <a href="#plano" className="hover:text-orange-600 transition-colors">Plano</a>
-          <a href="#simulador" className="hover:text-orange-600 transition-colors">Formas de compra</a>
+          <a href="#simulador" className="hover:text-orange-600 transition-colors">Simulación de cuotas</a>
           <a href="#confianza" className="hover:text-orange-600 transition-colors">Confianza</a>
           <a href="#agenda" className="hover:text-orange-600 transition-colors">Agenda</a>
         </nav>
@@ -146,7 +146,7 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
           </h1>
           
           <p className="text-lg max-w-md opacity-90 leading-relaxed mb-12 font-light">
-            Conocé {project.name} con información verificable, un recorrido real y acompañamiento humano antes de tomar una decisión.
+            Conoce {project.name} con información verificable, un recorrido real y acompañamiento humano antes de tomar una decisión.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4">
@@ -195,10 +195,10 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
         <div className="max-w-[1400px] mx-auto px-6">
           <div className="mb-16">
             <h2 className="font-serif text-5xl lg:text-7xl text-stone-900 mb-6 tracking-tight">
-              Elegí el lote.<br/>
-              <em className="text-[#db7844] italic">Después simulá la compra.</em>
+              Elige el lote.<br/>
+              <em className="text-[#db7844] italic">Después simula la compra.</em>
             </h2>
-            <p className="text-stone-600 text-lg max-w-2xl">Recorré el plano oficial, identificá cada estado por color y hacé clic en cualquier pin. La ficha cargará el precio al contado del lote y lo enviará al simulador.</p>
+            <p className="text-stone-600 text-lg max-w-2xl">Recorre el plano oficial, identifica cada estado por color y haz clic en cualquier pin. La ficha cargará el precio al contado del lote y lo enviará al simulador.</p>
           </div>
 
           {/* PROJECT TABS */}
@@ -389,14 +389,14 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
                 <div className="flex gap-8 border-b border-white/10 pb-8">
                   <div className="text-[#db7844] font-bold text-[10px] mt-1">02</div>
                   <div>
-                    <div className="font-bold text-white mb-2 text-lg">Definí inicial y plazo</div>
-                    <div className="text-sm opacity-70">Probá una condición ficticia de 1 a 10 años.</div>
+                    <div className="font-bold text-white mb-2 text-lg">Define inicial y plazo</div>
+                    <div className="text-sm opacity-70">Prueba una condición estimada de 1 a 10 años.</div>
                   </div>
                 </div>
                 <div className="flex gap-8">
                   <div className="text-[#db7844] font-bold text-[10px] mt-1">03</div>
                   <div>
-                    <div className="font-bold text-white mb-2 text-lg">Confirmá la cotización</div>
+                    <div className="font-bold text-white mb-2 text-lg">Confirma la cotización</div>
                     <div className="text-sm opacity-70">Un asesor revisa inventario, descuentos y condiciones vigentes.</div>
                   </div>
                 </div>
@@ -439,14 +439,10 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
               </div>
 
               <div className="bg-[#e9e2d5] p-8 mb-10">
-                <div className="grid grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-2 gap-6 mb-8">
                   <div>
                     <div className="text-[9px] uppercase font-bold text-stone-500 mb-2 tracking-widest">Saldo a financiar</div>
                     <div className="font-bold text-stone-900">USD {balance > 0 ? balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0.00"}</div>
-                  </div>
-                  <div>
-                    <div className="text-[9px] uppercase font-bold text-stone-500 mb-2 tracking-widest">Tasa anual aplicada</div>
-                    <div className="font-bold text-stone-900">{annualRateDisplay}</div>
                   </div>
                   <div>
                     <div className="text-[9px] uppercase font-bold text-stone-500 mb-2 tracking-widest">Número de cuotas</div>
@@ -482,12 +478,12 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
                </div>
                
                <h2 className="font-serif text-5xl lg:text-6xl text-stone-900 mb-6 leading-tight">
-                 Conocé {project.name}<br/>
+                 Conoce {project.name}<br/>
                  <em className="text-[#db7844] italic">a tu manera.</em>
                </h2>
                
                <p className="text-stone-600 text-lg mb-12 max-w-lg leading-relaxed">
-                 Elegí una visita, contanos dónde estás y un asesor confirmará el horario por WhatsApp para guiarte en vivo o en terreno.
+                 Elige el tipo de visita, indica dónde estás y un asesor confirmará el horario por WhatsApp para guiarte en vivo o en terreno.
                </p>
 
                {/* TEAM BADGE */}
@@ -582,26 +578,40 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
                      {/* OBJETIVO */}
                      <div>
                         <label className="block text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2 flex items-center gap-2">
-                           <Compass className="w-3.5 h-3.5 text-[#db7844]" /> Objetivo
+                           <Compass className="w-3.5 h-3.5 text-[#db7844]" /> ¿Para qué es el terreno?
                         </label>
                         <select className="w-full bg-[#f9f7f4] border border-stone-200 p-3.5 text-sm text-stone-900 rounded-xl focus:outline-none focus:border-[#db7844] transition-colors cursor-pointer">
-                           <option>Inversión a futuro</option>
-                           <option>Vivienda propia</option>
-                           <option>Quinta / Recreación</option>
+                           <option>Construir mi vivienda</option>
+                           <option>Inversión a largo plazo</option>
+                           <option>Patrimonio familiar</option>
+                           <option>Todavía no sé, quiero informarme</option>
                         </select>
                      </div>
                   </div>
 
-                  {/* HORARIO PREFERIDO */}
-                  <div>
-                     <label className="block text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2 flex items-center gap-2">
-                        <Calendar className="w-3.5 h-3.5 text-[#db7844]" /> Horario o fecha preferida
-                     </label>
-                     <input 
-                        type="text" 
-                        placeholder="Ej. Mañana por la tarde / Sábado 10:00 AM" 
-                        className="w-full bg-[#f9f7f4] border border-stone-200 p-3.5 text-sm text-stone-900 rounded-xl focus:outline-none focus:border-[#db7844] transition-colors"
-                     />
+                  {/* FECHA Y HORA PREFERIDA */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2 flex items-center gap-2">
+                           <Calendar className="w-3.5 h-3.5 text-[#db7844]" /> Fecha preferida
+                        </label>
+                        <input 
+                           type="date" 
+                           min={new Date().toISOString().split('T')[0]}
+                           className="w-full bg-[#f9f7f4] border border-stone-200 p-3.5 text-sm text-stone-900 rounded-xl focus:outline-none focus:border-[#db7844] transition-colors cursor-pointer"
+                        />
+                     </div>
+                     <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2 flex items-center gap-2">
+                           <Clock className="w-3.5 h-3.5 text-[#db7844]" /> Hora preferida
+                        </label>
+                        <select className="w-full bg-[#f9f7f4] border border-stone-200 p-3.5 text-sm text-stone-900 rounded-xl focus:outline-none focus:border-[#db7844] transition-colors cursor-pointer">
+                           <option>Por la mañana (8:00 – 12:00)</option>
+                           <option>Al mediodía (12:00 – 14:00)</option>
+                           <option>Por la tarde (14:00 – 18:00)</option>
+                           <option>Por la noche (18:00 – 20:00)</option>
+                        </select>
+                     </div>
                   </div>
 
                   {/* SUBMIT BUTTON */}
@@ -613,7 +623,7 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
                   </button>
 
                   <p className="text-[9px] text-stone-400 text-center leading-relaxed uppercase tracking-widest pt-2">
-                     Al confirmar, aceptás ser contactado para coordinar esta solicitud. No se realiza ningún pago desde este formulario.
+                     Al confirmar, acepta ser contactado para coordinar esta solicitud. No se realiza ningún pago desde este formulario.
                   </p>
                 </form>
              </div>
@@ -628,28 +638,28 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
                COMPRAR A DISTANCIA
             </div>
             <h2 className="font-serif text-5xl lg:text-7xl mb-6 tracking-tight">Cerca, aunque estés lejos.</h2>
-            <p className="text-lg opacity-80 mb-20 max-w-xl">Una ruta humana para vos y para quienes te ayudan a decidir.</p>
+            <p className="text-lg opacity-80 mb-20 max-w-xl">Una ruta humana para ti y para quienes te ayudan a decidir.</p>
             
             <div className="grid md:grid-cols-4 border-t border-white/10">
                <div className="p-10 border-b md:border-b-0 md:border-r border-white/10 relative hover:bg-white/5 transition-colors">
                   <div className="text-[#db7844] text-[10px] font-bold mb-12">01</div>
-                  <h3 className="font-serif text-3xl font-bold mb-4">Explorá</h3>
+                  <h3 className="font-serif text-3xl font-bold mb-4">Explora</h3>
                   <p className="text-sm opacity-70 leading-relaxed">Ubicación, recorrido y estado actual en un solo lugar.</p>
                </div>
                <div className="p-10 border-b md:border-b-0 md:border-r border-white/10 relative hover:bg-white/5 transition-colors">
                   <div className="text-[#db7844] text-[10px] font-bold mb-12">02</div>
-                  <h3 className="font-serif text-3xl font-bold mb-4">Conversá</h3>
+                  <h3 className="font-serif text-3xl font-bold mb-4">Conversa</h3>
                   <p className="text-sm opacity-70 leading-relaxed">Un asesor entiende tu objetivo y responde con claridad.</p>
                </div>
                <div className="p-10 border-b md:border-b-0 md:border-r border-white/10 relative hover:bg-white/5 transition-colors">
                   <div className="text-[#db7844] text-[10px] font-bold mb-12">03</div>
-                  <h3 className="font-serif text-3xl font-bold mb-4">Verificá</h3>
-                  <p className="text-sm opacity-70 leading-relaxed">Revisá documentos, disponibilidad y condiciones vigentes.</p>
+                  <h3 className="font-serif text-3xl font-bold mb-4">Verifica</h3>
+                  <p className="text-sm opacity-70 leading-relaxed">Revisa documentos, disponibilidad y condiciones vigentes.</p>
                </div>
                <div className="p-10 relative hover:bg-white/5 transition-colors">
                   <div className="text-[#db7844] text-[10px] font-bold mb-12">04</div>
-                  <h3 className="font-serif text-3xl font-bold mb-4">Visitá</h3>
-                  <p className="text-sm opacity-70 leading-relaxed">Elegí recorrido presencial o videollamada desde el terreno.</p>
+                  <h3 className="font-serif text-3xl font-bold mb-4">Visita</h3>
+                  <p className="text-sm opacity-70 leading-relaxed">Elige recorrido presencial o videollamada desde el terreno.</p>
                </div>
             </div>
          </div>

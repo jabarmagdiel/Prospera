@@ -56,8 +56,8 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
             En Prospera desarrollamos proyectos urbanísticos para quienes quieren vivir mejor, invertir con criterio o dejar patrimonio. Te ayudamos a entender cada opción y avanzar con una condición que sí puedas sostener.
           </motion.p>
           <motion.div variants={fadeUp} className="hero-actions flex gap-4">
-            <button className="button primary !py-3 !px-6 !text-sm" tabIndex={0} onClick={() => document.getElementById('proyectos')?.scrollIntoView({ behavior: 'smooth' })}>Encontrá tu proyecto <span>↓</span></button>
-            <button className="button ghost !py-3 !px-6 !text-sm" tabIndex={0} onClick={() => document.getElementById('nosotros')?.scrollIntoView({ behavior: 'smooth' })}>Conocé Prospera</button>
+            <button className="button primary !py-3 !px-6 !text-sm" tabIndex={0} onClick={() => document.getElementById('proyectos')?.scrollIntoView({ behavior: 'smooth' })}>Encuentra tu proyecto <span>↓</span></button>
+            <button className="button ghost !py-3 !px-6 !text-sm" tabIndex={0} onClick={() => document.getElementById('nosotros')?.scrollIntoView({ behavior: 'smooth' })}>Conoce Prospera</button>
           </motion.div>
         </motion.div>
         <HeroCarousel />
@@ -170,7 +170,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
                     </div>
                     <div>
                       <h4 className="font-serif font-bold text-stone-900 text-sm">Nuestra Misión</h4>
-                      <span className="text-xs text-stone-500 block">Conocé nuestro propósito</span>
+                      <span className="text-xs text-stone-500 block">Conoce nuestro propósito</span>
                     </div>
                   </div>
                   <ChevronDown className={`w-5 h-5 text-stone-400 transition-transform duration-300 ${openSection === 'mision' ? 'rotate-180 text-orange-500' : ''}`} />
@@ -485,6 +485,8 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
               allowFullScreen>
             </iframe>
+            {/* Transparent overlay prevents scroll-trap on desktop */}
+            <div className="absolute inset-0 z-10" style={{ pointerEvents: 'none' }}></div>
             <span className="video-label">Lotes Panorámicos (Muestra)</span>
           </div>
           <div className="video-wrapper">
@@ -497,6 +499,8 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
               allowFullScreen>
             </iframe>
+            {/* Transparent overlay prevents scroll-trap on desktop */}
+            <div className="absolute inset-0 z-10" style={{ pointerEvents: 'none' }}></div>
             <span className="video-label">Vista Aérea (Muestra)</span>
           </div>
         </div>
@@ -535,8 +539,9 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
             <motion.div variants={fadeUp} className="lg:col-span-5">
               <div className="bg-stone-800/80 border border-stone-700/80 rounded-3xl p-8 backdrop-blur-md relative overflow-hidden shadow-2xl">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 rounded-2xl bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-xl">
-                    ✓
+                  <div className="px-3 py-1.5 rounded-xl bg-orange-500/20 border border-orange-500/40 text-orange-400 font-bold text-xs tracking-wider uppercase flex items-center gap-1.5 shadow-sm">
+                    <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse"></span>
+                    APROBADO
                   </div>
                   <div>
                     <h4 className="font-serif text-xl text-white">Garantía Prospera</h4>
@@ -559,26 +564,26 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
             {[
               {
                 num: "01",
-                title: "Entendé",
-                desc: "Conocé qué propone cada proyecto, su ubicación estratégica y para quién funciona mejor.",
+                title: "Entiende",
+                desc: "Conoce qué propone cada proyecto, su ubicación estratégica y para quién funciona mejor.",
                 icon: Lightbulb
               },
               {
                 num: "02",
-                title: "Compará",
-                desc: "Revisá las etapas de desarrollo, modalidades de pago y opciones de plusvalía a futuro.",
+                title: "Compara",
+                desc: "Revisa las etapas de desarrollo, modalidades de pago y opciones de plusvalía a futuro.",
                 icon: TrendingUp
               },
               {
                 num: "03",
-                title: "Conocé",
-                desc: "Visitá el terreno en persona o realizá un recorrido interactivo guiado por videollamada.",
+                title: "Conoce",
+                desc: "Visita el terreno en persona o realiza un recorrido interactivo guiado por videollamada.",
                 icon: Eye
               },
               {
                 num: "04",
-                title: "Decidí",
-                desc: "Avanzá con total tranquilidad cuando la alternativa se ajuste a tu plan y presupuesto.",
+                title: "Decide",
+                desc: "Avanza con total tranquilidad cuando la alternativa se ajuste a tu plan y presupuesto.",
                 icon: CheckCircle
               }
             ].map((step, idx) => (

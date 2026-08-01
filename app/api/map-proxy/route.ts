@@ -74,6 +74,55 @@ export async function GET(request: Request) {
         .badge-bloqueado { color: #4b5563; }
       </style>
       <script>
+      // ── HIDE NON-GREEN (NON-AVAILABLE) MARKERS ──────────────────
+      (function() {
+        function isGreenish(color) {
+          if (!color) return false;
+          color = color.toLowerCase().replace(/\s/g,'');
+          var greenKeywords = ['green','#0f0','lime','#00ff00','#008000','#22c55e','#16a34a','#15803d','#1a7a1a'];
+          for (var i = 0; i < greenKeywords.length; i++) {
+            if (color.indexOf(greenKeywords[i]) !== -1) return true;
+          }
+          var rgb = color.match(/rgb\((\d+),(\d+),(\d+)\)/);
+          if (rgb) {
+            var r = parseInt(rgb[1]), g = parseInt(rgb[2]), b = parseInt(rgb[3]);
+            return g > r + 40 && g > b + 40 && g > 80;
+          }
+          return false;
+        }
+
+        function filterMarkers() {
+          var paths = document.querySelectorAll('path[fill], circle[fill]');
+          for (var i = 0; i < paths.length; i++) {
+            var fill = paths[i].getAttribute('fill') || '';
+            if (fill === 'none' || fill === 'transparent' || fill === '') continue;
+            if (!isGreenish(fill)) {
+              var el = paths[i];
+              el.style.display = 'none';
+              // Also hide the parent group element if it's a marker group
+              var g = el.parentElement;
+              if (g && (g.tagName === 'g' || g.classList.contains('leaflet-interactive'))) {
+                g.style.display = 'none';
+              }
+            }
+          }
+        }
+
+        // Run on load and observe DOM changes for dynamically added markers
+        var filterTimer;
+        var obs = new MutationObserver(function() {
+          clearTimeout(filterTimer);
+          filterTimer = setTimeout(filterMarkers, 200);
+        });
+        obs.observe(document.documentElement, { childList: true, subtree: true });
+
+        // Also run periodically for the first few seconds after load
+        window.addEventListener('load', function() {
+          [500, 1000, 2000, 3500].forEach(function(t) { setTimeout(filterMarkers, t); });
+        });
+      })();
+      </script>
+      <script>
       (function() {
         var lastKey = "";
         function sendLot(lotData) {
