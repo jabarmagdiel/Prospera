@@ -539,12 +539,16 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
             <motion.div variants={fadeUp} className="lg:col-span-5">
               <div className="bg-stone-800/80 border border-stone-700/80 rounded-3xl p-8 backdrop-blur-md relative overflow-hidden shadow-2xl">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="px-3 py-1.5 rounded-xl bg-orange-500/20 border border-orange-500/40 text-orange-400 font-bold text-xs tracking-wider uppercase flex items-center gap-1.5 shadow-sm">
-                    <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse"></span>
-                    APROBADO
+                  <div className="relative flex items-center justify-center w-13 h-13 rounded-2xl bg-gradient-to-br from-orange-500/25 via-amber-500/20 to-orange-600/30 border border-orange-500/50 shadow-lg shrink-0">
+                    <BadgeCheck className="w-7 h-7 text-orange-400 drop-shadow-md" />
                   </div>
                   <div>
-                    <h4 className="font-serif text-xl text-white">Garantía Prospera</h4>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="font-serif text-xl text-white">Garantía Prospera</h4>
+                      <span className="px-2.5 py-0.5 rounded-full bg-orange-500/20 border border-orange-500/40 text-orange-400 font-bold text-[9px] tracking-widest uppercase">
+                        Sello Oficial
+                      </span>
+                    </div>
                     <p className="text-stone-400 text-xs">Transparencia y respaldo jurídico total</p>
                   </div>
                 </div>
