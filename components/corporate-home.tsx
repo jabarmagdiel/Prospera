@@ -29,7 +29,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
     hidden: {},
     visible: { transition: { staggerChildren: 0.15 } }
   };
-  
+
   const { scrollYProgress } = useScroll();
 
   return (
@@ -40,17 +40,17 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
         className="fixed top-0 left-0 right-0 h-1 z-[100] bg-orange-500/80"
       />
       <Header />
-      
+
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section className="corp-hero" id="inicio">
-        <motion.div 
+        <motion.div
           className="corp-hero-copy !py-10 md:!py-16 lg:!py-20"
           initial="hidden"
           animate="visible"
           variants={stagger}
         >
           <motion.h1 variants={fadeUp} className="!text-4xl md:!text-5xl lg:!text-6xl !leading-tight !mb-4 !mt-0">
-            Un terreno puede ser<br/><em>el comienzo de algo grande.</em>
+            Un terreno puede ser<br /><em>el comienzo de algo grande.</em>
           </motion.h1>
           <motion.p variants={fadeUp} className="!text-base !mb-6 !mt-2 !text-justify" style={{ textAlign: 'justify' }}>
             En Prospera desarrollamos proyectos urbanísticos para quienes quieren vivir mejor, invertir con criterio o dejar patrimonio. Te ayudamos a entender cada opción y avanzar con una condición que sí puedas sostener.
@@ -98,187 +98,187 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
       >
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-16 items-center">
-          {/* Imagen */}
-          <motion.div
-            variants={{ hidden: { opacity: 0, x: -40 }, visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } } }}
-            className="relative"
-          >
-            <div className="rounded-[2.5rem] overflow-hidden shadow-2xl aspect-[4/5] relative">
-              <img
-                src="/hero/slide1.png"
-                alt="Equipo Prospera"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-900/20 to-transparent" />
+            {/* Imagen */}
+            <motion.div
+              variants={{ hidden: { opacity: 0, x: -40 }, visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } } }}
+              className="relative"
+            >
+              <div className="rounded-[2.5rem] overflow-hidden shadow-2xl aspect-[4/5] relative">
+                <img
+                  src="/hero/slide1.png"
+                  alt="Equipo Prospera"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-900/20 to-transparent" />
 
-              {/* Overlay Bar en la imagen con íconos/pills */}
-              <div className="absolute bottom-5 left-5 right-5 bg-stone-900/85 backdrop-blur-md border border-white/15 rounded-2xl p-4 shadow-2xl z-10">
-                <div className="text-[10px] uppercase font-bold tracking-widest text-orange-400 mb-2.5">Garantía y Servicios Prospera</div>
-                <div className="flex flex-wrap gap-2">
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full text-xs font-medium text-white border border-white/10 shadow-sm">
-                    <CheckCircle className="w-3.5 h-3.5 text-orange-400" /> Seguridad jurídica
-                  </div>
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full text-xs font-medium text-white border border-white/10 shadow-sm">
-                    <CheckCircle className="w-3.5 h-3.5 text-orange-400" /> Financiamiento directo
-                  </div>
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full text-xs font-medium text-white border border-white/10 shadow-sm">
-                    <CheckCircle className="w-3.5 h-3.5 text-orange-400" /> Asesoría personalizada
+                {/* Overlay Bar en la imagen con íconos/pills */}
+                <div className="absolute bottom-5 left-5 right-5 bg-stone-900/85 backdrop-blur-md border border-white/15 rounded-2xl p-4 shadow-2xl z-10">
+                  <div className="text-[10px] uppercase font-bold tracking-widest text-orange-400 mb-2.5">Garantía y Servicios Prospera</div>
+                  <div className="flex flex-wrap gap-2">
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full text-xs font-medium text-white border border-white/10 shadow-sm">
+                      <CheckCircle className="w-3.5 h-3.5 text-orange-400" /> Seguridad jurídica
+                    </div>
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full text-xs font-medium text-white border border-white/10 shadow-sm">
+                      <CheckCircle className="w-3.5 h-3.5 text-orange-400" /> Financiamiento directo
+                    </div>
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full text-xs font-medium text-white border border-white/10 shadow-sm">
+                      <CheckCircle className="w-3.5 h-3.5 text-orange-400" /> Asesoría personalizada
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Floating badge en la esquina superior derecha para no tapar el card inferior */}
-            <div className="absolute -top-6 -right-4 md:-right-6 bg-orange-500 text-white rounded-3xl px-6 py-4 shadow-xl z-20">
-              <span className="text-3xl font-serif font-bold block">+15</span>
-              <span className="text-xs font-bold tracking-widest uppercase opacity-90">años de experiencia</span>
-            </div>
-            {/* Second image overlap en la esquina superior izquierda */}
-            <div className="absolute -top-6 -left-4 md:-left-6 w-32 h-32 md:w-36 md:h-36 rounded-2xl overflow-hidden border-4 border-white shadow-xl hidden sm:block z-20">
-              <img src="/hero/slide3.png" alt="Proyecto Prospera" className="w-full h-full object-cover" />
-            </div>
-          </motion.div>
-
-          {/* Texto */}
-          <div>
-            <motion.p variants={fadeUp} className="eyebrow"><span></span> Quiénes somos</motion.p>
-            <motion.h2 variants={fadeUp} className="about-copy-h2 font-serif text-4xl md:text-5xl text-stone-900 mt-4 mb-6 leading-tight">
-              Planificamos tierra.<br/><em className="font-serif italic text-orange-600 not-italic">Impulsamos futuro.</em>
-            </motion.h2>
-            <motion.p variants={fadeUp} className="text-stone-600 text-base leading-relaxed !text-justify mb-4" style={{ textAlign: 'justify' }}>
-              Prospera es una empresa de desarrollos inmobiliarios situada en Santa Cruz de la Sierra, Bolivia.
-            </motion.p>
-            <motion.p variants={fadeUp} className="text-stone-600 text-base leading-relaxed !text-justify mb-4" style={{ textAlign: 'justify' }}>
-              Analizamos cada proyecto con criterios de rentabilidad, seguridad jurídica, ubicación y proyección, para garantizar inversiones transparentes y rentables para nuestros clientes e inversionistas.
-            </motion.p>
-            <motion.p variants={fadeUp} className="text-stone-600 text-base leading-relaxed !text-justify mb-6" style={{ textAlign: 'justify' }}>
-              La gestión de riesgos, la aprobación rigurosa de proyectos y la rigurosidad jurídica son los pilares que nos permiten ofrecer confianza y seguridad en cada operación.
-            </motion.p>
-
-            {/* Accordion / Cards Desplegables de Misión, Visión y Nuestros Valores */}
-            <motion.div variants={fadeUp} className="flex flex-col gap-3 mt-6 mb-6">
-              {/* Target Misión */}
-              <div className="bg-white border border-stone-200 hover:border-orange-500 rounded-2xl overflow-hidden shadow-sm transition-all">
-                <button
-                  type="button"
-                  onClick={() => setOpenSection(openSection === 'mision' ? null : 'mision')}
-                  className="w-full p-4 flex items-center justify-between text-left cursor-pointer"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center">
-                      <Target className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="font-serif font-bold text-stone-900 text-sm">Nuestra Misión</h4>
-                      <span className="text-xs text-stone-500 block">Conoce nuestro propósito</span>
-                    </div>
-                  </div>
-                  <ChevronDown className={`w-5 h-5 text-stone-400 transition-transform duration-300 ${openSection === 'mision' ? 'rotate-180 text-orange-500' : ''}`} />
-                </button>
-                <AnimatePresence>
-                  {openSection === 'mision' && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="px-5 pb-5 border-t border-stone-100 bg-orange-50/30"
-                    >
-                      <p className="text-stone-600 text-sm leading-relaxed mt-3 pt-1 !text-justify" style={{ textAlign: 'justify' }}>
-                        Desarrollar e implementar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario mediante una gestión innovadora y eficiente.
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+              {/* Floating badge en la esquina superior derecha para no tapar el card inferior */}
+              <div className="absolute -top-6 -right-4 md:-right-6 bg-orange-500 text-white rounded-3xl px-6 py-4 shadow-xl z-20">
+                <span className="text-3xl font-serif font-bold block">+15</span>
+                <span className="text-xs font-bold tracking-widest uppercase opacity-90">años de experiencia</span>
               </div>
-
-              {/* Target Visión */}
-              <div className="bg-white border border-stone-200 hover:border-blue-500 rounded-2xl overflow-hidden shadow-sm transition-all">
-                <button
-                  type="button"
-                  onClick={() => setOpenSection(openSection === 'vision' ? null : 'vision')}
-                  className="w-full p-4 flex items-center justify-between text-left cursor-pointer"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
-                      <Eye className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="font-serif font-bold text-stone-900 text-sm">Nuestra Visión</h4>
-                      <span className="text-xs text-stone-500 block">Hacia dónde vamos</span>
-                    </div>
-                  </div>
-                  <ChevronDown className={`w-5 h-5 text-stone-400 transition-transform duration-300 ${openSection === 'vision' ? 'rotate-180 text-blue-600' : ''}`} />
-                </button>
-                <AnimatePresence>
-                  {openSection === 'vision' && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="px-5 pb-5 border-t border-stone-100 bg-blue-50/30"
-                    >
-                      <p className="text-stone-600 text-sm leading-relaxed mt-3 pt-1 !text-justify" style={{ textAlign: 'justify' }}>
-                        Ser un referente sólido, confiable e innovador que gestiona inversiones inmobiliarias, superando las expectativas de nuestros clientes e inversionistas.
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Target Nuestros Valores */}
-              <div className="bg-white border border-stone-200 hover:border-amber-500 rounded-2xl overflow-hidden shadow-sm transition-all">
-                <button
-                  type="button"
-                  onClick={() => setOpenSection(openSection === 'valores' ? null : 'valores')}
-                  className="w-full p-4 flex items-center justify-between text-left cursor-pointer"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
-                      <Star className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="font-serif font-bold text-stone-900 text-sm">Nuestros Valores</h4>
-                      <span className="text-xs text-stone-500 block">Los 5 pilares que nos guían</span>
-                    </div>
-                  </div>
-                  <ChevronDown className={`w-5 h-5 text-stone-400 transition-transform duration-300 ${openSection === 'valores' ? 'rotate-180 text-amber-600' : ''}`} />
-                </button>
-                <AnimatePresence>
-                  {openSection === 'valores' && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="px-5 pb-5 border-t border-stone-100 bg-amber-50/30"
-                    >
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3 pt-1">
-                        {[
-                          { title: "Compromiso", icon: Handshake },
-                          { title: "Transparencia", icon: ShieldCheck },
-                          { title: "Innovación", icon: Lightbulb },
-                          { title: "Confiabilidad", icon: BadgeCheck },
-                          { title: "Profesionalismo", icon: Briefcase },
-                        ].map((val, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-stone-200/80 shadow-2xs">
-                            <div className="w-7 h-7 bg-amber-100 text-amber-700 rounded-lg flex items-center justify-center flex-shrink-0">
-                              <val.icon className="w-3.5 h-3.5" />
-                            </div>
-                            <strong className="text-stone-800 text-xs font-semibold block leading-tight">{val.title}</strong>
-                          </div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+              {/* Second image overlap en la esquina superior izquierda */}
+              <div className="absolute -top-6 -left-4 md:-left-6 w-32 h-32 md:w-36 md:h-36 rounded-2xl overflow-hidden border-4 border-white shadow-xl hidden sm:block z-20">
+                <img src="/hero/slide3.png" alt="Proyecto Prospera" className="w-full h-full object-cover" />
               </div>
             </motion.div>
-          </div>
-        </div>
 
-        {/* Política de Calidad (Movida arriba - Ancho Completo) */}
+            {/* Texto */}
+            <div>
+              <motion.p variants={fadeUp} className="eyebrow"><span></span> Quiénes somos</motion.p>
+              <motion.h2 variants={fadeUp} className="about-copy-h2 font-serif text-4xl md:text-5xl text-stone-900 mt-4 mb-6 leading-tight">
+                Planificamos tierra.<br /><em className="font-serif italic text-orange-600 not-italic">Impulsamos futuro.</em>
+              </motion.h2>
+              <motion.p variants={fadeUp} className="text-stone-600 text-base leading-relaxed !text-justify mb-4" style={{ textAlign: 'justify' }}>
+                Prospera es una empresa de desarrollos inmobiliarios situada en Santa Cruz de la Sierra, Bolivia.
+              </motion.p>
+              <motion.p variants={fadeUp} className="text-stone-600 text-base leading-relaxed !text-justify mb-4" style={{ textAlign: 'justify' }}>
+                Analizamos cada proyecto con criterios de rentabilidad, seguridad jurídica, ubicación y proyección, para garantizar inversiones transparentes y rentables para nuestros clientes e inversionistas.
+              </motion.p>
+              <motion.p variants={fadeUp} className="text-stone-600 text-base leading-relaxed !text-justify mb-6" style={{ textAlign: 'justify' }}>
+                La gestión de riesgos, la aprobación rigurosa de proyectos y la rigurosidad jurídica son los pilares que nos permiten ofrecer confianza y seguridad en cada operación.
+              </motion.p>
+
+              {/* Accordion / Cards Desplegables de Misión, Visión y Nuestros Valores */}
+              <motion.div variants={fadeUp} className="flex flex-col gap-3 mt-6 mb-6">
+                {/* Target Misión */}
+                <div className="bg-white border border-stone-200 hover:border-orange-500 rounded-2xl overflow-hidden shadow-sm transition-all">
+                  <button
+                    type="button"
+                    onClick={() => setOpenSection(openSection === 'mision' ? null : 'mision')}
+                    className="w-full p-4 flex items-center justify-between text-left cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center">
+                        <Target className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="font-serif font-bold text-stone-900 text-sm">Nuestra Misión</h4>
+                        <span className="text-xs text-stone-500 block">Conoce nuestro propósito</span>
+                      </div>
+                    </div>
+                    <ChevronDown className={`w-5 h-5 text-stone-400 transition-transform duration-300 ${openSection === 'mision' ? 'rotate-180 text-orange-500' : ''}`} />
+                  </button>
+                  <AnimatePresence>
+                    {openSection === 'mision' && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="px-5 pb-5 border-t border-stone-100 bg-orange-50/30"
+                      >
+                        <p className="text-stone-600 text-sm leading-relaxed mt-3 pt-1 !text-justify" style={{ textAlign: 'justify' }}>
+                          Desarrollar e implementar soluciones de inversión confiables, seguras y rentables en el sector inmobiliario mediante una gestión innovadora y eficiente.
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Target Visión */}
+                <div className="bg-white border border-stone-200 hover:border-blue-500 rounded-2xl overflow-hidden shadow-sm transition-all">
+                  <button
+                    type="button"
+                    onClick={() => setOpenSection(openSection === 'vision' ? null : 'vision')}
+                    className="w-full p-4 flex items-center justify-between text-left cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
+                        <Eye className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="font-serif font-bold text-stone-900 text-sm">Nuestra Visión</h4>
+                        <span className="text-xs text-stone-500 block">Hacia dónde vamos</span>
+                      </div>
+                    </div>
+                    <ChevronDown className={`w-5 h-5 text-stone-400 transition-transform duration-300 ${openSection === 'vision' ? 'rotate-180 text-blue-600' : ''}`} />
+                  </button>
+                  <AnimatePresence>
+                    {openSection === 'vision' && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="px-5 pb-5 border-t border-stone-100 bg-blue-50/30"
+                      >
+                        <p className="text-stone-600 text-sm leading-relaxed mt-3 pt-1 !text-justify" style={{ textAlign: 'justify' }}>
+                          Ser un referente sólido, confiable e innovador que gestiona inversiones inmobiliarias, superando las expectativas de nuestros clientes e inversionistas.
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Target Nuestros Valores */}
+                <div className="bg-white border border-stone-200 hover:border-amber-500 rounded-2xl overflow-hidden shadow-sm transition-all">
+                  <button
+                    type="button"
+                    onClick={() => setOpenSection(openSection === 'valores' ? null : 'valores')}
+                    className="w-full p-4 flex items-center justify-between text-left cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
+                        <Star className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="font-serif font-bold text-stone-900 text-sm">Nuestros Valores</h4>
+                        <span className="text-xs text-stone-500 block">Los 5 pilares que nos guían</span>
+                      </div>
+                    </div>
+                    <ChevronDown className={`w-5 h-5 text-stone-400 transition-transform duration-300 ${openSection === 'valores' ? 'rotate-180 text-amber-600' : ''}`} />
+                  </button>
+                  <AnimatePresence>
+                    {openSection === 'valores' && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="px-5 pb-5 border-t border-stone-100 bg-amber-50/30"
+                      >
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3 pt-1">
+                          {[
+                            { title: "Compromiso", icon: Handshake },
+                            { title: "Transparencia", icon: ShieldCheck },
+                            { title: "Innovación", icon: Lightbulb },
+                            { title: "Confiabilidad", icon: BadgeCheck },
+                            { title: "Profesionalismo", icon: Briefcase },
+                          ].map((val, idx) => (
+                            <div key={idx} className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-stone-200/80 shadow-2xs">
+                              <div className="w-7 h-7 bg-amber-100 text-amber-700 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <val.icon className="w-3.5 h-3.5" />
+                              </div>
+                              <strong className="text-stone-800 text-xs font-semibold block leading-tight">{val.title}</strong>
+                            </div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Política de Calidad (Movida arriba - Ancho Completo) */}
           <motion.div
             className="mt-16 rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden shadow-2xl group"
             initial="hidden"
@@ -412,8 +412,8 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
         {/* Dark overlay for contrast */}
         <div className="absolute inset-0 bg-stone-900/70 pointer-events-none"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-[#f7f3ee] via-transparent to-[#1c1917] pointer-events-none opacity-50"></div>
-        
-        <motion.div 
+
+        <motion.div
           className="relative z-10 max-w-4xl mx-auto text-center px-6 mb-16"
           initial="hidden"
           whileInView="visible"
@@ -425,7 +425,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
               <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse"></span> Proyectos Prospera
             </p>
             <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-6 drop-shadow-lg">
-              No todos buscan lo mismo.<br/><span className="italic text-orange-400">Tu proyecto también puede ser distinto.</span>
+              No todos buscan lo mismo.<br /><span className="italic text-orange-400">Tu proyecto también puede ser distinto.</span>
             </h2>
             <p className="text-lg md:text-xl text-stone-300 max-w-2xl mx-auto font-medium drop-shadow-md">
               Lotes seleccionados con la revalorización más alta del mercado.
@@ -457,7 +457,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           )}
         </div>
 
-        <motion.p 
+        <motion.p
           className="text-center relative z-10 text-stone-400 text-sm max-w-2xl mx-auto mt-4 px-6"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -467,7 +467,7 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
         </motion.p>
       </section>
 
-      <motion.section 
+      <motion.section
         className="corp-video-section"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -476,13 +476,13 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
       >
         <div className="video-grid">
           <div className="video-wrapper">
-            <iframe 
-              className="corp-video" 
+            <iframe
+              className="corp-video"
               style={{ pointerEvents: 'none' }}
-              src="https://www.youtube-nocookie.com/embed/LXb3EKWsInQ?autoplay=1&mute=1&loop=1&playlist=LXb3EKWsInQ&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1" 
-              title="Lotes Panorámicos" 
-              frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              src="https://www.youtube-nocookie.com/embed/LXb3EKWsInQ?autoplay=1&mute=1&loop=1&playlist=LXb3EKWsInQ&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1"
+              title="Lotes Panorámicos"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen>
             </iframe>
             {/* Transparent overlay prevents scroll-trap on desktop */}
@@ -490,13 +490,13 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
             <span className="video-label">Lotes Panorámicos (Muestra)</span>
           </div>
           <div className="video-wrapper">
-            <iframe 
-              className="corp-video" 
+            <iframe
+              className="corp-video"
               style={{ pointerEvents: 'none' }}
-              src="https://www.youtube-nocookie.com/embed/L_tqK4eqelA?autoplay=1&mute=1&loop=1&playlist=L_tqK4eqelA&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1" 
-              title="Vista Aérea" 
-              frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              src="https://www.youtube-nocookie.com/embed/L_tqK4eqelA?autoplay=1&mute=1&loop=1&playlist=L_tqK4eqelA&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1"
+              title="Vista Aérea"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen>
             </iframe>
             {/* Transparent overlay prevents scroll-trap on desktop */}
@@ -508,8 +508,8 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
 
       {/* ── RESPALDO / PROCESO ───────────────────────────────── */}
       {/* ── RESPALDO / PROCESO ───────────────────────────────── */}
-      <motion.section 
-        className="py-24 bg-stone-900 text-white relative overflow-hidden" 
+      <motion.section
+        className="py-24 bg-stone-900 text-white relative overflow-hidden"
         id="respaldo"
         initial="hidden"
         whileInView="visible"
@@ -611,16 +611,16 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           </div>
         </div>
       </motion.section>
-      
-      <motion.section 
-        className="remote-section" 
+
+      <motion.section
+        className="remote-section"
         id="distancia"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
         variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
       >
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.9, rotate: -1 }}
           whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
           whileHover={{ scale: 1.02 }}
@@ -628,23 +628,23 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           viewport={{ once: true, amount: 0.3 }}
           className="relative rounded-3xl overflow-hidden shadow-2xl border border-stone-200 aspect-[4/3] md:aspect-auto min-h-[440px] group cursor-pointer"
         >
-          <img 
-            src="/images/airport_reception.jpg" 
-            alt="Recepción en aeropuerto" 
+          <img
+            src="/images/airport_reception.svg"
+            alt="Recepción de familia en el aeropuerto por Asesor Prospera en polera naranja"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
           />
         </motion.div>
 
         <div className="remote-copy">
           <motion.p variants={fadeUp} className="eyebrow"><span></span> Tu decisión puede empezar desde cualquier lugar</motion.p>
-          <motion.h2 variants={fadeUp}>Primero conoce.<br/><em>Después decide si quieres viajar.</em></motion.h2>
+          <motion.h2 variants={fadeUp}>Primero conoce.<br /><em>Después decide si quieres viajar.</em></motion.h2>
           <motion.p variants={fadeUp}>Si vives en La Paz, Oruro o fuera de Bolivia, un asesor puede mostrarte el proyecto desde el terreno, responder tus preguntas e incorporar a tu familia en la videollamada.</motion.p>
           <motion.button variants={fadeUp} className="button dark" onClick={() => window.open('https://wa.me/59177820003', '_blank')}>Ver un proyecto en vivo <span>→</span></motion.button>
         </div>
       </motion.section>
-      
-      <motion.section 
-        className="work-section" 
+
+      <motion.section
+        className="work-section"
         id="trabaja"
         initial="hidden"
         whileInView="visible"
@@ -653,11 +653,11 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
       >
         <div className="work-copy">
           <motion.p variants={fadeUp} className="eyebrow light"><span></span> Trabaja con nosotros</motion.p>
-          <motion.h2 variants={fadeUp}>El futuro también se construye<br/><em>con las personas correctas.</em></motion.h2>
+          <motion.h2 variants={fadeUp}>El futuro también se construye<br /><em>con las personas correctas.</em></motion.h2>
           <motion.p variants={fadeUp}>En Prospera valoramos la claridad, el compromiso, el trabajo en equipo y las ganas de crecer. Si te interesa aportar al desarrollo inmobiliario de Santa Cruz, queremos conocerte.</motion.p>
           <motion.button variants={fadeUp} className="button work-button" onClick={() => window.open('https://wa.me/59177820003', '_blank')}>Quiero ser parte de Prospera <span>→</span></motion.button>
         </div>
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.8, rotate: -2 }}
           whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
           transition={{ duration: 1, type: "spring", bounce: 0.4 }}
@@ -671,15 +671,15 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
       </motion.section>
 
 
-      <motion.section 
-        className="corp-contact-section" 
+      <motion.section
+        className="corp-contact-section"
         id="contacto"
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
       >
-        <img src="/brand/prospera.png" alt="Prospera Desarrollos Inmobiliarios"/>
+        <img src="/brand/prospera.png" alt="Prospera Desarrollos Inmobiliarios" />
         <div>
           <p className="eyebrow"><span></span> Contanos qué querés construir</p>
           <h2>Tu primera decisión es empezar a mirar.</h2>
