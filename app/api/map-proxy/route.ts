@@ -72,53 +72,94 @@ export async function GET(request: Request) {
         .badge-reservado { color: #1d4ed8; }
         .badge-bloqueado .dot { background: #9ca3af; }
         .badge-bloqueado { color: #4b5563; }
+
+        /* STRICTLY HIDE ALL NON-DISPONIBLE MARKERS VIA CSS */
+        .cfm-marker-Vendido,
+        .cfm-marker-Reservado,
+        .cfm-marker-Bloqueado,
+        .cfm-marker-Minuta,
+        .cfm-marker-Ocupado,
+        .cfm-marker-0,
+        .cfm-marker-2,
+        .cfm-marker-3,
+        .cfm-marker-4,
+        .cfm-marker-5,
+        [class*="cfm-marker-"]:not(.cfm-marker-Disponible):not(.cfm-marker-1),
+        [data-class="Vendido"],
+        [data-class="Reservado"],
+        [data-class="Bloqueado"],
+        [data-class="Minuta"] {
+          display: none !important;
+          visibility: hidden !important;
+          opacity: 0 !important;
+          pointer-events: none !important;
+        }
       </style>
       <script>
-      // ── HIDE NON-GREEN (NON-AVAILABLE) MARKERS ──────────────────
+      // ── HIDE NON-GREEN (NON-AVAILABLE) MARKERS STRICTLY ──────────
       (function() {
-        function isGreenish(color) {
-          if (!color) return false;
-          color = color.toLowerCase().replace(/\s/g,'');
-          var greenKeywords = ['green','#0f0','lime','#00ff00','#008000','#22c55e','#16a34a','#15803d','#1a7a1a'];
-          for (var i = 0; i < greenKeywords.length; i++) {
-            if (color.indexOf(greenKeywords[i]) !== -1) return true;
-          }
-          var rgb = color.match(/rgb\((\d+),(\d+),(\d+)\)/);
-          if (rgb) {
-            var r = parseInt(rgb[1]), g = parseInt(rgb[2]), b = parseInt(rgb[3]);
-            return g > r + 40 && g > b + 40 && g > 80;
-          }
-          return false;
-        }
-
         function filterMarkers() {
-          var paths = document.querySelectorAll('path[fill], circle[fill]');
-          for (var i = 0; i < paths.length; i++) {
-            var fill = paths[i].getAttribute('fill') || '';
-            if (fill === 'none' || fill === 'transparent' || fill === '') continue;
-            if (!isGreenish(fill)) {
-              var el = paths[i];
-              el.style.display = 'none';
-              // Also hide the parent group element if it's a marker group
-              var g = el.parentElement;
-              if (g && (g.tagName === 'g' || g.classList.contains('leaflet-interactive'))) {
-                g.style.display = 'none';
+          try {
+            // 1. Hide by specific Leaflet marker classes
+            var selectors = [
+              '.cfm-marker:not(.cfm-marker-Disponible)',
+              '.cfm-marker-Vendido',
+              '.cfm-marker-Reservado',
+              '.cfm-marker-Bloqueado',
+              '.cfm-marker-Minuta',
+              '.cfm-marker-Ocupado'
+            ];
+            selectors.forEach(function(sel) {
+              var els = document.querySelectorAll(sel);
+              for (var i = 0; i < els.length; i++) {
+                els[i].style.setProperty('display', 'none', 'important');
+                els[i].style.setProperty('visibility', 'hidden', 'important');
+              }
+            });
+
+            // 2. Hide all cfm-marker elements that don't have 'Disponible' in class
+            var allMarkers = document.querySelectorAll('.cfm-marker, [class*="cfm-marker"]');
+            for (var i = 0; i < allMarkers.length; i++) {
+              var el = allMarkers[i];
+              var cls = (el.className || '').toString();
+              if (cls.indexOf('cfm-marker') !== -1 && cls.indexOf('Disponible') === -1 && cls.indexOf('cfm-marker-1') === -1) {
+                el.style.setProperty('display', 'none', 'important');
+                el.style.setProperty('visibility', 'hidden', 'important');
               }
             }
-          }
+
+            // 3. Scan SVG shapes / paths / images for non-green fills
+            var shapes = document.querySelectorAll('path, circle, polygon, div.leaflet-marker-icon, img.leaflet-marker-icon');
+            for (var k = 0; k < shapes.length; k++) {
+              var sh = shapes[k];
+              var fill = sh.getAttribute ? (sh.getAttribute('fill') || '') : '';
+              var bg = sh.style ? (sh.style.backgroundColor || sh.style.background || '') : '';
+              var combined = (fill + ' ' + bg + ' ' + (sh.className || '')).toLowerCase();
+
+              if (combined.indexOf('red') !== -1 || combined.indexOf('yellow') !== -1 || combined.indexOf('blue') !== -1 ||
+                  combined.indexOf('ff0000') !== -1 || combined.indexOf('ffff00') !== -1 || combined.indexOf('0000ff') !== -1 ||
+                  combined.indexOf('#ff') !== -1 || combined.indexOf('rojo') !== -1 || combined.indexOf('amarillo') !== -1 ||
+                  combined.indexOf('vendido') !== -1 || combined.indexOf('reservado') !== -1 || combined.indexOf('bloqueado') !== -1) {
+                sh.style.setProperty('display', 'none', 'important');
+                if (sh.parentElement && sh.parentElement.classList.contains('leaflet-interactive')) {
+                  sh.parentElement.style.setProperty('display', 'none', 'important');
+                }
+              }
+            }
+          } catch(err) {}
         }
 
-        // Run on load and observe DOM changes for dynamically added markers
+        // Run filter immediately and continuously on DOM changes
         var filterTimer;
         var obs = new MutationObserver(function() {
           clearTimeout(filterTimer);
-          filterTimer = setTimeout(filterMarkers, 200);
+          filterTimer = setTimeout(filterMarkers, 100);
         });
         obs.observe(document.documentElement, { childList: true, subtree: true });
 
-        // Also run periodically for the first few seconds after load
+        setInterval(filterMarkers, 500);
         window.addEventListener('load', function() {
-          [500, 1000, 2000, 3500].forEach(function(t) { setTimeout(filterMarkers, t); });
+          [100, 300, 600, 1200, 2500, 4000].forEach(function(t) { setTimeout(filterMarkers, t); });
         });
       })();
       </script>

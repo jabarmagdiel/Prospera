@@ -621,18 +621,35 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
         variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
       >
         <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
+          initial={{ opacity: 0, scale: 0.9, rotate: -1 }}
+          whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.8, type: "spring", bounce: 0.3 }}
           viewport={{ once: true, amount: 0.3 }}
-          className="relative rounded-3xl overflow-hidden shadow-2xl border border-stone-200 aspect-[4/3] md:aspect-auto min-h-[440px]"
+          className="relative rounded-3xl overflow-hidden shadow-2xl border border-stone-200 aspect-[4/3] md:aspect-auto min-h-[440px] group cursor-pointer"
         >
           <img 
-            src="/images/airport_family.jpg" 
+            src="/images/airport_family_welcome.jpg" 
             alt="Recepción de familia en el aeropuerto por Asesor Prospera" 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-stone-950/20 to-transparent pointer-events-none" />
+          
+          {/* Prospera Advisor Badge Overlay */}
+          <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-stone-900/85 backdrop-blur-md border border-white/15 flex items-center justify-between text-white shadow-xl">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center font-bold text-white shadow-md">
+                🧡
+              </div>
+              <div>
+                <h4 className="font-bold text-xs uppercase tracking-wider text-orange-400">Asesor Prospera</h4>
+                <p className="text-xs text-stone-200 font-medium">Recepción de familia en el aeropuerto</p>
+              </div>
+            </div>
+            <span className="hidden sm:inline-block text-[10px] uppercase font-bold tracking-widest px-3 py-1 bg-white/10 rounded-full border border-white/10 text-stone-300">
+              Viru Viru / El Trompillo
+            </span>
+          </div>
         </motion.div>
 
         <div className="remote-copy">

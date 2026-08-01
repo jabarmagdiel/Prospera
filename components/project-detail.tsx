@@ -239,10 +239,7 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
                   </div>
                   {/* Legend */}
                   <div className="hidden md:flex items-center gap-6 text-[9px] font-bold text-stone-500 uppercase tracking-widest">
-                    <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#6db33f]"></span> Disponible</div>
-                    <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#e3241b]"></span> Vendido</div>
-                    <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#4078c0]"></span> Reservado</div>
-                    <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#999999]"></span> Bloqueado</div>
+                    <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#6db33f]"></span> Lotes Disponibles</div>
                   </div>
                 </div>
                 {/* INJECT THE MAP HERE */}
