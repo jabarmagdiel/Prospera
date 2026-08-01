@@ -370,18 +370,19 @@ export function ProjectDetail({ project, allProjects, onSelectProject, onBack }:
            <div className="lg:w-1/2 flex flex-col justify-center">
               <div className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#db7844] mb-8 flex items-center gap-4">
                 <span className="w-8 h-[1px] bg-[#db7844]"></span>
-                SIMULACIÓN DE CUOTAS
+                SIMULACIÓN FINANCIERA VERIFICADA
               </div>
-              <h2 className="font-serif text-5xl lg:text-7xl mb-12 tracking-tight">
-                Elige tu terreno<br/>
-                <em className="text-[#db7844] italic">según tu presupuesto.</em>
+              <h2 className="font-serif text-5xl lg:text-7xl mb-8 tracking-tight">
+                Del pin a una<br/>
+                <em className="text-[#db7844] italic">cuota ficticia.</em>
               </h2>
+              <p className="text-lg opacity-80 mb-20 max-w-md">Seleccioná un pin en el plano para cargar automáticamente su valor al contado, o usá el monto referencial para explorar una cuota.</p>
               
               <div className="space-y-12">
                 <div className="flex gap-8 border-b border-white/10 pb-8">
                   <div className="text-[#db7844] font-bold text-[10px] mt-1">01</div>
                   <div>
-                    <div className="font-bold text-white mb-2 text-lg">Selecciona un lote</div>
+                    <div className="font-bold text-white mb-2 text-lg">Seleccioná un lote</div>
                     <div className="text-sm opacity-70">El pin aporta manzano, lote, superficie, precio y estado.</div>
                   </div>
                 </div>
