@@ -621,85 +621,14 @@ export function CorporateHome({ onOpenProject, content, projects }: { onOpenProj
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true, amount: 0.3 }}
-          className="relative rounded-3xl overflow-hidden shadow-2xl border border-stone-200 bg-gradient-to-br from-stone-900 via-stone-850 to-stone-950 p-8 flex flex-col justify-between min-h-[460px]"
+          className="relative rounded-3xl overflow-hidden shadow-2xl border border-stone-200 aspect-[4/3] md:aspect-auto min-h-[440px]"
         >
-          {/* Airport Terminal Backdrop Decorative Elements */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(217,125,54,0.15),transparent_60%)] pointer-events-none" />
-          <div className="absolute top-0 right-0 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-          
-          {/* Top Flight Board Badge */}
-          <div className="relative z-10 flex items-center justify-between border-b border-white/10 pb-4 mb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-xs border border-orange-500/30">
-                ✈
-              </div>
-              <div>
-                <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-orange-400 block">Llegadas Vuelos Nacionales</span>
-                <span className="text-xs text-stone-300 font-medium">La Paz · Oruro · Cochabamba · Sucre → Santa Cruz</span>
-              </div>
-            </div>
-            <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-widest rounded-full border border-emerald-500/30">
-              Recepción Confirmada
-            </span>
-          </div>
-
-          {/* Center Graphic Scene: Airport Greeting */}
-          <div className="relative z-10 my-auto grid grid-cols-1 md:grid-cols-11 gap-4 items-center">
-            
-            {/* Family Card (Mother + Daughter + Suitcases) */}
-            <div className="md:col-span-5 bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-5 text-white">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-stone-800 border border-white/20 flex items-center justify-center text-lg">
-                  👩‍👧
-                </div>
-                <div>
-                  <h4 className="font-bold text-sm text-white">Familia de Visita</h4>
-                  <p className="text-[11px] text-stone-300">Mamá e hija llegando con equipaje</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 pt-2 border-t border-white/10 text-xs text-stone-300">
-                <span className="text-orange-400 font-bold">🧳 Vuelo nacional</span>
-                <span className="text-stone-400">• Maletas listas para conocer el terreno</span>
-              </div>
-            </div>
-
-            {/* Handshake Greeting Connector */}
-            <div className="md:col-span-1 flex items-center justify-center py-2">
-              <div className="w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold text-lg shadow-lg animate-pulse">
-                🤝
-              </div>
-            </div>
-
-            {/* Prospera Advisor Card (Advisor with Prospera Cap) */}
-            <div className="md:col-span-5 bg-orange-500/15 backdrop-blur-md border border-orange-500/30 rounded-2xl p-5 text-white">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-orange-600 border border-orange-400 flex items-center justify-center text-lg shadow-md">
-                  🧢
-                </div>
-                <div>
-                  <h4 className="font-bold text-sm text-white flex items-center gap-1.5">
-                    Asesor Prospera
-                    <span className="text-[9px] bg-orange-500 text-white px-2 py-0.5 rounded-full font-bold uppercase">Gorra Prospera</span>
-                  </h4>
-                  <p className="text-[11px] text-orange-200">Recepción personal y bienvenida</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 pt-2 border-t border-orange-500/20 text-xs text-orange-200">
-                <span className="font-bold">👋 Saludo cordial</span>
-                <span className="opacity-80">• Transporte directo al desarrollo</span>
-              </div>
-            </div>
-
-          </div>
-
-          {/* Bottom Banner */}
-          <div className="relative z-10 mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs text-stone-400">
-            <span className="flex items-center gap-2 text-stone-300 font-medium">
-              <span className="w-2 h-2 rounded-full bg-orange-400"></span>
-              Te recibimos desde tu llegada al aeropuerto y te guiamos en terreno.
-            </span>
-            <span className="text-orange-400 font-bold">Atención 100% personalizada</span>
-          </div>
+          <img 
+            src="/images/airport_family.jpg" 
+            alt="Recepción de familia en el aeropuerto por Asesor Prospera" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-transparent to-transparent pointer-events-none" />
         </motion.div>
 
         <div className="remote-copy">
